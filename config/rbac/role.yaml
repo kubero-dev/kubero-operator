@@ -52,11 +52,26 @@ rules:
   resources:
   - "serviceaccounts"
   - "services"
+  #- "persistentvolumeclaims"
+  #- "persistentvolumes"
+  #- "resourcequotas"
 - verbs:
   - "*"
   apiGroups:
   - "apps"
   resources:
   - "deployments"
+- verbs:
+  - "*"
+  apiGroups:
+  - "autoscaling"
+  resources:
+  - "horizontalpodautoscalers"
+- verbs:
+  - "*"
+  apiGroups:
+  - "networking.k8s.io"
+  resources:
+  - "ingresses"
 
 #+kubebuilder:scaffold:rules
