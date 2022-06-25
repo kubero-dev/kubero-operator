@@ -1,0 +1,121 @@
+# Default values for kuberoapp.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+gitrepo:
+  description: Simple example Node app
+  id: 123456789
+  name: template-nodeapp
+  node_id: X_XxxXxyyYYY
+  owner: kubero-dev
+  private: false
+  ssh_url: git@github.com:kubero-dev/template-nodeapp.git
+
+branch: master
+ref: refs/heads/dummy-pr
+autodeploy: false
+envVars:
+  - name: EXAMPLE
+    value: foo
+  - name: BAR
+    value: 3000
+podsize: ""
+name: kuberoapp-sample
+phase: production
+pipeline: samplepipeline
+
+imageWeb:
+  repository: ghcr.io/kubero-dev/docker-images/node-web
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: main
+  securityContext:
+    readOnlyRootFilesystem: true
+
+imageBuilder:
+  repository: ghcr.io/kubero-dev/docker-images/node-builder
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: main
+  securityContext:
+    readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: kubero.lacolhost.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+web:
+  replicaCount: 1
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 
+
+worker:
+  replicaCount: 1
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

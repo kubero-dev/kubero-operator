@@ -1,0 +1,47 @@
+name: Docker
+
+on:
+  #push:
+    # Publish `master` as Docker `latest` image.
+    #branches:
+    #  - main
+
+    # Publish `v1.2.3` tags as releases.
+    #tags:
+    #  - v*
+  workflow_dispatch:
+
+  # Run tests for any PRs.
+  #pull_request:
+
+env:
+  SDK_VERSION: "v1.21.0"
+  IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.1
+  BUNDLE_IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v0.0.1
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: "Install operator-sdk"
+        run : |
+          curl -L -o /usr/local/bin/operator-sdk "https://github.com/operator-framework/operator-sdk/releases/download/${SDK_VERSION}/operator-sdk_linux_amd64"
+          chmod +x /usr/local/bin/operator-sdk
+
+      - name: Build images
+        run: | 
+          make docker-build
+          make bundle-build
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image ghcr.io
+        run: |
+          make docker-push
+          make bundle-push

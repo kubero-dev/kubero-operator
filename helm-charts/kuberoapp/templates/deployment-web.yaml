@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kuberoapp.fullname" . }}-web
+  labels:
+    {{- include "kuberoapp.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.web.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "kuberoapp.selectorLabels" . | nindent 6 }}-web
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kuberoapp.selectorLabels" . | nindent 8 }}-web
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: {{ .Chart.Name }}-builder
+          securityContext:
+            {{- toYaml .Values.imageBuilder.securityContext | nindent 12 }}
+          image: "{{ .Values.imageBuilder.repository }}:{{ .Values.imageBuilder.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.imageBuilder.pullPolicy }}
+          env:
+            - name: GIT_REPOSITORY
+              value: {{ .Values.gitrepo.ssh_url | quote }}
+            {{- if .Values.branch }}
+            - name: GIT_BRANCH
+              value: {{ .Values.branch | quote }}
+            {{- end }}
+            {{- if .Values.branch }}
+            - name: GIT_REF
+              value: {{ .Values.ref | quote }}
+            {{- end }}
+            {{- toYaml .Values.envVars | nindent 12 }}
+          volumeMounts:
+            - mountPath: /root/.ssh
+              name: deployment-keys
+              readOnly: true
+            - mountPath: /app
+              name: app-storage
+      containers:
+        - name: {{ .Chart.Name }}-web
+          securityContext:
+            {{- toYaml .Values.imageWeb.securityContext | nindent 12 }}
+          image: "{{ .Values.imageWeb.repository }}:{{ .Values.imageWeb.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.imageWeb.pullPolicy }}
+          workingDir: /app
+          command: 
+            #- tail 
+            #- -f
+            #- /dev/null
+            - npm 
+            - start
+          env:
+            - name: PORT
+              value: "8080"
+            - name: npm_config_cache
+              value: /tmp/cache
+            {{- toYaml .Values.envVars | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          volumeMounts:
+            - mountPath: /app
+              name: app-storage
+              readOnly: true
+            - mountPath: /tmp/cache
+              name: cache-storage
+              readOnly: false
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: deployment-keys
+        secret:
+          defaultMode: 0600
+          secretName: deployment-keys
+      - name: app-storage
+        emptyDir: {}
+      - name: cache-storage
+        emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
