@@ -119,3 +119,19 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+cronjobs: 
+  - name: "cronjob-sample"
+    schedule: '* */6 * * *'
+    image: busybox:1.28
+    command: 
+      - /bin/sh
+      - -c
+      - date; echo Hello from the Kubernetes cluster
+    restartPolicy: OnFailure
+    envVars: []
+
+addons:
+  - name: Redis
+    operator: redis-operator.operators
+    version: v0.0.1
