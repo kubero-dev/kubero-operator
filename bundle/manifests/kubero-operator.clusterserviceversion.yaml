@@ -65,7 +65,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.21.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: kubero-operator.v0.0.2
+  name: kubero-operator.v0.0.3
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -194,7 +194,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.2
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.3
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -276,4 +276,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.2
+  version: 0.0.3
