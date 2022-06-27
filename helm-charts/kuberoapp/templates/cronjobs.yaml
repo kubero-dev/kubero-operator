@@ -15,6 +15,6 @@ spec:
             imagePullPolicy: IfNotPresent
             command:
               {{- toYaml .command | nindent 14 }}
-            restartPolicy: {{ .restartPolicy }}
+          restartPolicy: {{ .restartPolicy }}
 ---
 {{- end }}
