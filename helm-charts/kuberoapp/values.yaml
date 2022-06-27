@@ -129,7 +129,7 @@ cronjobs:
       - -c
       - date; echo Hello from the Kubernetes cluster
     restartPolicy: OnFailure
-    envVars: []
+    env: []
 
 addons:
   - name: Redis
