@@ -86,4 +86,35 @@ rules:
   resources:
   - "cronjobs"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoes
+  - kuberoes/status
+  - kuberoes/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+
 #+kubebuilder:scaffold:rules

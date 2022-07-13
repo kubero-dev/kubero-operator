@@ -3,4 +3,8 @@
   version: v1alpha1
   kind: KuberoApp
   chart: helm-charts/kuberoapp
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: Kubero
+  chart: helm-charts/kubero
 #+kubebuilder:scaffold:watch

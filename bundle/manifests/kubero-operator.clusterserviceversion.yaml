@@ -6,6 +6,63 @@ metadata:
       [
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "Kubero",
+          "metadata": {
+            "name": "kubero-sample"
+          },
+          "spec": {
+            "affinity": {},
+            "autoscaling": {
+              "enabled": false,
+              "maxReplicas": 100,
+              "minReplicas": 1,
+              "targetCPUUtilizationPercentage": 80
+            },
+            "fullnameOverride": "",
+            "image": {
+              "pullPolicy": "IfNotPresent",
+              "repository": "nginx",
+              "tag": ""
+            },
+            "imagePullSecrets": [],
+            "ingress": {
+              "annotations": {},
+              "className": "",
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": [
+                    {
+                      "path": "/",
+                      "pathType": "ImplementationSpecific"
+                    }
+                  ]
+                }
+              ],
+              "tls": []
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "podAnnotations": {},
+            "podSecurityContext": {},
+            "replicaCount": 1,
+            "resources": {},
+            "securityContext": {},
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "serviceAccount": {
+              "annotations": {},
+              "create": true,
+              "name": ""
+            },
+            "tolerations": []
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoApp",
           "metadata": {
             "name": "kuberoapp-sample"
@@ -65,7 +122,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.21.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: kubero-operator.v0.0.5
+  name: kubero-operator.v0.0.6
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -73,6 +130,9 @@ spec:
     owned:
     - kind: KuberoApp
       name: kuberoapps.application.kubero.dev
+      version: v1alpha1
+    - kind: Kubero
+      name: kuberoes.application.kubero.dev
       version: v1alpha1
   description: Maintain a kubero Application
   displayName: Kubero App
@@ -153,6 +213,33 @@ spec:
           - update
           - watch
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoes
+          - kuberoes/status
+          - kuberoes/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -206,7 +293,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.5
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.6
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -288,4 +375,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.5
+  version: 0.0.6

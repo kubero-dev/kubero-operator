@@ -3,4 +3,5 @@
 # It should be run by config/default
 resources:
 - bases/application.kubero.dev_kuberoapps.yaml
+- bases/application.kubero.dev_kuberoes.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
