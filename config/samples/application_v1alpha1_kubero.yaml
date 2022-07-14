@@ -13,15 +13,15 @@ spec:
   fullnameOverride: ""
   image:
     pullPolicy: IfNotPresent
-    repository: nginx
-    tag: ""
+    repository: ghcr.io/kubero-dev/kubero/kubero
+    tag: "main"
   imagePullSecrets: []
   ingress:
     annotations: {}
     className: ""
-    enabled: false
+    enabled: true
     hosts:
-    - host: chart-example.local
+    - host: kubero.lacolhost.com
       paths:
       - path: /
         pathType: ImplementationSpecific

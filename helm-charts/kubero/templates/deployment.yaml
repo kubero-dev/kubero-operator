@@ -33,9 +33,37 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: /etc/kubero
+              name: kubero-config-volume
+          env:
+            - name: KUBERO_CONFIG_PATH
+              value: /etc/kubero/config.yaml
+            - name: PORT
+              value: "{{ .Values.service.port }}"
+            - name: GIT_DEPLOYMENTKEY_PUBLIC
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GIT_DEPLOYMENTKEY_PUBLIC
+            - name: GIT_DEPLOYMENTKEY_PRIVATE_B64
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GIT_DEPLOYMENTKEY_PRIVATE_B64
+            - name: GITHUB_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITHUB_WEBHOOK_SECRET
+            - name: GITHUB_PERSONAL_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITHUB_PERSONAL_ACCESS_TOKEN
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -47,6 +75,10 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: kubero-config-volume
+          configMap:
+            name: kubero-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
