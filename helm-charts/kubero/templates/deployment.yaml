@@ -35,6 +35,15 @@ spec:
             - mountPath: /etc/kubero
               name: kubero-config-volume
           env:
+            #- name: NODE_TLS_REJECT_UNAUTHORIZED
+            #  value: "0"
+            #- name: KUBECONFIG_BASE64
+            #  valueFrom:
+            #    secretKeyRef:
+            #      name: kubero-secrets
+            #      key: KUBECONFIG_BASE64
+            - name: DEBUG
+              value: "{{ .Values.kubero.debug }}" 
             - name: KUBERO_CONFIG_PATH
               value: /etc/kubero/config.yaml
             - name: PORT

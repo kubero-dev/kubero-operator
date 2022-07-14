@@ -116,5 +116,11 @@ rules:
   resources:
   - "serviceaccounts"
   - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "operators.coreos.com"
+  resources:
+  - "clusterserviceversions"
 
 #+kubebuilder:scaffold:rules

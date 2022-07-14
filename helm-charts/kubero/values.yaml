@@ -75,6 +75,7 @@ tolerations: []
 affinity: {}
 
 kubero:
+  debug: "*.*"
   config: |
     kubero:
       context: kind-kubero

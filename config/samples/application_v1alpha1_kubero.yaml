@@ -7,7 +7,7 @@ spec:
   affinity: {}
   fullnameOverride: ""
   image:
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     repository: ghcr.io/kubero-dev/kubero/kubero
     tag: "main"
   imagePullSecrets: []
@@ -29,7 +29,7 @@ spec:
   resources: {}
   securityContext: {}
   service:
-    port: 80
+    port: 2000
     type: ClusterIP
   serviceAccount:
     annotations: {}
@@ -37,6 +37,7 @@ spec:
     name: ""
   tolerations: []
   kubero:
+    debug: "*.*"
     config: |
       kubero:
         context: kind-kubero
