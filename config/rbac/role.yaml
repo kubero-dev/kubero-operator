@@ -32,6 +32,14 @@ rules:
 ## Rules for application.kubero.dev/v1alpha1, Kind: KuberoApp
 ##
 - apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - "roles"
+  - "clusterroles"
+  - "rolebindings"
+  verbs:
+  - "*"
+- apiGroups:
   - application.kubero.dev
   resources:
   - kuberoapps
@@ -52,12 +60,6 @@ rules:
   resources:
   - "serviceaccounts"
   - "services"
-  - "roles"
-  - "clusterroles"
-  - "rolebindings"
-  #- "persistentvolumeclaims"
-  #- "persistentvolumes"
-  #- "resourcequotas"
 - verbs:
   - "*"
   apiGroups:
