@@ -52,6 +52,9 @@ rules:
   resources:
   - "serviceaccounts"
   - "services"
+  - "roles"
+  - "clusterroles"
+  - "rolebindings"
   #- "persistentvolumeclaims"
   #- "persistentvolumes"
   #- "resourcequotas"
