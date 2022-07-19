@@ -76,6 +76,17 @@ affinity: {}
 
 kubero:
   debug: "*.*"
+  namespace: kubero
+  context: kind-kubero
+  webhook_url: http://localhost:3000/api/webhook
+  repositories:
+    github:
+      enabled: false
+    gitea:
+      enabled: false
+    gitlab:
+      enabled: false
+
   config: |
     kubero:
       context: kind-kubero

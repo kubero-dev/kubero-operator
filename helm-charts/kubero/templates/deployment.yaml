@@ -35,13 +35,46 @@ spec:
             - mountPath: /etc/kubero
               name: kubero-config-volume
           env:
-            #- name: NODE_TLS_REJECT_UNAUTHORIZED
-            #  value: "0"
-            #- name: KUBECONFIG_BASE64
-            #  valueFrom:
-            #    secretKeyRef:
-            #      name: kubero-secrets
-            #      key: KUBECONFIG_BASE64
+            # TODO: needs some investigation. Crashes with UNABLE_TO_VERIFY_LEAF_SIGNATURE
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
+            - name: KUBERO_CONTEXT
+              value: "{{ .Values.kubero.context }}" 
+            - name: KUBERO_NAMESPACE
+              value: "{{ .Values.kubero.namespace }}" 
+            - name: KUBERO_WEBHOOK_URL
+              value: "{{ .Values.kubero.webhook_url }}" 
+            - name: KUBERO_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: KUBERO_WEBHOOK_SECRET
+            {{- if .Values.kubero.repositories.github.enabled }}
+              - name: GITHUB_PERSONAL_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: kubero-secrets
+                    key: GITHUB_PERSONAL_ACCESS_TOKEN
+            {{- end }}
+            {{- if .Values.kubero.repositories.gitea.enabled }}
+              - name: GITEA_PERSONAL_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: kubero-secrets
+                    key: GITEA_PERSONAL_ACCESS_TOKEN
+            {{- end }}
+            {{- if .Values.kubero.repositories.gitlab.enabled }}
+              - name: GITLAB_PERSONAL_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: kubero-secrets
+                    key: GITLAB_PERSONAL_ACCESS_TOKEN
+            {{- end }}
+            - name: KUBECONFIG_BASE64
+              valueFrom:
+                  secretKeyRef:
+                    name: kubero-secrets
+                    key: KUBECONFIG_BASE64
             - name: DEBUG
               value: "{{ .Values.kubero.debug }}" 
             - name: KUBERO_CONFIG_PATH
@@ -58,16 +91,6 @@ spec:
                 secretKeyRef:
                   name: kubero-secrets
                   key: GIT_DEPLOYMENTKEY_PRIVATE_B64
-            - name: GITHUB_WEBHOOK_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: kubero-secrets
-                  key: GITHUB_WEBHOOK_SECRET
-            - name: GITHUB_PERSONAL_ACCESS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: kubero-secrets
-                  key: GITHUB_PERSONAL_ACCESS_TOKEN
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

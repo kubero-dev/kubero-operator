@@ -38,6 +38,8 @@ spec:
   tolerations: []
   kubero:
     debug: "*.*"
+    namespace: kubero
+    contenxt: kind-kubero
     config: |
       kubero:
         context: kind-kubero
