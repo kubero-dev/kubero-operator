@@ -50,25 +50,25 @@ spec:
                   name: kubero-secrets
                   key: KUBERO_WEBHOOK_SECRET
             {{- if .Values.kubero.repositories.github.enabled }}
-              - name: GITHUB_PERSONAL_ACCESS_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: kubero-secrets
-                    key: GITHUB_PERSONAL_ACCESS_TOKEN
+            - name: GITHUB_PERSONAL_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITHUB_PERSONAL_ACCESS_TOKEN
             {{- end }}
             {{- if .Values.kubero.repositories.gitea.enabled }}
-              - name: GITEA_PERSONAL_ACCESS_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: kubero-secrets
-                    key: GITEA_PERSONAL_ACCESS_TOKEN
+            - name: GITEA_PERSONAL_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITEA_PERSONAL_ACCESS_TOKEN
             {{- end }}
             {{- if .Values.kubero.repositories.gitlab.enabled }}
-              - name: GITLAB_PERSONAL_ACCESS_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: kubero-secrets
-                    key: GITLAB_PERSONAL_ACCESS_TOKEN
+            - name: GITLAB_PERSONAL_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITLAB_PERSONAL_ACCESS_TOKEN
             {{- end }}
             - name: KUBECONFIG_BASE64
               valueFrom:

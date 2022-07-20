@@ -14,3 +14,5 @@ bin
 *~
 
 /notes.txt
+
+helm-charts/kubero/secrets.yaml
