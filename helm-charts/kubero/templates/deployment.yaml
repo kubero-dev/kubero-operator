@@ -54,16 +54,19 @@ spec:
                 secretKeyRef:
                   name: kubero-secrets
                   key: GITHUB_PERSONAL_ACCESS_TOKEN
+                  optional: true
             - name: GITEA_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: kubero-secrets
                   key: GITEA_PERSONAL_ACCESS_TOKEN
+                  optional: true
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: kubero-secrets
                   key: GITLAB_PERSONAL_ACCESS_TOKEN
+                  optional: true
             - name: KUBECONFIG_BASE64
               valueFrom:
                   secretKeyRef:
