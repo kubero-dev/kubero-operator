@@ -42,17 +42,6 @@ metadata:
               "context": "kind-kubero",
               "debug": "*.*",
               "namespace": "kubero",
-              "repositories": {
-                "gitea": {
-                  "enabled": false
-                },
-                "github": {
-                  "enabled": false
-                },
-                "gitlab": {
-                  "enabled": false
-                }
-              },
               "webhook_url": "http://localhost:3000/api/webhook"
             },
             "nameOverride": "",
@@ -135,7 +124,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.22.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: kubero-operator.v0.0.13
+  name: kubero-operator.v0.0.14
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -320,7 +309,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.13
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.14
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -402,4 +391,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.13
+  version: 0.0.14
