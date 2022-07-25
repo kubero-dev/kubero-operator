@@ -1,0 +1,31 @@
+# https://itnext.io/manage-auto-generated-secrets-in-your-helm-charts-5aee48ba6918
+
+{{- $name := .Values.name -}}
+{{- $mainnamespace := .Values.mainnamespace -}}
+{{- $deploymentstrategy := .Values.deploymentstrategy -}}
+{{- range .Values.phases }}
+{{- if .enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $name }}-{{ .name }}
+---
+{{- if eq $deploymentstrategy "git" }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "deployment-keys"
+  namespace: {{ $name }}-{{ .name }}
+type: Opaque
+data:
+  # retrieve the secret data using lookup function and when not exists, return an empty dictionary / map as result
+  {{- $secretObj := (lookup "v1" "Secret" $mainnamespace "kubero-secrets") | default dict }}
+  {{- $secretData := (get $secretObj "data") | default dict }}
+  {{- $github := (get $secretData "GIT_DEPLOYMENTKEY_PRIVATE_B64") }}
+  github: {{ $github | quote }}
+  {{- $githubPub := (get $secretData "GIT_DEPLOYMENTKEY_PUBLIC") }}
+  github.pub: {{ $githubPub | quote }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

@@ -2,4 +2,5 @@
 resources:
 - application_v1alpha1_kuberoapp.yaml
 - application_v1alpha1_kubero.yaml
+- application_v1alpha1_kuberopipeline.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

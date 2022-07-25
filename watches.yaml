@@ -7,4 +7,8 @@
   version: v1alpha1
   kind: Kubero
   chart: helm-charts/kubero
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoPipeline
+  chart: helm-charts/kuberopipeline
 #+kubebuilder:scaffold:watch

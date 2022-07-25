@@ -128,4 +128,41 @@ rules:
   resources:
   - "clusterserviceversions"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoPipeline
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberopipelines
+  - kuberopipelines/status
+  - kuberopipelines/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "namespaces"
+  - "secrets"
 #+kubebuilder:scaffold:rules

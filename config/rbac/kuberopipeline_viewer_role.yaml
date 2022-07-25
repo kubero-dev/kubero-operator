@@ -1,0 +1,20 @@
+# permissions for end users to view kuberopipelines.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberopipeline-viewer-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberopipelines
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberopipelines/status
+  verbs:
+  - get
