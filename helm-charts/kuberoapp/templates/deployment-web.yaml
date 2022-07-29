@@ -27,12 +27,13 @@ spec:
       serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if ne .Values.buildpack "Docker" }}
       initContainers:
         - name: {{ .Chart.Name }}-builder
           securityContext:
-            {{- toYaml .Values.imageBuilder.securityContext | nindent 12 }}
-          image: "{{ .Values.imageBuilder.repository }}:{{ .Values.imageBuilder.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.imageBuilder.pullPolicy }}
+            {{- toYaml .Values.image.builder.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}-builder:{{ .Values.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: GIT_REPOSITORY
               value: {{ .Values.gitrepo.ssh_url | quote }}
@@ -51,12 +52,13 @@ spec:
               readOnly: true
             - mountPath: /app
               name: app-storage
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
           securityContext:
-            {{- toYaml .Values.imageWeb.securityContext | nindent 12 }}
-          image: "{{ .Values.imageWeb.repository }}:{{ .Values.imageWeb.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.imageWeb.pullPolicy }}
+            {{- toYaml .Values.image.web.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}-web:{{ .Values.image.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
           command: 
             #- tail 

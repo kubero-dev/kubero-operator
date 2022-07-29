@@ -2,6 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+buildpack: Docker
+
 gitrepo:
   description: Simple example Node app
   id: 123456789
@@ -10,6 +12,27 @@ gitrepo:
   owner: kubero-dev
   private: false
   ssh_url: git@github.com:kubero-dev/template-nodeapp.git
+
+image:
+  repository: ghcr.io/kubero-dev/docker-images/node
+  tag: main
+  pullPolicy: Always
+  web: 
+    securityContext:
+      readOnlyRootFilesystem: true
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  builder: 
+    securityContext:
+      readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
 branch: master
 ref: refs/heads/dummy-pr
@@ -23,27 +46,6 @@ podsize: ""
 name: kuberoapp-sample
 phase: production
 pipeline: samplepipeline
-
-imageWeb:
-  repository: ghcr.io/kubero-dev/docker-images/node-web
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: main
-  securityContext:
-    readOnlyRootFilesystem: true
-
-imageBuilder:
-  repository: ghcr.io/kubero-dev/docker-images/node-builder
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: main
-  securityContext:
-    readOnlyRootFilesystem: false
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 imagePullSecrets: []
 nameOverride: ""
