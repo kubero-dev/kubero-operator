@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "kuberoapp.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if and (not .Values.autoscaling.enabled) (lt .Values.web.autoscaling.minReplicas 1) }}
   replicas: {{ .Values.web.replicaCount }}
   {{- end }}
   selector:
