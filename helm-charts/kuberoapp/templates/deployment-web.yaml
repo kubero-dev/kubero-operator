@@ -8,6 +8,9 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.web.replicaCount }}
   {{- end }}
+  {{- if and (.Values.autoscaling.enabled) (lt .Values.web.autoscaling.minReplicas 1) }}
+  replicas: 0
+  {{- end }}
   selector:
     matchLabels:
       {{- include "kuberoapp.selectorLabels" . | nindent 6 }}-web
