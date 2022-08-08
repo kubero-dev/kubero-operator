@@ -8,7 +8,7 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.worker.replicaCount }}
   {{- end }}
-  {{- if and (.Values.autoscaling.enabled) (lt .Values.worker.autoscaling.minReplicas 1) }}
+  {{- if and (.Values.autoscaling.enabled) (lt .Values.worker.autoscaling.minReplicas 1.0) }}
   replicas: 0
   {{- end }}
   selector:
@@ -52,7 +52,10 @@ spec:
             - name: GIT_REF
               value: {{ .Values.ref | quote }}
             {{- end }}
-            {{- toYaml .Values.envVars | nindent 12 }}
+            {{- range .Values.envVars }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }} 
           volumeMounts:
             - mountPath: /root/.ssh
               name: deployment-keys
@@ -78,7 +81,10 @@ spec:
               value: "8080"
             - name: npm_config_cache
               value: /tmp/cache
-            {{- toYaml .Values.envVars | nindent 12 }}
+            {{- range .Values.envVars }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }} 
           ports:
             - name: http
               containerPort: 8080
