@@ -35,7 +35,11 @@ spec:
         - name: {{ .Chart.Name }}-builder
           securityContext:
             {{- toYaml .Values.image.builder.securityContext | nindent 12 }}
+          {{- if eq .Values.buildpack "Docker" }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
+          {{- else }}
           image: "{{ .Values.image.repository }}-builder:{{ .Values.image.tag | default "latest" }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: GIT_REPOSITORY

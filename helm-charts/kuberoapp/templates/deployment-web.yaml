@@ -60,7 +60,11 @@ spec:
         - name: {{ .Chart.Name }}-web
           securityContext:
             {{- toYaml .Values.image.web.securityContext | nindent 12 }}
+          {{- if eq .Values.buildpack "Docker" }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
+          {{- else }}
           image: "{{ .Values.image.repository }}-web:{{ .Values.image.tag | default "latest" }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
           command: 
