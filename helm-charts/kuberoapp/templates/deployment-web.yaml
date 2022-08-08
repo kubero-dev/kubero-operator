@@ -92,9 +92,11 @@ spec:
               path: /
               port: http
           volumeMounts:
+            {{- if ne .Values.buildpack "Docker" }}
             - mountPath: /app
               name: app-storage
               readOnly: true
+            {{- end }}
             - mountPath: /tmp/cache
               name: cache-storage
               readOnly: false
