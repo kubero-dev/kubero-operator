@@ -16,8 +16,8 @@ on:
 
 env:
   SDK_VERSION: "v1.21.0"
-  IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.25
-  BUNDLE_IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v0.0.25
+  IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.26
+  BUNDLE_IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v0.0.26
 
 jobs:
   # Push image to GitHub Packages.
