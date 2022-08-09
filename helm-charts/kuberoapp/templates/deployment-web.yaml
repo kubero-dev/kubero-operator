@@ -70,17 +70,11 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
-          command: 
-            #- tail 
-            #- -f
-            #- /dev/null
-            - npm 
-            - start
           env:
+            - name: PROC_TYPE
+              value: web
             - name: PORT
               value: "8080"
-            - name: npm_config_cache
-              value: /tmp/cache
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}
@@ -103,8 +97,8 @@ spec:
               name: app-storage
               readOnly: true
             {{- end }}
-            - mountPath: /tmp/cache
-              name: cache-storage
+            - mountPath: /tmp
+              name: tmp-storage
               readOnly: false
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -115,7 +109,7 @@ spec:
           secretName: deployment-keys
       - name: app-storage
         emptyDir: {}
-      - name: cache-storage
+      - name: tmp-storage
         emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
