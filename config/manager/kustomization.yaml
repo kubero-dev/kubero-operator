@@ -13,4 +13,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: ghcr.io/kubero-dev/kubero-operator/kuberoapp
-  newTag: v0.0.27
+  newTag: v0.0.28

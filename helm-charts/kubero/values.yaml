@@ -85,6 +85,16 @@ kubero:
       context: kind-kubero
       namespace: kubero
       port: 3000
+    buildpacks:
+      - name: NodeJS
+        repository: ghcr.io/kubero-dev/docker-images/node
+        tag: main
+      - name: Python
+        repository: ghcr.io/kubero-dev/docker-images/python
+        tag: main
+      - name: PHP
+        repository: ghcr.io/kubero-dev/docker-images/php
+        tag: main
     podSizeList:
     - name: small
       description: 'Small (CPU: 0.25, Memory: 0.5Gi)'
