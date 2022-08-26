@@ -37,10 +37,9 @@ metadata:
               "tls": []
             },
             "kubero": {
-              "config": "kubero:\n  context: kind-kubero\n  namespace: kubero\n  port: 3000\npodSizeList:\n- name: small\n  description: 'Small (CPU: 0.25, Memory: 0.5Gi)'\n  default: true\n  resources:\n    requests:\n      memory: 0.5Gi\n      cpu: 250m\n    limits:\n      memory: 1Gi\n      cpu: 500m\n- name: medium\n  description: 'Medium (CPU: 1, Memory: 2Gi)'\n  resources:\n    requests:\n      memory: 2Gi\n      cpu: 1000m\n    limits:\n      memory: 4Gi\n      cpu: 2000m\n- name: large\n  description: 'Large (CPU: 2, Memory: 4Gi)'\n  active: false\n  resources:\n    requests:\n      memory: 4Gi\n      cpu: 2000m\n",
-              "contenxt": "kind-kubero",
+              "config": "kubero:\n  context: kind-kubero\n  namespace: kubero\n  port: 3000\nbuildpacks:\n  - name: NodeJS\n    repository: ghcr.io/kubero-dev/docker-images/node\n    tag: main\n  - name: Python\n    repository: ghcr.io/kubero-dev/docker-images/python\n    tag: main\n  - name: PHP\n    repository: ghcr.io/kubero-dev/docker-images/php\n    tag: main\npodSizeList:\n- name: small\n  description: 'Small (CPU: 0.25, Memory: 0.5Gi)'\n  default: true\n  resources:\n    requests:\n      memory: 0.5Gi\n      cpu: 250m\n    limits:\n      memory: 1Gi\n      cpu: 500m\n- name: medium\n  description: 'Medium (CPU: 1, Memory: 2Gi)'\n  resources:\n    requests:\n      memory: 2Gi\n      cpu: 1000m\n    limits:\n      memory: 4Gi\n      cpu: 2000m\n- name: large\n  description: 'Large (CPU: 2, Memory: 4Gi)'\n  active: false\n  resources:\n    requests:\n      memory: 4Gi\n      cpu: 2000m\n",
               "context": "kind-kubero",
-              "debug": "*.*",
+              "debug": "",
               "namespace": "kubero",
               "webhook_url": "http://localhost:3000/api/webhook"
             },
@@ -181,7 +180,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.22.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: kubero-operator.v0.0.28
+  name: kubero-operator.v0.0.29
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -403,7 +402,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.28
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.29
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -485,4 +484,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.28
+  version: 0.0.29
