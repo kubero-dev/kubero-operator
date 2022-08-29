@@ -1,9 +1,11 @@
-<img src="docs/logo/kubero-logo-horizontal.png">
+<img src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/logo/kubero-logo-horizontal.png">
 
 <br>
 <br>
 Kubero brings the convinience of Heroku/platform.sh to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment.
 <br>
+Pleas visit the main repository for docs and more information 
+https://github.com/kubero-dev 
 <br>
 
 ![GitHub](https://img.shields.io/github/license/kubero-dev/kubero?style=flat-square)
@@ -32,8 +34,8 @@ Kubero brings the convinience of Heroku/platform.sh to your kubernetes cluster. 
 
 ## Screenshots
 <a href="https://github.com/kubero-dev/kubero/tree/main/docs/screenshots">more Screenshots</a><p>
-<img width="45%" style="vertical-align: top" src="docs/screenshots/app.png">
-<img width="45%" style="vertical-align: top" src="docs/screenshots/appoverview.png">
+<img width="45%" style="vertical-align: top" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/screenshots/app.png">
+<img width="45%" style="vertical-align: top" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/screenshots/appoverview.png">
 
 # Usage
 1. Create a pipeline with all your phases
@@ -87,38 +89,4 @@ kubectl apply -f https://raw.githubusercontent.com/kubero-dev/kubero-operator/ma
 ## configure Kubero
 ```bash
 kubectl edit configmap kubero-config -n kubero
-```
-
-# Development
-
-### local development
-from local source
-```bash
-yarn dev
-```
-
-or with docker compose
-```bash
-docker-compose build
-docker-compose up -d
-```
-
-### start a local kind cluster
-```
-kind create cluster --config kind.yaml
-kubectl create -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
-kubectl create -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-``` 
-
-### Exporting the Kubernetes config file 
-
-Local development
-```bash
-kind export kubeconfig --name kubero --kubeconfig ./kubeconfig
-```
-
-To use in the docker-compose 
-```bash
-kind get kubeconfig --internal --name kubero > ./kubeconfig-docker
 ```
