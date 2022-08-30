@@ -49,6 +49,11 @@ spec:
                 secretKeyRef:
                   name: kubero-secrets
                   key: KUBERO_WEBHOOK_SECRET
+            - name: KUBERO_USERS
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: KUBERO_USERS
             - name: GITHUB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
