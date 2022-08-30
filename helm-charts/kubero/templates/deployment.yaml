@@ -54,6 +54,7 @@ spec:
                 secretKeyRef:
                   name: kubero-secrets
                   key: KUBERO_USERS
+                  optional: true
             - name: GITHUB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -74,9 +75,10 @@ spec:
                   optional: true
             - name: KUBECONFIG_BASE64
               valueFrom:
-                  secretKeyRef:
-                    name: kubero-secrets
-                    key: KUBECONFIG_BASE64
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: KUBECONFIG_BASE64
+                  optional: true
             - name: DEBUG
               value: "{{ .Values.kubero.debug }}" 
             - name: KUBERO_CONFIG_PATH
