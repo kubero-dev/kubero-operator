@@ -8,85 +8,23 @@ Pleas visit the main repository for docs and more information
 https://github.com/kubero-dev 
 <br>
 
-![GitHub](https://img.shields.io/github/license/kubero-dev/kubero?style=flat-square)
-![GitHub package.json version](https://img.shields.io/github/package-json/v/kubero-dev/kubero?style=flat-square)
 
-## What can Kubero do for you?
-- Create a CI pipeline with up to 4 separate environments for all your standard apps: review apps -> testing -> stageing -> production
-- Build, start and cleanup reviewapps after opening/closing a pull request
-- Automatic deployment of the app based on a branch or tag
-- Create Scheduled tasks (cronjobs)
-- Easy deployment of your apps on kubernetes without helm charts
-- Deploy addons (PostgreSQL, Redis, more to come)
-- Easy access of application logs in the UI
-- Easy and safe restart of the application in the UI
+## Installation without operator hub (not published yet)
 
-## What Kubero can't do for you
-- Manage your Kubernetes cluster
-- Install and Manage your operators
-- Give access to your Contaier CLI
-
-## Which heroku features are still missing?
-- Dataclips
-- CLI (May be added later since kubero has a API)
-- Other Buildpacks (only NodeJS is currently supported, more to come soon)
-
-
-## Screenshots
-<a href="https://github.com/kubero-dev/kubero/tree/main/docs/screenshots">more Screenshots</a><p>
-<img width="45%" style="vertical-align: top" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/screenshots/app.png">
-<img width="45%" style="vertical-align: top" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/screenshots/appoverview.png">
-
-# Usage
-1. Create a pipeline with all your phases
-2. Connect the Pipeline to your git repository ( not required with pre-build image deployment )
-3. Create your apps with cronjobs and addons
-
-# Installation
-
-## Cluster Requirements: 
-- Kubernetes 1.19+
-- OLM - Operator Lifecycle Manager
-
-
-## Install the Operator
-The operator will also install the UI and all the required CRD
 ```bash
-TODO
+git clone git@github.com:kubero-dev/kubero-operator.git 
+cd kubero-operator
+
+export VERSION=0.0.31
+export BUNDLE_IMG=ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v$VERSION
+kubectl ns operator
+operator-sdk run bundle $BUNDLE_IMG
+kubectl get csv
+
+# if Operator is insalled allready 
+# operator-sdk run bundle-upgrade $BUNDLE_IMG
+
+# to remove the operator
+# operator-sdk cleanup kubero-operator
 ```
 
-## create the namespace
-```bash
-kubectl create namespace kubero
-```
-
-## Create and deploy the secrets
-```bash
-curl -sL https://raw.githubusercontent.com/kubero-dev/kubero-operator/main/helm-charts/kubero/secrets.yaml.example > secrets.yaml
-# Edit the secret with your credentials
-kubectl apply -f secrets.yaml -n kubero
-```
-| Variable | Required | Description |
-|-------:|:-------:|:-----------|
-| GIT_DEPLOYMENTKEY_PUBLIC | required | generated Public Key |
-| GIT_DEPLOYMENTKEY_PRIVATE_B64 | required | Base64 encoded Private Key |
-| KUBECONFIG_BASE64 | required | Base64 encoded Kubeconfig, may contain multiple contexts |
-| KUBERO_WEBHOOK_SECRET | required | Random secret string
-| GITHUB_PERSONAL_ACCESS_TOKEN | optional | Personal access token for GitHub API |
-| GITEA_PERSONAL_ACCESS_TOKEN | optional | Personal access token for Gitea API |
-GITLAB_PERSONAL_ACCESS_TOKEN | optional | Personal access token for GitLab API |
-
-### To base64 encode your kubeconfig
-```bash
-cat kubeconfig | base64
-```
-
-## deploy the UI
-```bash
-kubectl apply -f https://raw.githubusercontent.com/kubero-dev/kubero-operator/main/config/samples/application_v1alpha1_kubero.yaml -n kubero
-```
-
-## configure Kubero
-```bash
-kubectl edit configmap kubero-config -n kubero
-```
