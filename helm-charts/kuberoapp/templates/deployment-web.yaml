@@ -32,11 +32,13 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if ne .Values.buildpack "Docker" }}
       initContainers:
-        - name: {{ .Chart.Name }}-builder
+        - name: {{ .Chart.Name }}-fetcher
           securityContext:
             {{- toYaml .Values.image.builder.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}-builder:{{ .Values.image.tag | default "latest" }}"
+          image: "{{ .Values.image.fetcher.repository }}-builder:{{ .Values.image.fetcher.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /app
+          command: ["./init-fetch.sh"]
           env:
             - name: GIT_REPOSITORY
               value: {{ .Values.gitrepo.ssh_url | quote }}
@@ -58,30 +60,38 @@ spec:
               readOnly: true
             - mountPath: /app
               name: app-storage
+        - name: {{ .Chart.Name }}-builder
+          securityContext:
+            {{- toYaml .Values.image.builder.securityContext | nindent 12 }}
+          image: "{{ .Values.image.builder.repository }}:{{ .Values.image.builder.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /app
+          command: ["./init-build.sh"]
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
           securityContext:
-            {{- toYaml .Values.image.web.securityContext | nindent 12 }}
+            {{- toYaml .Values.image.runner.securityContext | nindent 12 }}
           {{- if eq .Values.buildpack "Docker" }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- else }}
-          image: "{{ .Values.image.repository }}-web:{{ .Values.image.tag | default "latest" }}"
+          image: "{{ .Values.image.runner.repository }}:{{ .Values.image.runner.tag | default "latest" }}"
+          workingDir: /app
+          command: ["./init-web.sh"]
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          workingDir: /app
           env:
             - name: PROC_TYPE
               value: web
             - name: PORT
-              value: "8080"
+              value: {{ .Values.image.containerPort | default "8080" | quote }}
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}
             {{- end }} 
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.image.containerPort | default "8080" }}
               protocol: TCP
           livenessProbe:
             httpGet:

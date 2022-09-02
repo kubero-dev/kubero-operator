@@ -17,17 +17,32 @@ image:
   repository: ghcr.io/kubero-dev/docker-images/node
   tag: main
   pullPolicy: Always
-  web: 
+  containerPort: 8080
+  fetcher: 
+    repository: ghcr.io/kubero-dev/docker-images/base
+    tag: main
     securityContext:
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
   # capabilities:
   #   drop:
   #   - ALL
   # runAsNonRoot: true
   # runAsUser: 1000
   builder: 
+    repository: node
+    tag: latest
     securityContext:
       readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  runner: 
+    repository: node
+    tag: latest
+    securityContext:
+      readOnlyRootFilesystem: true
   # capabilities:
   #   drop:
   #   - ALL
