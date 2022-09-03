@@ -71,7 +71,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-web
           securityContext:
-            {{- toYaml .Values.image.runn.securityContext | nindent 12 }}
+            {{- toYaml .Values.image.run.securityContext | nindent 12 }}
           {{- if eq .Values.buildpack "Docker" }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- else }}
