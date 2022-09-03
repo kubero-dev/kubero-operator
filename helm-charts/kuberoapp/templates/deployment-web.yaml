@@ -34,8 +34,8 @@ spec:
       initContainers:
         - name: {{ .Chart.Name }}-fetcher
           securityContext:
-            {{- toYaml .Values.image.builder.securityContext | nindent 12 }}
-          image: "{{ .Values.image.fetcher.repository }}-builder:{{ .Values.image.fetcher.tag | default "latest" }}"
+            {{- toYaml .Values.image.fetch.securityContext | nindent 12 }}
+          image: "{{ .Values.image.fetch.repository }}-fetcher:{{ .Values.image.fetch.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
           command: ["./init-fetch.sh"]
@@ -62,8 +62,8 @@ spec:
               name: app-storage
         - name: {{ .Chart.Name }}-builder
           securityContext:
-            {{- toYaml .Values.image.builder.securityContext | nindent 12 }}
-          image: "{{ .Values.image.builder.repository }}:{{ .Values.image.builder.tag | default "latest" }}"
+            {{- toYaml .Values.image.build.securityContext | nindent 12 }}
+          image: "{{ .Values.image.build.repository }}:{{ .Values.image.build.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
           command: ["./init-build.sh"]
@@ -71,11 +71,11 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-web
           securityContext:
-            {{- toYaml .Values.image.runner.securityContext | nindent 12 }}
+            {{- toYaml .Values.image.runn.securityContext | nindent 12 }}
           {{- if eq .Values.buildpack "Docker" }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- else }}
-          image: "{{ .Values.image.runner.repository }}:{{ .Values.image.runner.tag | default "latest" }}"
+          image: "{{ .Values.image.run.repository }}:{{ .Values.image.run.tag | default "latest" }}"
           workingDir: /app
           command: ["./init-web.sh"]
           {{- end }}
