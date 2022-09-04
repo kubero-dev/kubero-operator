@@ -35,7 +35,7 @@ spec:
         - name: {{ .Chart.Name }}-fetcher
           securityContext:
             {{- toYaml .Values.image.fetch.securityContext | nindent 12 }}
-          image: "{{ .Values.image.fetch.repository }}-fetcher:{{ .Values.image.fetch.tag | default "latest" }}"
+          image: "{{ .Values.image.fetch.repository }}:{{ .Values.image.fetch.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
           command: ["./init-fetch.sh"]
