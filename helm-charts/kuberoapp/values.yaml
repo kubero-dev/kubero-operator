@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 buildpack: Docker
+deploymentstrategy: git
 
 gitrepo:
   description: Simple example Node app

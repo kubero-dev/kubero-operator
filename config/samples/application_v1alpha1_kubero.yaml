@@ -50,7 +50,7 @@ spec:
         - name: NodeJS
           language: JavaScript
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: node
@@ -61,7 +61,7 @@ spec:
         - name: PHP
           language: PHP
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: composer
@@ -72,7 +72,7 @@ spec:
         - name: Python
           language: Python
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: python
@@ -83,7 +83,7 @@ spec:
         - name: GoLang
           language: GoLang
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: golang
@@ -94,7 +94,7 @@ spec:
         - name: Python
           language: goLang
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: golang
@@ -105,7 +105,7 @@ spec:
         - name: Ruby
           language: Ruby
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: ruby
@@ -116,7 +116,7 @@ spec:
         - name: Static
           language: HTML
           fetch:
-            repository: ghcr.io/kubero-dev/docker-repositorys/base
+            repository: ghcr.io/kubero-dev/docker-image/base
             tag: main
           build:
             repository: busybox

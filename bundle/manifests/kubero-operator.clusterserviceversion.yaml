@@ -37,7 +37,7 @@ metadata:
               "tls": []
             },
             "kubero": {
-              "config": "kubero:\n  context: kind-kubero\n  namespace: kubero\n  port: 3000\nbuildpacks:\n  - name: NodeJS\n    language: JavaScript\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: node\n      tag: latest\n    run:\n      repository: node\n      tag: latest\n  - name: PHP\n    language: PHP\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: composer\n      tag: latest\n    run:\n      repository: webdevops/php-apache\n      tag: \"8.1\"\n  - name: Python\n    language: Python\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: python\n      tag: 3.10-buster\n    run:\n      repository: python\n      tag: 3.10-buster\n  - name: GoLang\n    language: GoLang\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: golang\n      tag: alpine\n    run:\n      repository: golang\n      tag: alpine\n  - name: Python\n    language: goLang\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: golang\n      tag: alpine\n    run:\n      repository: golang\n      tag: alpine\n  - name: Ruby\n    language: Ruby\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: ruby\n      tag: \"2.7\"\n    run:\n      repository: ruby\n      tag: \"2.7\"\n  - name: Static\n    language: HTML\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-repositorys/base\n      tag: main\n    build:\n      repository: busybox\n      tag: latest\n    run:\n      repository: webdevops/nginx\n      tag: alpine\npodSizeList: \n- name: small\n  description: 'Small (CPU: 0.25, Memory: 0.5Gi)'\n  default: true\n  resources:\n    requests:\n      memory: 0.5Gi\n      cpu: 250m\n    limits:\n      memory: 1Gi\n      cpu: 500m\n- name: medium\n  description: 'Medium (CPU: 1, Memory: 2Gi)'\n  resources:\n    requests:\n      memory: 2Gi\n      cpu: 1000m\n    limits:\n      memory: 4Gi\n      cpu: 2000m\n- name: large\n  description: 'Large (CPU: 2, Memory: 4Gi)'\n  active: false\n  resources:\n    requests:\n      memory: 4Gi\n      cpu: 2000m\n",
+              "config": "kubero:\n  context: kind-kubero\n  namespace: kubero\n  port: 3000\nbuildpacks:\n  - name: NodeJS\n    language: JavaScript\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: node\n      tag: latest\n    run:\n      repository: node\n      tag: latest\n  - name: PHP\n    language: PHP\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: composer\n      tag: latest\n    run:\n      repository: webdevops/php-apache\n      tag: \"8.1\"\n  - name: Python\n    language: Python\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: python\n      tag: 3.10-buster\n    run:\n      repository: python\n      tag: 3.10-buster\n  - name: GoLang\n    language: GoLang\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: golang\n      tag: alpine\n    run:\n      repository: golang\n      tag: alpine\n  - name: Python\n    language: goLang\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: golang\n      tag: alpine\n    run:\n      repository: golang\n      tag: alpine\n  - name: Ruby\n    language: Ruby\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: ruby\n      tag: \"2.7\"\n    run:\n      repository: ruby\n      tag: \"2.7\"\n  - name: Static\n    language: HTML\n    fetch:\n      repository: ghcr.io/kubero-dev/docker-image/base\n      tag: main\n    build:\n      repository: busybox\n      tag: latest\n    run:\n      repository: webdevops/nginx\n      tag: alpine\npodSizeList: \n- name: small\n  description: 'Small (CPU: 0.25, Memory: 0.5Gi)'\n  default: true\n  resources:\n    requests:\n      memory: 0.5Gi\n      cpu: 250m\n    limits:\n      memory: 1Gi\n      cpu: 500m\n- name: medium\n  description: 'Medium (CPU: 1, Memory: 2Gi)'\n  resources:\n    requests:\n      memory: 2Gi\n      cpu: 1000m\n    limits:\n      memory: 4Gi\n      cpu: 2000m\n- name: large\n  description: 'Large (CPU: 2, Memory: 4Gi)'\n  active: false\n  resources:\n    requests:\n      memory: 4Gi\n      cpu: 2000m\n",
               "context": "kind-kubero",
               "debug": "",
               "namespace": "kubero",
@@ -180,7 +180,7 @@ metadata:
     capabilities: Basic Install
     operators.operatorframework.io/builder: operator-sdk-v1.22.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: kubero-operator.v0.0.35
+  name: kubero-operator.v0.0.37
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -406,7 +406,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.35
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.37
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -493,4 +493,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.35
+  version: 0.0.37

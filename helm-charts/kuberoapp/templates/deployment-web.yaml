@@ -30,7 +30,7 @@ spec:
       serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if ne .Values.buildpack "Docker" }}
+      {{- if .Values.deploymentstrategy "git" }}
       initContainers:
         - name: {{ .Chart.Name }}-fetcher
           securityContext:
@@ -72,7 +72,7 @@ spec:
         - name: {{ .Chart.Name }}-web
           securityContext:
             {{- toYaml .Values.image.run.securityContext | nindent 12 }}
-          {{- if eq .Values.buildpack "Docker" }}
+          {{- if .Values.deploymentstrategy "git" }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- else }}
           image: "{{ .Values.image.run.repository }}:{{ .Values.image.run.tag | default "latest" }}"
@@ -102,7 +102,7 @@ spec:
               path: /
               port: http
           volumeMounts:
-            {{- if ne .Values.buildpack "Docker" }}
+            {{- if .Values.deploymentstrategy "git" }}
             - mountPath: /app
               name: app-storage
               readOnly: true
