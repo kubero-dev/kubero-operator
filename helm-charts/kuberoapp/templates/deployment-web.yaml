@@ -66,6 +66,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
           command: ["./init-build.sh"]
+          volumeMounts:
+            - mountPath: /app
+              name: app-storage
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
