@@ -21,10 +21,10 @@ data:
   # retrieve the secret data using lookup function and when not exists, return an empty dictionary / map as result
   {{- $secretObj := (lookup "v1" "Secret" $mainnamespace "kubero-secrets") | default dict }}
   {{- $secretData := (get $secretObj "data") | default dict }}
-  {{- $github := (get $secretData "GIT_DEPLOYMENTKEY_PRIVATE_B64") }}
-  github: {{ $github | quote }}
+  {{- $deploykey := (get $secretData "GIT_DEPLOYMENTKEY_PRIVATE_B64") }}
+  deploykey: {{ $deploykey | quote }}
   {{- $githubPub := (get $secretData "GIT_DEPLOYMENTKEY_PUBLIC") }}
-  github.pub: {{ $githubPub | quote }}
+  deploykey.pub: {{ $deploykeyPub | quote }}
 ---
 {{- end }}
 {{- end }}
