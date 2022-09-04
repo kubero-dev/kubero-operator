@@ -38,7 +38,6 @@ spec:
           image: "{{ .Values.image.fetch.repository }}:{{ .Values.image.fetch.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           workingDir: /app
-          command: ["./init-fetch.sh"]
           env:
             - name: GIT_REPOSITORY
               value: {{ .Values.gitrepo.ssh_url | quote }}
