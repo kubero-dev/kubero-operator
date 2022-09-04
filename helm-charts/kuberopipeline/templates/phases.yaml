@@ -23,7 +23,7 @@ data:
   {{- $secretData := (get $secretObj "data") | default dict }}
   {{- $deploykey := (get $secretData "GIT_DEPLOYMENTKEY_PRIVATE_B64") }}
   deploykey: {{ $deploykey | quote }}
-  {{- $githubPub := (get $secretData "GIT_DEPLOYMENTKEY_PUBLIC") }}
+  {{- $deploykeyPub := (get $secretData "GIT_DEPLOYMENTKEY_PUBLIC") }}
   deploykey.pub: {{ $deploykeyPub | quote }}
 ---
 {{- end }}
