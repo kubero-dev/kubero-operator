@@ -74,7 +74,7 @@ spec:
         - name: {{ .Chart.Name }}-web
           securityContext:
             {{- toYaml .Values.image.run.securityContext | nindent 12 }}
-          {{- if eq .Values.deploymentstrategy "git" }}
+          {{- if eq .Values.deploymentstrategy "docker" }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- else }}
           image: "{{ .Values.image.run.repository }}:{{ .Values.image.run.tag | default "latest" }}"
