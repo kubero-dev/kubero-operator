@@ -107,11 +107,7 @@ spec:
             {{- if eq .Values.deploymentstrategy "git" }}
             - mountPath: /app
               name: app-storage
-              {{- if not .Values.image.run.readOnly }} # default to read-only
-              readOnly: false
-              {{- else }}
-              readOnly: true
-              {{- end }}
+              readOnly: {{ hasKey .Values.image.run "readOnly" | ternary .Values.image.run.readOnly true }}
             {{- end }}
             - mountPath: /tmp
               name: tmp-storage
