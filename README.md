@@ -15,7 +15,7 @@ https://github.com/kubero-dev
 git clone git@github.com:kubero-dev/kubero-operator.git 
 cd kubero-operator
 
-export VERSION=0.0.48
+export VERSION=0.0.49
 export BUNDLE_IMG=ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v$VERSION
 kubectl ns operator
 operator-sdk run bundle $BUNDLE_IMG

@@ -40,7 +40,7 @@ image:
   # runAsNonRoot: true
   # runAsUser: 1000
   run: 
-    readOnly: false
+    readOnlyAppStorage: true
     repository: node
     tag: latest
     securityContext:
