@@ -45,7 +45,7 @@ spec:
             - name: GIT_BRANCH
               value: {{ .Values.branch | quote }}
             {{- end }}
-            {{- if .Values.branch }}
+            {{- if .Values.ref }}
             - name: GIT_REF
               value: {{ .Values.ref | quote }}
             {{- end }}

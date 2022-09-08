@@ -11,11 +11,13 @@ https://github.com/kubero-dev
 
 ## Installation without operator hub (not published yet)
 
+Get the latest version on the `Makefile`
+
 ```bash
 git clone git@github.com:kubero-dev/kubero-operator.git 
 cd kubero-operator
 
-export VERSION=0.0.49
+export VERSION=0.0.XX
 export BUNDLE_IMG=ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v$VERSION
 kubectl ns operator
 operator-sdk run bundle $BUNDLE_IMG
