@@ -178,7 +178,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    operators.operatorframework.io/builder: operator-sdk-v1.22.1
+    operators.operatorframework.io/builder: operator-sdk-v1.23.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
   name: kubero-operator.v0.0.50
   namespace: placeholder
