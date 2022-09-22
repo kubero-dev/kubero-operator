@@ -3,6 +3,8 @@
 {{- $name := .Values.name -}}
 {{- $mainnamespace := .Values.mainnamespace -}}
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
+{{- $deploykey := .Values.git.keys.priv -}}
+{{- $deploykeyPub := .Values.git.keys.pub -}}
 {{- range .Values.phases }}
 {{- if .enabled }}
 apiVersion: v1
@@ -18,12 +20,7 @@ metadata:
   namespace: {{ $name }}-{{ .name }}
 type: Opaque
 data:
-  # retrieve the secret data using lookup function and when not exists, return an empty dictionary / map as result
-  {{- $secretObj := (lookup "v1" "Secret" $mainnamespace "kubero-secrets") | default dict }}
-  {{- $secretData := (get $secretObj "data") | default dict }}
-  {{- $deploykey := (get $secretData "GIT_DEPLOYMENTKEY_PRIVATE_B64") }}
   deploykey: {{ $deploykey | quote }}
-  {{- $deploykeyPub := (get $secretData "GIT_DEPLOYMENTKEY_PUBLIC") }}
   deploykey.pub: {{ $deploykeyPub | quote }}
 ---
 {{- end }}
