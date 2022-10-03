@@ -6,13 +6,20 @@ buildpack: Docker
 deploymentstrategy: git
 
 gitrepo:
-  description: Simple example Node app
   id: 123456789
-  name: template-nodeapp
-  node_id: X_XxxXxyyYYY
-  owner: kubero-dev
+  admin: false
   private: false
-  ssh_url: git@github.com:kubero-dev/template-nodeapp.git
+  push: false
+  visibility: public
+  description: Hello World for Node.js
+  homepage: https://github.com/foo/bar
+  language: JavaScript
+  name: node-hello
+  node_id: X_XxxXxyyYYY
+  owner: foo
+  ssh_url: git@github.com:foo/bar.git
+  clone_url: https://github.com/foo/bar.git
+  default_branch: main
 
 image:
   repository: ghcr.io/kubero-dev/docker-images/node

@@ -8,7 +8,7 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.worker.replicaCount }}
   {{- end }}
-  {{- if and (.Values.autoscaling.enabled) (lt .Values.worker.autoscaling.minReplicas 1) }}
+  {{- if and (.Values.autoscaling.enabled) (lt .Values.worker.autoscaling.minReplicas 1.0) }}
   replicas: 0
   {{- end }}
   selector:
@@ -40,7 +40,7 @@ spec:
           workingDir: /app
           env:
             - name: GIT_REPOSITORY
-              value: {{ .Values.gitrepo.ssh_url | quote }}
+              value: {{ include "kuberoapp.clone_url" . | quote }}
             {{- if .Values.branch }}
             - name: GIT_BRANCH
               value: {{ .Values.branch | quote }}

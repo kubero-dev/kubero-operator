@@ -60,3 +60,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "kuberoapp.clone_url" -}}
+{{- if .Values.gitrepo.admin }}
+{{- .Values.gitrepo.ssh_url  }}
+{{- else }}
+{{- .Values.gitrepo.clone_url }}
+{{- end }}
+{{- end }}
