@@ -49,6 +49,14 @@ spec:
             - name: GIT_REF
               value: {{ .Values.ref | quote }}
             {{- end }}
+            {{- if .Values.image.build.command }}
+            - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
+              value: {{ .Values.image.build.command | quote }}
+            {{- end }}
+            {{- if .Values.image.run.command }}
+            - name: KUBERO_BUILDPACK_DEFAULT_RUN_CMD
+              value: {{ .Values.image.run.command | quote }}
+            {{- end }}
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}

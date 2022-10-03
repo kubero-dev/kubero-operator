@@ -39,6 +39,7 @@ image:
   build: 
     repository: node
     tag: latest
+    command: "npm install"
     securityContext:
       readOnlyRootFilesystem: false
   # capabilities:
@@ -50,6 +51,7 @@ image:
     readOnlyAppStorage: true
     repository: node
     tag: latest
+    command: "node index.js"
     securityContext:
       readOnlyRootFilesystem: true
   # capabilities:
