@@ -1,4 +1,4 @@
-{{- if and ( .Values.autoscaling.enabled) (gt .Values.worker.autoscaling.minReplicas 0.0) }}
+{{- if and ( .Values.autoscaling.enabled) (gt (.Values.worker.autoscaling.minReplicas | float64) 0.0) }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
