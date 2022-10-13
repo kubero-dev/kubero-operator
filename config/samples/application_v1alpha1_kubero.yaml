@@ -39,11 +39,11 @@ spec:
   kubero:
     debug: ""
     namespace: kubero
-    context: kind-kubero
+    context: inClusterContext
     webhook_url: http://localhost:3000/api/webhook
     config: |
       kubero:
-        context: kind-kubero
+        context: inClusterContext
         namespace: kubero
         port: 3000
       buildpacks:
