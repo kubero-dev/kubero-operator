@@ -91,7 +91,26 @@ rules:
   - "batch"
   resources:
   - "cronjobs"
-
+#### Addons
+- apiGroups:
+    - "redis.redis.opstreelabs.in"
+  resources:
+    - "redis"
+    - "redisclusters"
+  verbs:
+    - "*"
+- apiGroups:
+    - "postgres-operator.crunchydata.com"
+  resources:
+    - "postgresclusters"
+  verbs:
+    - "*"
+- apiGroups:
+    - "psmdb.percona.com"
+  resources:
+    - "perconaservermongodbs"
+  verbs:
+    - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
 ##
