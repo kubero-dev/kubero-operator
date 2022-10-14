@@ -159,7 +159,45 @@ cronjobs:
     restartPolicy: OnFailure
     env: []
 
-addons:
-  - name: Redis
-    operator: redis-operator.operators
-    version: v0.0.1
+addons: []
+#  - id: redis-operator
+#    kind: Redis
+#    env: []
+#    version:
+#      installed: 0.11.0
+#      latest: 0.11.0
+#    crd:
+#      apiVersion: redis.redis.opstreelabs.in/v1beta1
+#      kind: Redis
+#      metadata:
+#        name: redis-standalone
+#      spec:
+#        kubernetesConfig:
+#          image: quay.io/opstree/redis:v6.2.5
+#          imagePullPolicy: IfNotPresent
+#          resources:
+#            limits:
+#              cpu: 101m
+#              memory: 128Mi
+#            requests:
+#              cpu: 101m
+#              memory: 128Mi
+#        redisExporter:
+#          enabled: true
+#          image: quay.io/opstree/redis-exporter:1.0
+#          imagePullPolicy: Always
+#          resources:
+#            limits:
+#              cpu: 100m
+#              memory: 128Mi
+#            requests:
+#              cpu: 100m
+#              memory: 128Mi
+#        storage:
+#          volumeClaimTemplate:
+#            spec:
+#              accessModes:
+#              - ReadWriteOnce
+#              resources:
+#                requests:
+#                  storage: 1Gi
