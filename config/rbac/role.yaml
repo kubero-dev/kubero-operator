@@ -95,7 +95,7 @@ rules:
 - apiGroups:
     - "opstreelabs.in"
   resources:
-    - "mongodb"
+    - "mongodbs"
   verbs:
     - "*"
 - apiGroups:
