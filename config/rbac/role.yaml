@@ -93,6 +93,12 @@ rules:
   - "cronjobs"
 #### Addons
 - apiGroups:
+    - "opstreelabs.in"
+  resources:
+    - "mongodb"
+  verbs:
+    - "*"
+- apiGroups:
     - "redis.redis.opstreelabs.in"
   resources:
     - "redis"
