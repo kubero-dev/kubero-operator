@@ -26,7 +26,7 @@ image:
   tag: main
   pullPolicy: Always
   containerPort: 8080
-  fetch: 
+  fetch:
     repository: ghcr.io/kubero-dev/docker-images/base
     tag: main
     securityContext:
@@ -36,7 +36,7 @@ image:
   #   - ALL
   # runAsNonRoot: true
   # runAsUser: 1000
-  build: 
+  build:
     repository: node
     tag: latest
     command: "npm install"
@@ -47,7 +47,7 @@ image:
   #   - ALL
   # runAsNonRoot: true
   # runAsUser: 1000
-  run: 
+  run:
     readOnlyAppStorage: true
     repository: node
     tag: latest
@@ -117,7 +117,7 @@ web:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 
+    targetMemoryUtilizationPercentage:
 
 worker:
   replicaCount: 1
@@ -125,7 +125,7 @@ worker:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 
+    targetMemoryUtilizationPercentage:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -148,11 +148,11 @@ tolerations: []
 
 affinity: {}
 
-cronjobs: 
+cronjobs:
   - name: "cronjob-sample"
     schedule: '* */6 * * *'
     image: busybox:1.28
-    command: 
+    command:
       - /bin/sh
       - -c
       - date; echo Hello from the Kubernetes cluster
@@ -160,44 +160,59 @@ cronjobs:
     env: []
 
 addons: []
-#  - id: redis-operator
-#    kind: Redis
-#    env: []
-#    version:
-#      installed: 0.11.0
-#      latest: 0.11.0
-#    crd:
-#      apiVersion: redis.redis.opstreelabs.in/v1beta1
-#      kind: Redis
-#      metadata:
-#        name: redis-standalone
-#      spec:
-#        kubernetesConfig:
-#          image: quay.io/opstree/redis:v6.2.5
-#          imagePullPolicy: IfNotPresent
-#          resources:
-#            limits:
-#              cpu: 101m
-#              memory: 128Mi
-#            requests:
-#              cpu: 101m
-#              memory: 128Mi
-#        redisExporter:
-#          enabled: true
-#          image: quay.io/opstree/redis-exporter:1.0
-#          imagePullPolicy: Always
-#          resources:
-#            limits:
-#              cpu: 100m
-#              memory: 128Mi
-#            requests:
-#              cpu: 100m
-#              memory: 128Mi
-#        storage:
-#          volumeClaimTemplate:
-#            spec:
-#              accessModes:
-#              - ReadWriteOnce
-#              resources:
-#                requests:
-#                  storage: 1Gi
+# addons:
+#   - id: redis-operator
+#     kind: Redis
+#     env: []
+#     version:
+#       installed: 0.11.0
+#       latest: 0.11.0
+#     crd:
+#       apiVersion: redis.redis.opstreelabs.in/v1beta1
+#       kind: Redis
+#       metadata:
+#         name: redis-standalone
+#       spec:
+#         kubernetesConfig:
+#           image: quay.io/opstree/redis:v6.2.5
+#           imagePullPolicy: IfNotPresent
+#           resources:
+#             limits:
+#               cpu: 101m
+#               memory: 128Mi
+#             requests:
+#               cpu: 101m
+#               memory: 128Mi
+#         redisExporter:
+#           enabled: true
+#           image: quay.io/opstree/redis-exporter:1.0
+#           imagePullPolicy: Always
+#           resources:
+#             limits:
+#               cpu: 100m
+#               memory: 128Mi
+#             requests:
+#               cpu: 100m
+#               memory: 128Mi
+#         storage:
+#           volumeClaimTemplate:
+#             spec:
+#               accessModes:
+#               - ReadWriteOnce
+#               resources:
+#                 requests:
+#                   storage: 1Gi
+#     additionalResources:
+#           mongodbSecret:
+#             apiVersion: v1
+#             data:
+#               password: test
+#             kind: Secret
+#             metadata:
+#               annotations:
+#                 meta.helm.sh/release-name: test
+#                 meta.helm.sh/release-namespace: kubero-dev
+#               labels:
+#                 app.kubernetes.io/managed-by: Kubero
+#               name: mongodb-secret
+#             type: Opaque
