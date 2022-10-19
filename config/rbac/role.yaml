@@ -112,9 +112,9 @@ rules:
   verbs:
     - "*"
 - apiGroups:
-    - "psmdb.percona.com"
+    - "minio.min.io"
   resources:
-    - "perconaservermongodbs"
+    - "tenants"
   verbs:
     - "*"
 ##
