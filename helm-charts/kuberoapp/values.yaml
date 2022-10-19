@@ -159,60 +159,45 @@ cronjobs:
     restartPolicy: OnFailure
     env: []
 
-addons: []
-# addons:
-#   - id: redis-operator
-#     kind: Redis
-#     env: []
-#     version:
-#       installed: 0.11.0
-#       latest: 0.11.0
-#     crd:
-#       apiVersion: redis.redis.opstreelabs.in/v1beta1
-#       kind: Redis
-#       metadata:
-#         name: redis-standalone
-#       spec:
-#         kubernetesConfig:
-#           image: quay.io/opstree/redis:v6.2.5
-#           imagePullPolicy: IfNotPresent
-#           resources:
-#             limits:
-#               cpu: 101m
-#               memory: 128Mi
-#             requests:
-#               cpu: 101m
-#               memory: 128Mi
-#         redisExporter:
-#           enabled: true
-#           image: quay.io/opstree/redis-exporter:1.0
-#           imagePullPolicy: Always
-#           resources:
-#             limits:
-#               cpu: 100m
-#               memory: 128Mi
-#             requests:
-#               cpu: 100m
-#               memory: 128Mi
-#         storage:
-#           volumeClaimTemplate:
-#             spec:
-#               accessModes:
-#               - ReadWriteOnce
-#               resources:
-#                 requests:
-#                   storage: 1Gi
-#     additionalResources:
-#           mongodbSecret:
-#             apiVersion: v1
-#             data:
-#               password: test
-#             kind: Secret
-#             metadata:
-#               annotations:
-#                 meta.helm.sh/release-name: test
-#                 meta.helm.sh/release-namespace: kubero-dev
-#               labels:
-#                 app.kubernetes.io/managed-by: Kubero
-#               name: mongodb-secret
-#             type: Opaque
+#addons: []
+addons:
+  - env: []
+    id: mongodb-operator
+    kind: MongoDB
+    resourceDefinitions:
+      MongoDB:
+        apiVersion: opstreelabs.in/v1alpha1
+        kind: MongoDB
+        metadata:
+          name: mongodbinstanceasdf
+        spec:
+          kubernetesConfig:
+            image: quay.io/opstree/mongo:v5.0.6
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              fsGroup: 1001
+          mongoDBSecurity:
+            mongoDBAdminUser: admin
+            secretRef:
+              key: password
+              name: mongodb-secret
+          storage:
+            accessModes:
+            - ReadWriteOnce
+            storageClass: standard
+            storageSize: 1Gi
+      mongodbSecret:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          annotations:
+            meta.helm.sh/release-name: test
+            meta.helm.sh/release-namespace: kubero-dev
+          labels:
+            app.kubernetes.io/managed-by: Kubero
+          name: mongodb-secret
+        stringData:
+          password: test
+        type: Opaque
+    version:
+      installed: 0.3.0

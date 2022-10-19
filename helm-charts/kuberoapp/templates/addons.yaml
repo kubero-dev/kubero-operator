@@ -1,7 +1,5 @@
 {{- range .Values.addons }}
-{{- toYaml .crd }}
----
-{{- range .additionalResources }}
+{{- range .resourceDefinitions }}
 {{- toYaml . }}
 ---
 {{- end }}
