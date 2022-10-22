@@ -6,7 +6,10 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.70
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
+    repository: https://github.com/kubero-dev/kubero
+    support: Kubero Community
   name: kubero-operator.v0.0.0
   namespace: placeholder
 spec:
