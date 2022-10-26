@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/logo/kubero-logo-horizontal.png">
+<img width="50%" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/logo/kubero-logo-horizontal.png">
 
 <br>
 <br>
