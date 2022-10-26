@@ -192,17 +192,17 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: KuberoApp is the Schema for the kuberoapps API
+    - description: Creates a App in a Kubero Pipeline
       displayName: KuberoApp
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
       version: v1alpha1
-    - description: Kubero is the Schema for the kuberoes API
-      displayName: Kubero
+    - description: Starts the Kubero UI
+      displayName: Kubero UI and API
       kind: Kubero
       name: kuberoes.application.kubero.dev
       version: v1alpha1
-    - description: KuberoPipeline is the Schema for the kuberopipelines API
+    - description: Creates a Kubero Pipeline
       displayName: KuberoPipeline
       kind: KuberoPipeline
       name: kuberopipelines.application.kubero.dev
