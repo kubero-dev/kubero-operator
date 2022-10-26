@@ -39,11 +39,11 @@ spec:
             - name: NODE_TLS_REJECT_UNAUTHORIZED
               value: "0"
             - name: KUBERO_CONTEXT
-              value: "{{ .Values.kubero.context }}" 
+              value: "{{ .Values.kubero.context }}"
             - name: KUBERO_NAMESPACE
-              value: "{{ .Values.kubero.namespace }}" 
+              value: "{{ .Values.kubero.namespace }}"
             - name: KUBERO_WEBHOOK_URL
-              value: "{{ .Values.kubero.webhook_url }}" 
+              value: "{{ .Values.kubero.webhook_url }}"
             - name: KUBERO_WEBHOOK_SECRET
               valueFrom:
                 secretKeyRef:
@@ -80,21 +80,11 @@ spec:
                   key: KUBECONFIG_BASE64
                   optional: true
             - name: DEBUG
-              value: "{{ .Values.kubero.debug }}" 
+              value: "{{ .Values.kubero.debug }}"
             - name: KUBERO_CONFIG_PATH
               value: /etc/kubero/config.yaml
             - name: PORT
               value: "{{ .Values.service.port }}"
-            - name: GIT_DEPLOYMENTKEY_PUBLIC
-              valueFrom:
-                secretKeyRef:
-                  name: kubero-secrets
-                  key: GIT_DEPLOYMENTKEY_PUBLIC
-            - name: GIT_DEPLOYMENTKEY_PRIVATE_B64
-              valueFrom:
-                secretKeyRef:
-                  name: kubero-secrets
-                  key: GIT_DEPLOYMENTKEY_PRIVATE_B64
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

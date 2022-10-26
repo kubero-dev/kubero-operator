@@ -6,7 +6,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.70
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.71
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
@@ -14,7 +14,23 @@ metadata:
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
-  customresourcedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Creates a App in a Kubero Pipeline
+      displayName: KuberoApp
+      kind: KuberoApp
+      name: kuberoapps.application.kubero.dev
+      version: v1alpha1
+    - description: Starts the Kubero UI
+      displayName: Kubero UI and API
+      kind: Kubero
+      name: kuberoes.application.kubero.dev
+      version: v1alpha1
+    - description: Creates a Kubero Pipeline
+      displayName: KuberoPipeline
+      kind: KuberoPipeline
+      name: kuberopipelines.application.kubero.dev
+      version: v1alpha1
   description: |-
     Kubero brings the convinience of Heroku/platform.sh/vercel/Netlify to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment.
 
