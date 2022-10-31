@@ -41,7 +41,23 @@ spec:
     namespace: kubero
     context: inClusterContext
     webhook_url: http://localhost:3000/api/webhook
-    config: |
+    sessionKey: "randomString"
+    auth:
+      github:
+        enabled: false
+        id: ""
+        secret: ""
+        callbackUrl: ""
+        org: ""
+      oauth2:
+        enabled: false
+        name: ""
+        id: ""
+        authUrl: ""
+        tokenUrl: ""
+        secret: ""
+        callbackUrl: ""
+      config: |
       kubero:
         context: inClusterContext
         namespace: kubero
@@ -129,7 +145,7 @@ spec:
             repository: webdevops/nginx
             tag: alpine
             command: "supervisord"
-      podSizeList: 
+      podSizeList:
       - name: small
         description: 'Small (CPU: 0.25, Memory: 0.5Gi)'
         default: true
