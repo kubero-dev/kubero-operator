@@ -44,6 +44,8 @@ spec:
               value: "{{ .Values.kubero.namespace }}"
             - name: KUBERO_WEBHOOK_URL
               value: "{{ .Values.kubero.webhook_url }}"
+            - name: KUBERNETES_INGRESS_CLASSNAME
+              value: "{{ .Values.ingress.className }}"
             - name: KUBERO_WEBHOOK_SECRET
               valueFrom:
                 secretKeyRef:
