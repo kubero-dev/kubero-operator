@@ -77,8 +77,8 @@ affinity: {}
 kubero:
   debug: ""
   namespace: kubero
-  context: kind-kubero
-  webhook_url: http://localhost:3000/api/webhook
+  context: inClusterContext
+  webhook_url: https://kubero.lacolhost.com/api/webhook
   #sessionKey: "randomString"
   auth:
     github:
