@@ -1,7 +1,7 @@
 apiVersion: application.kubero.dev/v1alpha1
 kind: KuberoApp
 metadata:
-  name: kuberoapp-sample
+  name: kuberoapp
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberoapp/values.yaml
   affinity: {}
@@ -41,5 +41,3 @@ spec:
     create: true
     name: ""
   tolerations: []
-  
-  

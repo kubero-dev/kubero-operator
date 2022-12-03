@@ -75,11 +75,47 @@ spec:
                   name: kubero-secrets
                   key: GITEA_PERSONAL_ACCESS_TOKEN
                   optional: true
+            - name: GITEA_BASEURL
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITEA_BASEURL
+                  optional: true
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: kubero-secrets
                   key: GITLAB_PERSONAL_ACCESS_TOKEN
+                  optional: true
+            - name: GITLAB_BASEURL
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITLAB_BASEURL
+                  optional: true
+            - name: GOGS_PERSONAL_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GOGS_PERSONAL_ACCESS_TOKEN
+                  optional: true
+            - name: GOGS_BASEURL
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GOGS_BASEURL
+                  optional: true
+            - name: BITBUCKET_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: BITBUCKET_USERNAME
+                  optional: true
+            - name: BITBUCKET_APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: BITBUCKET_APP_PASSWORD
                   optional: true
             - name: KUBECONFIG_BASE64
               valueFrom:

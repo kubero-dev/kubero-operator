@@ -1,7 +1,7 @@
 apiVersion: application.kubero.dev/v1alpha1
 kind: KuberoPipeline
 metadata:
-  name: kuberopipeline-sample
+  name: kuberopipeline
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberopipeline/values.yaml
   affinity: {}
@@ -41,5 +41,3 @@ spec:
     create: true
     name: ""
   tolerations: []
-  
-  
