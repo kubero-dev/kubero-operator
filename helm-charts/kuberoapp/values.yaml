@@ -27,7 +27,7 @@ image:
   pullPolicy: Always
   containerPort: 8080
   fetch:
-    repository: ghcr.io/kubero-dev/docker-images/base
+    repository: ghcr.io/kubero-dev/buildpacks/fetch
     tag: main
     securityContext:
       readOnlyRootFilesystem: false
