@@ -60,7 +60,7 @@ spec:
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}
-            {{- end }} 
+            {{- end }}
           volumeMounts:
             - mountPath: /root/.ssh
               name: deployment-keys
@@ -98,19 +98,11 @@ spec:
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}
-            {{- end }} 
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.image.containerPort | default "8080" }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           volumeMounts:
             {{- if eq .Values.deploymentstrategy "git" }}
             - mountPath: /app
