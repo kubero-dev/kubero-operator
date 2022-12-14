@@ -12,7 +12,7 @@ kind: Namespace
 metadata:
   name: {{ $name }}-{{ .name }}
 ---
-{{- if eq $deploymentstrategy "git" }}
+{{- if and (eq $deploymentstrategy "git") ($deploykeyPub) }}
 apiVersion: v1
 kind: Secret
 metadata:
