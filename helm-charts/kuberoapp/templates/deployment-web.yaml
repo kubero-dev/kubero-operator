@@ -60,7 +60,7 @@ spec:
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}
-            {{- end }} 
+            {{- end }}
           volumeMounts:
             - mountPath: /root/.ssh
               name: deployment-keys
@@ -98,7 +98,7 @@ spec:
             {{- range .Values.envVars }}
             - name: {{ .name }}
               value: {{ .value }}
-            {{- end }} 
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.image.containerPort | default "8080" }}

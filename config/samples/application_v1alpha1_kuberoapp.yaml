@@ -5,17 +5,68 @@ metadata:
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberoapp/values.yaml
   affinity: {}
+  deploymentstrategy: git
   autoscaling:
     enabled: false
     maxReplicas: 100
     minReplicas: 1
     targetCPUUtilizationPercentage: 80
   fullnameOverride: ""
+  gitrepo:
+    admin: false
+    ssh_url: git@github.com:foo/bar.git
+    clone_url: https://github.com/foo/bar.git
   image:
-    pullPolicy: IfNotPresent
-    repository: nginx
-    tag: ""
+    repository: ghcr.io/kubero-dev/docker-images/node
+    tag: main
+    pullPolicy: Always
+    containerPort: 8080
+    fetch:
+      repository: ghcr.io/kubero-dev/buildpacks/fetch
+      tag: main
+      securityContext:
+        readOnlyRootFilesystem: false
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # runAsNonRoot: true
+    # runAsUser: 1000
+    build:
+      repository: node
+      tag: latest
+      command: "npm install"
+      securityContext:
+        readOnlyRootFilesystem: false
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # runAsNonRoot: true
+    # runAsUser: 1000
+    run:
+      readOnlyAppStorage: true
+      repository: node
+      tag: latest
+      command: "node index.js"
+      securityContext:
+        readOnlyRootFilesystem: true
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # runAsNonRoot: true
+    # runAsUser: 1000
   imagePullSecrets: []
+  branch: master
+  ref: refs/heads/dummy-pr
+  autodeploy: false
+  envVars:
+    - name: EXAMPLE
+      value: foo
+    - name: BAR
+      value: 3000
+  podsize: ""
+  name: kuberoapp
+  phase: production
+  pipeline: kuberopipeline
   ingress:
     annotations: {}
     className: ""
@@ -41,3 +92,72 @@ spec:
     create: true
     name: ""
   tolerations: []
+
+  web:
+    replicaCount: 1
+    autoscaling:
+      minReplicas: 1
+      maxReplicas: 100
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+
+  worker:
+    replicaCount: 1
+    autoscaling:
+      minReplicas: 1
+      maxReplicas: 100
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+
+  cronjobs:
+    - name: "cronjob-sample"
+      schedule: '* */6 * * *'
+      image: busybox:1.28
+      command:
+        - /bin/sh
+        - -c
+        - date; echo Hello from the Kubernetes cluster
+      restartPolicy: OnFailure
+      env: []
+
+  addons:
+    - env: []
+      id: mongodb-operator
+      kind: MongoDB
+      resourceDefinitions:
+        MongoDB:
+          apiVersion: opstreelabs.in/v1alpha1
+          kind: MongoDB
+          metadata:
+            name: mongodbinstanceasdf
+          spec:
+            kubernetesConfig:
+              image: quay.io/opstree/mongo:v5.0.6
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                fsGroup: 1001
+            mongoDBSecurity:
+              mongoDBAdminUser: admin
+              secretRef:
+                key: password
+                name: mongodb-secret
+            storage:
+              accessModes:
+              - ReadWriteOnce
+              storageClass: standard
+              storageSize: 1Gi
+        mongodbSecret:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            annotations:
+              meta.helm.sh/release-name: test
+              meta.helm.sh/release-namespace: kubero-dev
+            labels:
+              app.kubernetes.io/managed-by: Kubero
+            name: mongodb-secret
+          stringData:
+            password: test
+          type: Opaque
+      version:
+        installed: 0.3.0
