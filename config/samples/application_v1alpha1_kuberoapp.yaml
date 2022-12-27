@@ -109,6 +109,15 @@ spec:
       targetCPUUtilizationPercentage: 80
       targetMemoryUtilizationPercentage: 80
 
+  extraVolumes:
+    - name: "test-volume"
+      emptyDir: false
+      storageClass: "standard"
+      size: "1Gi"
+      accessModes:
+        - "ReadWriteMany"
+      mountPath: "/test-volume"
+
   cronjobs:
     - name: "cronjob-sample"
       schedule: '* */6 * * *'

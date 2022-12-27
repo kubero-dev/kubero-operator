@@ -114,6 +114,10 @@ spec:
             - mountPath: /tmp
               name: tmp-storage
               readOnly: false
+            {{- range .Values.extraVolumes }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
@@ -125,6 +129,15 @@ spec:
         emptyDir: {}
       - name: tmp-storage
         emptyDir: {}
+      {{- range .Values.extraVolumes }}
+      - name: {{ .name }}
+        {{- if .emptyDir }}
+        emptyDir: {}
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ .name }}
+        {{- end }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
