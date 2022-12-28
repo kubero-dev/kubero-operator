@@ -63,7 +63,17 @@ spec:
       value: foo
     - name: BAR
       value: 3000
-  podsize: ""
+  podsize:
+    default: true
+    description: 'Small (CPU: 0.25, Memory: 0.5Gi)'
+    name: small
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 0.5Gi
   name: kuberoapp
   phase: production
   pipeline: kuberopipeline

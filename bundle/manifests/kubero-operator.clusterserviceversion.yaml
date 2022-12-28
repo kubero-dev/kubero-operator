@@ -406,7 +406,21 @@ metadata:
             "pipeline": "kuberopipeline",
             "podAnnotations": {},
             "podSecurityContext": {},
-            "podsize": "",
+            "podsize": {
+              "default": true,
+              "description": "Small (CPU: 0.25, Memory: 0.5Gi)",
+              "name": "small",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+                },
+                "requests": {
+                  "cpu": "250m",
+                  "memory": "0.5Gi"
+                }
+              }
+            },
             "ref": "refs/heads/dummy-pr",
             "replicaCount": 1,
             "resources": {},
@@ -502,13 +516,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.81
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.82
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.81
+  name: kubero-operator.v0.0.82
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -770,7 +784,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.81
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.82
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -857,4 +871,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.81
+  version: 0.0.82
