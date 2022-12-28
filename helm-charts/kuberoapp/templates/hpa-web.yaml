@@ -1,5 +1,9 @@
 {{- if and ( .Values.autoscaling.enabled) (gt (.Values.web.autoscaling.minReplicas | float64) 0.0) }}
+{{- if semverCompare ">=1.22-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: autoscaling/v2
+{{- else -}}
 apiVersion: autoscaling/v2beta1
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "kuberoapp.fullname" . }}-web
