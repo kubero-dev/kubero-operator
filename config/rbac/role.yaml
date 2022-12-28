@@ -147,6 +147,10 @@ rules:
   resources:
   - "serviceaccounts"
   - "services"
+  - "persistentvolumeclaims"
+  - "persistentvolumes"
+  - "persistentvolumeclaims/finalizers"
+  - "persistentvolumes/finalizers"
 - verbs:
   - "*"
   apiGroups:
