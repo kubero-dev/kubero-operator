@@ -250,18 +250,147 @@ metadata:
             "name": "kuberoapp"
           },
           "spec": {
+            "addons": [
+              {
+                "env": [],
+                "id": "mongodb-operator",
+                "kind": "MongoDB",
+                "resourceDefinitions": {
+                  "MongoDB": {
+                    "apiVersion": "opstreelabs.in/v1alpha1",
+                    "kind": "MongoDB",
+                    "metadata": {
+                      "name": "mongodbinstanceasdf"
+                    },
+                    "spec": {
+                      "kubernetesConfig": {
+                        "image": "quay.io/opstree/mongo:v5.0.6",
+                        "imagePullPolicy": "IfNotPresent",
+                        "securityContext": {
+                          "fsGroup": 1001
+                        }
+                      },
+                      "mongoDBSecurity": {
+                        "mongoDBAdminUser": "admin",
+                        "secretRef": {
+                          "key": "password",
+                          "name": "mongodb-secret"
+                        }
+                      },
+                      "storage": {
+                        "accessModes": [
+                          "ReadWriteOnce"
+                        ],
+                        "storageClass": "standard",
+                        "storageSize": "1Gi"
+                      }
+                    }
+                  },
+                  "mongodbSecret": {
+                    "apiVersion": "v1",
+                    "kind": "Secret",
+                    "metadata": {
+                      "annotations": {
+                        "meta.helm.sh/release-name": "test",
+                        "meta.helm.sh/release-namespace": "kubero-dev"
+                      },
+                      "labels": {
+                        "app.kubernetes.io/managed-by": "Kubero"
+                      },
+                      "name": "mongodb-secret"
+                    },
+                    "stringData": {
+                      "password": "test"
+                    },
+                    "type": "Opaque"
+                  }
+                },
+                "version": {
+                  "installed": "0.3.0"
+                }
+              }
+            ],
             "affinity": {},
+            "autodeploy": false,
             "autoscaling": {
               "enabled": false,
               "maxReplicas": 100,
               "minReplicas": 1,
               "targetCPUUtilizationPercentage": 80
             },
+            "branch": "master",
+            "cronjobs": [
+              {
+                "command": [
+                  "/bin/sh",
+                  "-c",
+                  "date; echo Hello from the Kubernetes cluster"
+                ],
+                "env": [],
+                "image": "busybox:1.28",
+                "name": "cronjob-sample",
+                "restartPolicy": "OnFailure",
+                "schedule": "* */6 * * *"
+              }
+            ],
+            "deploymentstrategy": "git",
+            "envVars": [
+              {
+                "name": "EXAMPLE",
+                "value": "foo"
+              },
+              {
+                "name": "BAR",
+                "value": 3000
+              }
+            ],
+            "extraVolumes": [
+              {
+                "accessModes": [
+                  "ReadWriteMany"
+                ],
+                "emptyDir": false,
+                "mountPath": "/test-volume",
+                "name": "test-volume",
+                "size": "1Gi",
+                "storageClass": "standard"
+              }
+            ],
             "fullnameOverride": "",
+            "gitrepo": {
+              "admin": false,
+              "clone_url": "https://github.com/foo/bar.git",
+              "ssh_url": "git@github.com:foo/bar.git"
+            },
             "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
+              "build": {
+                "command": "npm install",
+                "repository": "node",
+                "securityContext": {
+                  "readOnlyRootFilesystem": false
+                },
+                "tag": "latest"
+              },
+              "containerPort": 8080,
+              "fetch": {
+                "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                "securityContext": {
+                  "readOnlyRootFilesystem": false
+                },
+                "tag": "main"
+              },
+              "pullPolicy": "Always",
+              "repository": "ghcr.io/kubero-dev/docker-images/node",
+              "run": {
+                "command": "node index.js",
+                "readOnlyAppStorage": true,
+                "repository": "node",
+                "securityContext": {
+                  "readOnlyRootFilesystem": true
+                },
+                "tag": "latest"
+              },
+              "tag": "main"
             },
             "imagePullSecrets": [],
             "ingress": {
@@ -281,10 +410,15 @@ metadata:
               ],
               "tls": []
             },
+            "name": "kuberoapp",
             "nameOverride": "",
             "nodeSelector": {},
+            "phase": "production",
+            "pipeline": "kuberopipeline",
             "podAnnotations": {},
             "podSecurityContext": {},
+            "podsize": "",
+            "ref": "refs/heads/dummy-pr",
             "replicaCount": 1,
             "resources": {},
             "securityContext": {},
@@ -297,7 +431,25 @@ metadata:
               "create": true,
               "name": ""
             },
-            "tolerations": []
+            "tolerations": [],
+            "web": {
+              "autoscaling": {
+                "maxReplicas": 100,
+                "minReplicas": 1,
+                "targetCPUUtilizationPercentage": 80,
+                "targetMemoryUtilizationPercentage": 80
+              },
+              "replicaCount": 1
+            },
+            "worker": {
+              "autoscaling": {
+                "maxReplicas": 100,
+                "minReplicas": 1,
+                "targetCPUUtilizationPercentage": 80,
+                "targetMemoryUtilizationPercentage": 80
+              },
+              "replicaCount": 1
+            }
           }
         },
         {
@@ -361,13 +513,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.75
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.76
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.75
+  name: kubero-operator.v0.0.76
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -625,7 +777,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.75
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.76
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -712,4 +864,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.75
+  version: 0.0.76
