@@ -117,7 +117,7 @@ web:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage:
+    targetMemoryUtilizationPercentage: 80
 
 worker:
   replicaCount: 1
@@ -125,7 +125,7 @@ worker:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage:
+    targetMemoryUtilizationPercentage: 80
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
