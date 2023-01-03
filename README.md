@@ -14,6 +14,6 @@ Note: Add any extra configuration variables to the kubero-secrets secret.
 ```bash
 git clone https://github.com/kubero-dev/kubero-operator.git
 cd kubero-operator
-helm install kubero ./helm-charts/kubero -n kubero --create-namespace
+helm install kubero ./helm-charts/kubero -n kubero --create-namespace --values custom_values.yaml
 kubectl create secret generic kubero-secrets -n kubero --from-literal=KUBERO_WEBHOOK_SECRET=supersecret --from-literal=KUBERO_USERS=topsecret
 ```
