@@ -9,11 +9,14 @@ https://github.com/kubero-dev
 <br>
 
 
-## Installation without operator hub via helm (not published yet)
+## Installation without operator hub via kustomize (not published yet)
 Note: Add any extra configuration variables to the kubero-secrets secret.
 ```bash
 git clone https://github.com/kubero-dev/kubero-operator.git
 cd kubero-operator
+# kustomize build and apply operator controller
+make deploy IMG="ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.82"
+# Add kubero-ui instance
 helm install kubero ./helm-charts/kubero -n kubero --create-namespace --values custom_values.yaml
 kubectl create secret generic kubero-secrets -n kubero --from-literal=KUBERO_WEBHOOK_SECRET=$(openssl rand -hex 20) --from-literal=KUBERO_SESSION_KEY=$(openssl rand -hex 20)
 ```
