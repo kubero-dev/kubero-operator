@@ -1,1 +1,1 @@
-../bundle/manifests/application.kubero.dev_kuberopipelines.yaml
+../config/samples/application_v1alpha1_kuberopipeline.yaml
