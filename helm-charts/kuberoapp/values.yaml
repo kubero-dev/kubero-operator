@@ -164,7 +164,7 @@ extraVolumes: []
 #    storageClass: "standard"
 #    size: "1Gi"
 #    accessModes:
-#      - "ReadWriteMany"
+#      - "ReadWriteOnce"
 #    mountPath: "/test-volume"
 
 cronjobs:
