@@ -13,7 +13,15 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
+# Liveness Probe for container liveness. Container will be restarted if the probe fails.
+# Refer https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes.
+livenessProbe: {}
+# Readiness Probe for container readiness. Container will be removed from service endpoints if the probe fails.
+# Refer https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+readinessProbe: {}
+# Startup Probe for container startup. Container will be restarted if the probe fails.
+# Refer https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+startupProbe: {}
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
