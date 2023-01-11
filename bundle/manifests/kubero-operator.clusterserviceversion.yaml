@@ -545,7 +545,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.84
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.85
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
