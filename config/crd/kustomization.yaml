@@ -5,4 +5,5 @@ resources:
 - bases/application.kubero.dev_kuberoapps.yaml
 - bases/application.kubero.dev_kuberoes.yaml
 - bases/application.kubero.dev_kuberopipelines.yaml
+- bases/application.kubero.dev_kuberomysqls.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
