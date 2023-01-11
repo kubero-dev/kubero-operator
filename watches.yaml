@@ -11,4 +11,8 @@
   version: v1alpha1
   kind: KuberoPipeline
   chart: helm-charts/kuberopipeline
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoMysql
+  chart: helm-charts/kuberomysql
 #+kubebuilder:scaffold:watch
