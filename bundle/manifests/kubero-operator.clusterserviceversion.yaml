@@ -459,57 +459,29 @@ metadata:
           "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoMysql",
           "metadata": {
-            "name": "kuberomysql-sample"
+            "name": "kuberomysql"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
+            "mysql": {
+              "auth": {
+                "createDatabase": false,
+                "database": "my_database",
+                "password": "",
+                "rootPassword": "",
+                "username": ""
+              },
+              "global": {
+                "storageClass": ""
+              },
+              "primary": {
+                "persistence": {
+                  "accessModes": [
+                    "ReadWriteOnce"
+                  ],
+                  "size": "8Gi"
                 }
-              ],
-              "tls": []
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podSecurityContext": {},
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "create": true,
-              "name": ""
-            },
-            "tolerations": []
+              }
+            }
           }
         },
         {

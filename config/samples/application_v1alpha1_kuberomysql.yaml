@@ -1,7 +1,7 @@
 apiVersion: application.kubero.dev/v1alpha1
 kind: KuberoMysql
 metadata:
-  name: kuberomysql-sample
+  name: kuberomysql
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberomysql/values.yaml
   mysql:
