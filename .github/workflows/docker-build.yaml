@@ -3,8 +3,8 @@ name: Docker
 on:
   push:
     # Publish `master` as Docker `latest` image.
-    branches:
-      - main
+    #branches:
+    #  - main
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -16,8 +16,8 @@ on:
 
 env:
   SDK_VERSION: "v1.24.0"
-#  IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.85
-#  BUNDLE_IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v0.0.85
+#  IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.86
+#  BUNDLE_IMG: ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v0.0.86
 
 jobs:
   # Push image to GitHub Packages.
