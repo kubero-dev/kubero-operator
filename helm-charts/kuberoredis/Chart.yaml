@@ -1,0 +1,18 @@
+apiVersion: v2
+appVersion: 7.0.7
+description: A Helm chart for Kuberos Redis
+name: kuberoredis
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-redis
+    version: 17.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x

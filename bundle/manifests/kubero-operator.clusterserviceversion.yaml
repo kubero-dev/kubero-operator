@@ -567,18 +567,36 @@ metadata:
               }
             }
           }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoRedis",
+          "metadata": {
+            "name": "kuberoredis-sample"
+          },
+          "spec": {
+            "redis": {
+              "architecture": "replication",
+              "global": {
+                "redis": {
+                  "password": ""
+                },
+                "storageClass": ""
+              }
+            }
+          }
         }
       ]
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.86
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.88
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.87
+  name: kubero-operator.v0.0.88
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -608,6 +626,11 @@ spec:
       displayName: Kubero Postgresql
       kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
+      version: v1alpha1
+    - description: Creates a Redis Database
+      displayName: Kubero Redis
+      kind: KuberoRedis
+      name: kuberoredis.application.kubero.dev
       version: v1alpha1
   description: |-
     Kubero is a Internal Developer Platform (IDP) that brings the convinience of Heroku/platform.sh/vercel/Netlify to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment. It enables you to deploy your applications with a few clicks. It also provides a API and CLI to manage your applications.
@@ -919,6 +942,56 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoredis
+          - kuberoredis/status
+          - kuberoredis/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          - configmaps
+          - serviceaccounts
+          - services
+          - persistentvolumeclaims
+          - persistentvolumes
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - '*'
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - networkpolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -972,7 +1045,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.87
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.88
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1059,4 +1132,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.87
+  version: 0.0.88

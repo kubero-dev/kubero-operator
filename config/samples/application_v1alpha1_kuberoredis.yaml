@@ -1,0 +1,14 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoRedis
+metadata:
+  name: kuberoredis-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberoredis/values.yaml
+  redis:
+    global:
+      storageClass: ""
+      redis:
+        password: ""
+    ## @param architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
+    ##
+    architecture: replication
