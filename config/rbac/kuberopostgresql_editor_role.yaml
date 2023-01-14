@@ -1,0 +1,24 @@
+# permissions for end users to edit kuberopostgresqls.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberopostgresql-editor-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberopostgresqls
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberopostgresqls/status
+  verbs:
+  - get

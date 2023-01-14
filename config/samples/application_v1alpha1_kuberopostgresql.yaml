@@ -1,0 +1,21 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoPostgresql
+metadata:
+  name: kuberopostgresql-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberopostgresql/values.yaml
+  postgresql:
+    global:
+      storageClass: ""
+      postgresql:
+        auth:
+          postgresPassword: ""
+          username: ""
+          password: ""
+          database: ""
+
+    primary:
+      persistence:
+        ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
+        ##
+        size: 8Gi

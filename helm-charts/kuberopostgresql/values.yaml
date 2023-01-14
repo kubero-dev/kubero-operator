@@ -1,0 +1,15 @@
+postgresql:
+  global:
+    storageClass: ""
+    postgresql:
+      auth:
+        postgresPassword: ""
+        username: ""
+        password: ""
+        database: ""
+
+  primary:
+    persistence:
+      ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
+      ##
+      size: 8Gi
