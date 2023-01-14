@@ -6,7 +6,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.86
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.88
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
@@ -35,6 +35,16 @@ spec:
       displayName: Kubero Mysql
       kind: KuberoMysql
       name: kuberomysqls.application.kubero.dev
+      version: v1alpha1
+    - description: Creates a Postgresql Database
+      displayName: Kubero Postgresql
+      kind: KuberoPostgresql
+      name: kuberopostgresqls.application.kubero.dev
+      version: v1alpha1
+    - description: Creates a Redis Database
+      displayName: Kubero Redis
+      kind: KuberoRedis
+      name: kuberoredis.application.kubero.dev
       version: v1alpha1
   description: |-
     Kubero is a Internal Developer Platform (IDP) that brings the convinience of Heroku/platform.sh/vercel/Netlify to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment. It enables you to deploy your applications with a few clicks. It also provides a API and CLI to manage your applications.
