@@ -604,7 +604,9 @@ spec:
       kind: KuberoPipeline
       name: kuberopipelines.application.kubero.dev
       version: v1alpha1
-    - kind: KuberoPostgresql
+    - description: Creates a Postgresql Database
+      displayName: Kubero Postgresql
+      kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
       version: v1alpha1
   description: |-
