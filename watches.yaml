@@ -15,4 +15,8 @@
   version: v1alpha1
   kind: KuberoMysql
   chart: helm-charts/kuberomysql
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoPostgresql
+  chart: helm-charts/kuberopostgresql
 #+kubebuilder:scaffold:watch

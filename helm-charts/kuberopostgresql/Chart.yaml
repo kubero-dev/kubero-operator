@@ -1,16 +1,16 @@
 apiVersion: v2
-appVersion: 1.16.0
-description: A Helm chart for Kuberos Mysql
-name: kuberomysql
+appVersion: 15.1.0
+description: A Helm chart for Kuberos Postgresql
+name: kuberopostgresql
 type: application
 version: 0.1.0
 
 dependencies:
-  - name: mysql
+  - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     tags:
-      - bitnami-mysql
-    version: 9.x.x
+      - bitnami-postgresql
+    version: 12.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:

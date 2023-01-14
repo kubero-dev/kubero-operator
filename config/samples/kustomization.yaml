@@ -4,4 +4,5 @@ resources:
 - application_v1alpha1_kubero.yaml
 - application_v1alpha1_kuberopipeline.yaml
 - application_v1alpha1_kuberomysql.yaml
+- application_v1alpha1_kuberopostgresql.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

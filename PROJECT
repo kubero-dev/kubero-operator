@@ -34,4 +34,11 @@ resources:
   group: application
   kind: KuberoMysql
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: kubero.dev
+  group: application
+  kind: KuberoPostgresql
+  version: v1alpha1
 version: "3"
