@@ -676,7 +676,11 @@ spec:
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
       version: v1alpha1
-    - kind: KuberoElasticsearch
+    - description: Elasticsearch is a distributed search and analytics engine. It
+        is used for web search, log monitoring, and real-time analytics. Ideal for
+        Big Data applications.
+      displayName: Kubero Elasticsearch
+      kind: KuberoElasticsearch
       name: kuberoelasticsearches.application.kubero.dev
       version: v1alpha1
     - description: Starts the Kubero UI and API
