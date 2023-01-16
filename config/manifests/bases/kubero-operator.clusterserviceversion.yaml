@@ -6,7 +6,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.88
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.89
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
@@ -41,10 +41,19 @@ spec:
       kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
       version: v1alpha1
-    - description: Creates a Redis Database
+    - description: Redis(R) is an open source, advanced key-value store. It is often
+        referred to as a data structure server since keys can contain strings, hashes,
+        lists, sets and sorted sets.
       displayName: Kubero Redis
       kind: KuberoRedis
       name: kuberoredis.application.kubero.dev
+      version: v1alpha1
+    - description: MongoDB(R) is a relational open source NoSQL database. Easy to
+        use, it stores data in JSON-like documents. Automated scalability and high-performance.
+        Ideal for developing cloud native applications.
+      displayName: Kubero MongoDB
+      kind: KuberoMongoDB
+      name: kuberomongodbs.application.kubero.dev
       version: v1alpha1
   description: |-
     Kubero is a Internal Developer Platform (IDP) that brings the convinience of Heroku/platform.sh/vercel/Netlify to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment. It enables you to deploy your applications with a few clicks. It also provides a API and CLI to manage your applications.
