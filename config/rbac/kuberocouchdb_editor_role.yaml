@@ -1,0 +1,24 @@
+# permissions for end users to edit kuberocouchdbs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberocouchdb-editor-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberocouchdbs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberocouchdbs/status
+  verbs:
+  - get

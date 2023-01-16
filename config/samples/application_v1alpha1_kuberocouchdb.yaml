@@ -1,0 +1,31 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoCouchDB
+metadata:
+  name: kuberocouchdb-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberocouchdb/values.yaml
+  couchdb:
+    # -- the initial number of nodes in the CouchDB cluster.
+    clusterSize: 3
+    adminUsername: admin
+    adminPassword: this_is_not_secure
+    adminHash: -pbkdf2-this_is_not_necessarily_secure_either
+    cookieAuthSecret: neither_is_this
+
+    persistentVolume:
+      enabled: true
+      size: 10Gi
+      storageClass: ""
+
+    # -- Flip this to flag to include the Search container in each Pod
+    enableSearch: false
+
+    ## Optional resource requests and limits for the CouchDB container
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    #resources: {}
+      # requests:
+      #  cpu: 100m
+      #  memory: 128Mi
+      # limits:
+      #  cpu: 56
+      #  memory: 256Gi

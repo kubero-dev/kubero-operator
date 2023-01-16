@@ -10,4 +10,5 @@ resources:
 - bases/application.kubero.dev_kuberoredis.yaml
 - bases/application.kubero.dev_kuberomongodbs.yaml
 - bases/application.kubero.dev_kuberoelasticsearches.yaml
+- bases/application.kubero.dev_kuberocouchdbs.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
