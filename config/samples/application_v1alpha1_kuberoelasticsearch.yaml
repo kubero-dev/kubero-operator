@@ -4,7 +4,7 @@ metadata:
   name: kuberoelasticsearch-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberoelasticsearch/values.yaml
-  elasticesearch:
+  elasticsearch:
     global:
       storageClass: ""
     security:

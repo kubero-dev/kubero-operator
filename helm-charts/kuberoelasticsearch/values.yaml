@@ -1,4 +1,4 @@
-elasticesearch:
+elasticsearch:
   global:
     storageClass: ""
   security:
