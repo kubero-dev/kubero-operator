@@ -691,7 +691,9 @@ spec:
       kind: KuberoMongoDB
       name: kuberomongodbs.application.kubero.dev
       version: v1alpha1
-    - description: Creates a Mysql Database
+    - description: MySQL is a fast, reliable, scalable, and easy to use open source
+        relational database system. Designed to handle mission-critical, heavy-load
+        production applications.
       displayName: Kubero Mysql
       kind: KuberoMysql
       name: kuberomysqls.application.kubero.dev
@@ -701,7 +703,9 @@ spec:
       kind: KuberoPipeline
       name: kuberopipelines.application.kubero.dev
       version: v1alpha1
-    - description: Creates a Postgresql Database
+    - description: PostgreSQL (Postgres) is an open source object-relational database
+        known for reliability and data integrity. ACID-compliant, it supports foreign
+        keys, joins, views, triggers and stored procedures.
       displayName: Kubero Postgresql
       kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
