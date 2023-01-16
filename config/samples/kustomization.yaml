@@ -9,4 +9,5 @@ resources:
 - application_v1alpha1_kuberomongodb.yaml
 - application_v1alpha1_kuberoelasticsearch.yaml
 - application_v1alpha1_kuberocouchdb.yaml
+- application_v1alpha1_kuberokafka.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
