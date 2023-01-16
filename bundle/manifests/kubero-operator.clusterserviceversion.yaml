@@ -457,6 +457,39 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoMongoDB",
+          "metadata": {
+            "name": "kuberomongodb-sample"
+          },
+          "spec": {
+            "mongodb": {
+              "auth": {
+                "databases": [
+                  "kubero"
+                ],
+                "passwords": [
+                  "kubero"
+                ],
+                "rootPassword": "",
+                "rootUser": "root",
+                "usernames": [
+                  "kubero"
+                ]
+              },
+              "directoryPerDB": false,
+              "disableJavascript": false,
+              "global": {
+                "storageClass": ""
+              },
+              "persistence": {
+                "size": "8Gi"
+              },
+              "replicaCount": 2
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoMysql",
           "metadata": {
             "name": "kuberomysql"
@@ -590,13 +623,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.88
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.89
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.88
+  name: kubero-operator.v0.0.89
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -611,6 +644,13 @@ spec:
       displayName: Kubero UI and API
       kind: Kubero
       name: kuberoes.application.kubero.dev
+      version: v1alpha1
+    - description: MongoDB(R) is a relational open source NoSQL database. Easy to
+        use, it stores data in JSON-like documents. Automated scalability and high-performance.
+        Ideal for developing cloud native applications.
+      displayName: Kubero MongoDB
+      kind: KuberoMongoDB
+      name: kuberomongodbs.application.kubero.dev
       version: v1alpha1
     - description: Creates a Mysql Database
       displayName: Kubero Mysql
@@ -627,7 +667,9 @@ spec:
       kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
       version: v1alpha1
-    - description: Creates a Redis Database
+    - description: Redis(R) is an open source, advanced key-value store. It is often
+        referred to as a data structure server since keys can contain strings, hashes,
+        lists, sets and sorted sets.
       displayName: Kubero Redis
       kind: KuberoRedis
       name: kuberoredis.application.kubero.dev
@@ -992,6 +1034,56 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberomongodbs
+          - kuberomongodbs/status
+          - kuberomongodbs/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          - configmaps
+          - serviceaccounts
+          - services
+          - persistentvolumeclaims
+          - persistentvolumes
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - '*'
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - networkpolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1045,7 +1137,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.88
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.89
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1132,4 +1224,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.88
+  version: 0.0.89

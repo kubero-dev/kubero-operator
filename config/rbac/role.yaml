@@ -377,18 +377,41 @@ rules:
   - patch
   - update
   - watch
-- verbs:
-  - "*"
-  apiGroups:
-  - ""
-  resources:
-  - "serviceaccounts"
-  - "services"
-- verbs:
-  - "*"
-  apiGroups:
+- apiGroups:
   - "apps"
   resources:
-  - "deployments"
+  - "statefulsets"
+  verbs:
+  - "*"
+- apiGroups:
+  - ""
+  resources:
+  - "secrets"
+  - "configmaps"
+  - "serviceaccounts"
+  - "services"
+  - "persistentvolumeclaims"
+  - "persistentvolumes"
+  verbs:
+  - "*"
+- apiGroups:
+  - "policy"
+  resources:
+  - "poddisruptionbudgets"
+  verbs:
+  - "*"
+- apiGroups:
+  - "networking.k8s.io"
+  resources:
+  - "networkpolicies"
+  verbs:
+  - "*"
+- apiGroups:
+  - "rbac.authorization.k8s.io"
+  resources:
+  - "roles"
+  - "rolebindings"
+  verbs:
+  - "*"
 
 #+kubebuilder:scaffold:rules
