@@ -1,0 +1,9 @@
+dependencies:
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 19.5.8
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 2.2.2
+digest: sha256:c019ff654ade751dad26a2dbaa7531fe532f512b1a1795ccaa52d8b87a7db87e
+generated: "2023-01-16T14:32:43.649278+01:00"

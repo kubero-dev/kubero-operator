@@ -27,4 +27,8 @@
   version: v1alpha1
   kind: KuberoMongoDB
   chart: helm-charts/kuberomongodb
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoElasticsearch
+  chart: helm-charts/kuberoelasticsearch
 #+kubebuilder:scaffold:watch

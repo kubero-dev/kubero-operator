@@ -1,0 +1,24 @@
+# permissions for end users to edit kuberoelasticsearches.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberoelasticsearch-editor-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoelasticsearches
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoelasticsearches/status
+  verbs:
+  - get
