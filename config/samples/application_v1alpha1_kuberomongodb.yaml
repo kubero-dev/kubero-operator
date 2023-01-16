@@ -1,0 +1,50 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoMongoDB
+metadata:
+  name: kuberomongodb-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberomongodb/values.yaml
+  mongodb:
+    global:
+      storageClass: ""
+
+    ## MongoDB(&reg;) Authentication parameters
+    ##
+    auth:
+      rootUser: root
+      ## @param auth.rootPassword MongoDB(&reg;) root password
+      ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
+      ##
+      rootPassword: ""
+      ## MongoDB(&reg;) custom users and databases
+      ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#creating-a-user-and-database-on-first-run
+      ## @param auth.usernames List of custom users to be created during the initialization
+      ## @param auth.passwords List of passwords for the custom users set at `auth.usernames`
+      ## @param auth.databases List of custom databases to be created during the initialization
+      ##
+      usernames:
+      - kubero
+      passwords:
+      - kubero
+      databases:
+      - kubero
+
+    ## @param directoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
+    ##
+    directoryPerDB: false
+    ## @param disableJavascript Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution
+    ## ref: https://docs.mongodb.com/manual/core/server-side-javascript/
+    ##
+    disableJavascript: false
+    ## @param replicaCount Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)
+    ## Ignored when mongodb.architecture=standalone
+    ##
+    replicaCount: 2
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
+    persistence:
+      ## @param persistence.size PVC Storage Request for MongoDB(&reg;) data volume
+      ##
+      size: 8Gi

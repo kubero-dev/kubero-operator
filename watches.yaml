@@ -23,4 +23,8 @@
   version: v1alpha1
   kind: KuberoRedis
   chart: helm-charts/kuberoredis
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoMongoDB
+  chart: helm-charts/kuberomongodb
 #+kubebuilder:scaffold:watch
