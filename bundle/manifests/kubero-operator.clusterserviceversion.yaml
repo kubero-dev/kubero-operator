@@ -457,6 +457,28 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoCouchDB",
+          "metadata": {
+            "name": "kuberocouchdb-sample"
+          },
+          "spec": {
+            "couchdb": {
+              "adminHash": "-pbkdf2-this_is_not_necessarily_secure_either",
+              "adminPassword": "this_is_not_secure",
+              "adminUsername": "admin",
+              "clusterSize": 3,
+              "cookieAuthSecret": "neither_is_this",
+              "enableSearch": false,
+              "persistentVolume": {
+                "enabled": true,
+                "size": "10Gi",
+                "storageClass": ""
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoElasticsearch",
           "metadata": {
             "name": "kuberoelasticsearch-sample"
@@ -659,13 +681,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.91
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.92
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.91
+  name: kubero-operator.v0.0.92
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -675,6 +697,9 @@ spec:
       displayName: Kubero App
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoCouchDB
+      name: kuberocouchdbs.application.kubero.dev
       version: v1alpha1
     - description: Elasticsearch is a distributed search and analytics engine. It
         is used for web search, log monitoring, and real-time analytics. Ideal for
@@ -1181,6 +1206,33 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberocouchdbs
+          - kuberocouchdbs/status
+          - kuberocouchdbs/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1234,7 +1286,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.91
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.92
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1321,4 +1373,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.91
+  version: 0.0.92

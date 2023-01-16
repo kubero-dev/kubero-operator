@@ -31,4 +31,8 @@
   version: v1alpha1
   kind: KuberoElasticsearch
   chart: helm-charts/kuberoelasticsearch
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoCouchDB
+  chart: helm-charts/kuberocouchdb
 #+kubebuilder:scaffold:watch

@@ -62,4 +62,11 @@ resources:
   group: application
   kind: KuberoElasticsearch
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: kubero.dev
+  group: application
+  kind: KuberoCouchDB
+  version: v1alpha1
 version: "3"

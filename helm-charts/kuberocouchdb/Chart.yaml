@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 6.0.3
+description: Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
+home: https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
+name: kuberoelasticsearch
+type: application
+version: 0.1.0
+dependencies:
+  - name: couchdb
+    repository: https://apache.github.io/couchdb-helm
+    version: 4.x.x

@@ -468,4 +468,57 @@ rules:
   verbs:
   - "*"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoCouchDB
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberocouchdbs
+  - kuberocouchdbs/status
+  - kuberocouchdbs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - "apps"
+  resources:
+  - "statefulsets"
+  verbs:
+  - "*"
+- apiGroups:
+  - ""
+  resources:
+  - "secrets"
+  - "configmaps"
+  - "serviceaccounts"
+  - "services"
+  - "persistentvolumeclaims"
+  - "persistentvolumes"
+  verbs:
+  - "*"
+- apiGroups:
+  - "policy"
+  resources:
+  - "poddisruptionbudgets"
+  verbs:
+  - "*"
+- apiGroups:
+  - "networking.k8s.io"
+  resources:
+  - "networkpolicies"
+  verbs:
+  - "*"
+- apiGroups:
+  - "rbac.authorization.k8s.io"
+  resources:
+  - "roles"
+  - "rolebindings"
+  verbs:
+  - "*"
 #+kubebuilder:scaffold:rules
