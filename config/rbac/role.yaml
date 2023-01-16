@@ -521,4 +521,65 @@ rules:
   - "rolebindings"
   verbs:
   - "*"
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoKafka
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberokafkas
+  - kuberokafkas/status
+  - kuberokafkas/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+  - "statefulsets"
+  verbs:
+  - "*"
+- apiGroups:
+  - ""
+  resources:
+  - "secrets"
+  - "configmaps"
+  - "serviceaccounts"
+  - "services"
+  - "persistentvolumeclaims"
+  - "persistentvolumes"
+  verbs:
+  - "*"
+- apiGroups:
+  - "job"
+  resources:
+  - "batch"
+  verbs:
+  - "*"
+- apiGroups:
+  - "policy"
+  resources:
+  - "poddisruptionbudgets"
+  verbs:
+  - "*"
+- apiGroups:
+  - "networking.k8s.io"
+  resources:
+  - "networkpolicies"
+  verbs:
+  - "*"
+- apiGroups:
+  - "rbac.authorization.k8s.io"
+  resources:
+  - "roles"
+  - "rolebindings"
+  verbs:
+  - "*"
+
 #+kubebuilder:scaffold:rules

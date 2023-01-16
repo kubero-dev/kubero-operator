@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 3.3.1
+description: A Helm chart for Kuberos Kafka
+name: kuberokafka
+type: application
+version: 0.1.0
+dependencies:
+  - name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-kafka
+    version: 20.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x

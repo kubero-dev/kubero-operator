@@ -1,0 +1,20 @@
+# permissions for end users to view kuberokafkas.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberokafka-viewer-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberokafkas
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberokafkas/status
+  verbs:
+  - get

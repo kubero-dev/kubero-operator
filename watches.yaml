@@ -35,4 +35,8 @@
   version: v1alpha1
   kind: KuberoCouchDB
   chart: helm-charts/kuberocouchdb
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoKafka
+  chart: helm-charts/kuberokafka
 #+kubebuilder:scaffold:watch

@@ -515,6 +515,23 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoKafka",
+          "metadata": {
+            "name": "kuberokafka-sample"
+          },
+          "spec": {
+            "kafka": {
+              "global": {
+                "storageClass": ""
+              },
+              "persistence": {
+                "size": "8Gi"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoMongoDB",
           "metadata": {
             "name": "kuberomongodb-sample"
@@ -681,13 +698,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.92
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.93
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.92
+  name: kubero-operator.v0.0.93
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -698,7 +715,11 @@ spec:
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
       version: v1alpha1
-    - kind: KuberoCouchDB
+    - description: Apache CouchDB is a database featuring seamless multi-master sync,
+        that scales from big data to mobile, with an intuitive HTTP/JSON API and designed
+        for reliability.
+      displayName: Kubero CouchDB
+      kind: KuberoCouchDB
       name: kuberocouchdbs.application.kubero.dev
       version: v1alpha1
     - description: Elasticsearch is a distributed search and analytics engine. It
@@ -712,6 +733,13 @@ spec:
       displayName: Kubero UI and API
       kind: Kubero
       name: kuberoes.application.kubero.dev
+      version: v1alpha1
+    - description: Apache Kafka is a distributed streaming platform designed to build
+        real-time pipelines and can be used as a message broker or as a replacement
+        for a log aggregation solution for big data applications.
+      displayName: Kubero Kafka
+      kind: KuberoKafka
+      name: kuberokafkas.application.kubero.dev
       version: v1alpha1
     - description: MongoDB(R) is a relational open source NoSQL database. Easy to
         use, it stores data in JSON-like documents. Automated scalability and high-performance.
@@ -1220,16 +1248,96 @@ spec:
           - update
           - watch
         - apiGroups:
-          - ""
+          - apps
           resources:
-          - serviceaccounts
-          - services
+          - statefulsets
           verbs:
           - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          - configmaps
+          - serviceaccounts
+          - services
+          - persistentvolumeclaims
+          - persistentvolumes
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - '*'
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - networkpolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - '*'
+        - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberokafkas
+          - kuberokafkas/status
+          - kuberokafkas/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
         - apiGroups:
           - apps
           resources:
           - deployments
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          - configmaps
+          - serviceaccounts
+          - services
+          - persistentvolumeclaims
+          - persistentvolumes
+          verbs:
+          - '*'
+        - apiGroups:
+          - job
+          resources:
+          - batch
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - '*'
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - networkpolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
           verbs:
           - '*'
         - apiGroups:
@@ -1286,7 +1394,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.92
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.93
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1373,4 +1481,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.92
+  version: 0.0.93

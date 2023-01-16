@@ -6,7 +6,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.92
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.93
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
@@ -65,6 +65,20 @@ spec:
       displayName: Kubero Elasticsearch
       kind: KuberoElasticsearch
       name: kuberoelasticsearches.application.kubero.dev
+      version: v1alpha1
+    - description: Apache CouchDB is a database featuring seamless multi-master sync,
+        that scales from big data to mobile, with an intuitive HTTP/JSON API and designed
+        for reliability.
+      displayName: Kubero CouchDB
+      kind: KuberoCouchDB
+      name: kuberocouchdbs.application.kubero.dev
+      version: v1alpha1
+    - description: Apache Kafka is a distributed streaming platform designed to build
+        real-time pipelines and can be used as a message broker or as a replacement
+        for a log aggregation solution for big data applications.
+      displayName: Kubero Kafka
+      kind: KuberoKafka
+      name: kuberokafkas.application.kubero.dev
       version: v1alpha1
   description: |-
     Kubero is a Internal Developer Platform (IDP) that brings the convinience of Heroku/platform.sh/vercel/Netlify to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment. It enables you to deploy your applications with a few clicks. It also provides a API and CLI to manage your applications.

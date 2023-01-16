@@ -1,0 +1,12 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoKafka
+metadata:
+  name: kuberokafka-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberokafka/values.yaml
+  # https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
+  kafka:
+    global:
+      storageClass: ""
+    persistence:
+      size: 8Gi
