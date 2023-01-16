@@ -7,4 +7,5 @@ resources:
 - application_v1alpha1_kuberopostgresql.yaml
 - application_v1alpha1_kuberoredis.yaml
 - application_v1alpha1_kuberomongodb.yaml
+- application_v1alpha1_kuberoelasticsearch.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

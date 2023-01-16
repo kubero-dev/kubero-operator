@@ -457,6 +457,42 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoElasticsearch",
+          "metadata": {
+            "name": "kuberoelasticsearch-sample"
+          },
+          "spec": {
+            "elasticesearch": {
+              "data": {
+                "persistence": {
+                  "size": "8Gi"
+                },
+                "replicaCount": 2
+              },
+              "global": {
+                "storageClass": ""
+              },
+              "ingest": {
+                "enabled": true,
+                "replicaCount": 2
+              },
+              "master": {
+                "persistence": {
+                  "size": "8Gi"
+                },
+                "replicaCount": 2
+              },
+              "security": {
+                "elasticPassword": "",
+                "tls": {
+                  "verificationMode": "none"
+                }
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoMongoDB",
           "metadata": {
             "name": "kuberomongodb-sample"
@@ -623,13 +659,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.89
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.90
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.89
+  name: kubero-operator.v0.0.90
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -639,6 +675,9 @@ spec:
       displayName: Kubero App
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoElasticsearch
+      name: kuberoelasticsearches.application.kubero.dev
       version: v1alpha1
     - description: Starts the Kubero UI and API
       displayName: Kubero UI and API
@@ -1084,6 +1123,56 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoelasticsearches
+          - kuberoelasticsearches/status
+          - kuberoelasticsearches/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          - configmaps
+          - serviceaccounts
+          - services
+          - persistentvolumeclaims
+          - persistentvolumes
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - '*'
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - networkpolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1137,7 +1226,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.89
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.90
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1224,4 +1313,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.89
+  version: 0.0.90

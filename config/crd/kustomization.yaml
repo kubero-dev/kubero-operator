@@ -9,4 +9,5 @@ resources:
 - bases/application.kubero.dev_kuberopostgresqls.yaml
 - bases/application.kubero.dev_kuberoredis.yaml
 - bases/application.kubero.dev_kuberomongodbs.yaml
+- bases/application.kubero.dev_kuberoelasticsearches.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
