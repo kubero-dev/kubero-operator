@@ -59,7 +59,7 @@ spec:
             {{- end }}
             {{- range .Values.envVars }}
             - name: {{ .name }}
-              value: {{ .value }}
+              value: {{ .value | quote }}
             {{- end }}
           volumeMounts:
             - mountPath: /root/.ssh
