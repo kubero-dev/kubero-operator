@@ -466,13 +466,21 @@ metadata:
               "adminHash": "-pbkdf2-this_is_not_necessarily_secure_either",
               "adminPassword": "this_is_not_secure",
               "adminUsername": "admin",
+              "autoSetup": {
+                "enabled": false
+              },
               "clusterSize": 3,
               "cookieAuthSecret": "neither_is_this",
+              "couchdbConfig": {
+                "couchdb": {
+                  "uuid": "randomstring"
+                }
+              },
               "enableSearch": false,
               "persistentVolume": {
                 "enabled": true,
                 "size": "10Gi",
-                "storageClass": ""
+                "storageClass": "standard"
               }
             }
           }
@@ -698,13 +706,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.93
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.94
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.93
+  name: kubero-operator.v0.0.94
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1394,7 +1402,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.93
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.94
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1481,4 +1489,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.93
+  version: 0.0.94

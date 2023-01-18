@@ -97,7 +97,7 @@ spec:
               value: {{ .Values.image.containerPort | default "8080" | quote }}
             {{- range .Values.envVars }}
             - name: {{ .name }}
-              value: {{ .value }}
+              value: {{ .value | quote }}
             {{- end }}
           ports:
             - name: http
