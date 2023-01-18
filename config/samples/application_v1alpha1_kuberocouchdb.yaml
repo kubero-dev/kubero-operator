@@ -4,6 +4,7 @@ metadata:
   name: kuberocouchdb-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberocouchdb/values.yaml
+  # https://github.com/apache/couchdb-helm/blob/main/couchdb/values.yaml
   couchdb:
     # -- the initial number of nodes in the CouchDB cluster.
     clusterSize: 3
