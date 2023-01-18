@@ -12,10 +12,17 @@ spec:
     adminHash: -pbkdf2-this_is_not_necessarily_secure_either
     cookieAuthSecret: neither_is_this
 
+    autoSetup:
+      enabled: false
+
+    couchdbConfig:
+      couchdb:
+        uuid: randomstring
+
     persistentVolume:
       enabled: true
       size: 10Gi
-      storageClass: ""
+      storageClass: "standard"
 
     # -- Flip this to flag to include the Search container in each Pod
     enableSearch: false
