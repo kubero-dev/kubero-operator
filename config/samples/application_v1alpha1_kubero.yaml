@@ -9,7 +9,7 @@ spec:
   image:
     pullPolicy: Always
     repository: ghcr.io/kubero-dev/kubero/kubero
-    tag: "main"
+    tag: "latest"
   imagePullSecrets: []
   ingress:
     annotations: {}
