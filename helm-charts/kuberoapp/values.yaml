@@ -220,3 +220,9 @@ addons:
         type: Opaque
     version:
       installed: 0.3.0
+
+vulnerabilityscan:
+  enabled: false
+  image:
+    repository: aquasec/trivy
+    tag: lastest
