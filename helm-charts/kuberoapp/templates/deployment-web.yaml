@@ -85,7 +85,8 @@ spec:
           {{- if eq .Values.deploymentstrategy "docker" }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- if .Values.image.command }}
-          command: {{ .Values.image.command }}
+          command:
+            {{- toYaml .Values.image.command | nindent 12 }}
           {{- end }}
           {{- else }}
           image: "{{ .Values.image.run.repository }}:{{ .Values.image.run.tag | default "latest" }}"
