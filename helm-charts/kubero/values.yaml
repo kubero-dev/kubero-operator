@@ -47,7 +47,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: kubero.lacolhost.com
+    - host: kubero.localhost.com
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -78,7 +78,7 @@ kubero:
   debug: ""
   namespace: kubero
   context: inClusterContext
-  webhook_url: https://kubero.lacolhost.com/api/webhook
+  webhook_url: https://kubero.localhost.com/api/webhook
   #sessionKey: "randomString"
   auth:
     github:
