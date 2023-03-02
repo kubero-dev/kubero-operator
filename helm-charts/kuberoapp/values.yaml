@@ -26,9 +26,9 @@ image:
   tag: main
   pullPolicy: Always
   containerPort: 8080
-  command:
-    - npm
-    - start
+  #command:
+  #  - npm
+  #  - start
   fetch:
     repository: ghcr.io/kubero-dev/buildpacks/fetch
     tag: main
