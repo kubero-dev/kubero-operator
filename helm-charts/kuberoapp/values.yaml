@@ -222,7 +222,7 @@ addons:
       installed: 0.3.0
 
 vulnerabilityscan:
-  enabled: true
+  enabled: false
   schedule: "0 0 * * *"
   image:
     repository: aquasec/trivy
