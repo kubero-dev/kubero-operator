@@ -1,0 +1,20 @@
+# Source: kuberoapp/templates/job-vulnerabilityscan.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: appsmith-image-scan
+spec:
+  schedule: 43 12 * * *
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            vulnerabilityscan: appsmith
+        spec:
+          containers:
+          - name: trivy-image-scan
+            image: aquasec/trivy:latest
+            command: ["trivy",  "image", "appsmith/appsmith-ce", "-q", "-f", "json", "--exit-code", "0"]
+          restartPolicy: Never
