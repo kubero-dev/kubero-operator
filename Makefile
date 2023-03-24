@@ -77,7 +77,7 @@ run: helm-operator ## Run against the configured Kubernetes cluster in ~/.kube/c
 
 .PHONY: docker-build
 docker-build: ## Build docker image with the manager.
-	docker buildx build --platform linux/amd64,linux/arm64 -t ${IMG} .
+	docker buildx build --platform linux/amd64,linux/arm64 -t ${IMG} . --push
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -146,7 +146,7 @@ bundle: kustomize ## Generate bundle manifests and metadata, then validate gener
 
 .PHONY: bundle-build
 bundle-build: ## Build the bundle image.
-	docker buildx build --platform linux/amd64,linux/arm64 -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	docker buildx build --platform linux/amd64,linux/arm64 -f bundle.Dockerfile -t $(BUNDLE_IMG) . --push
 
 .PHONY: bundle-push
 bundle-push: ## Push the bundle image.
