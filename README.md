@@ -1,8 +1,10 @@
 <img width="50%" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/logo/kubero-logo-horizontal.png">
 
+> ℹ️ **NOTE**: Please open issues in the [Kubero](https://github.com/kubero-dev/kubero/issues) main repository.
+
 <br>
 <br>
-Kubero brings the convinience of Heroku/platform.sh to your kubernetes cluster. Your developers should not need to worry about the underlying infrastructure and deployment.
+This is the source code for the Kubero Operator. 
 <br>
 Pleas visit the main repository for docs and more information 
 https://github.com/kubero-dev 
