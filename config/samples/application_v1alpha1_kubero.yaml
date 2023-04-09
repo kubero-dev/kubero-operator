@@ -57,11 +57,14 @@ spec:
         tokenUrl: ""
         secret: ""
         callbackUrl: ""
-      config: |
+    config: |
       kubero:
-        context: inClusterContext
-        namespace: kubero
-        port: 3000
+        readonly: false
+        banner:
+          show: false
+          message: "Welcome to Kubero!"
+          bgcolor: "#8560A9"
+          fontcolor: "azure"
       buildpacks:
         - name: NodeJS
           language: JavaScript
