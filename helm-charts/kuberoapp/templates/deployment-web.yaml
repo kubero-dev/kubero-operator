@@ -77,6 +77,10 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: app-storage
+            {{- range .Values.extraVolumes }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{- end }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
