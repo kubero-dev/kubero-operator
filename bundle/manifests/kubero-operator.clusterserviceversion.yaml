@@ -383,54 +383,53 @@ metadata:
             "name": "kuberomail-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
-                }
-              ],
-              "tls": []
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podSecurityContext": {},
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "create": true,
-              "name": ""
-            },
-            "tolerations": []
+            "haraka": {
+              "haraka": {
+                "env": [
+                  {
+                    "name": "HARAKA_HOSTLIST",
+                    "value": "localhost,localhost.kubero.dev"
+                  },
+                  {
+                    "name": "HARAKA_ME",
+                    "value": "mynameisnobody"
+                  },
+                  {
+                    "name": "HARAKA_PLUGINS",
+                    "value": "helo.checks,mail_from.is_resolvable,rcpt_to.in_host_list,headers,relay_all"
+                  },
+                  {
+                    "name": "HARAKA_HELO_CHECKS_CHECK",
+                    "value": "mynameisnobody"
+                  },
+                  {
+                    "name": "HARAKA_HELO_CHECKS_REJECT",
+                    "value": "host_mismatch=false,big_company=false,rdns_match=false"
+                  },
+                  {
+                    "name": "HARAKA_HELO_CHECKS_SKIP",
+                    "value": "private_ip=false,relaying=true"
+                  },
+                  {
+                    "name": "HARAKA_LOG_LEVEL",
+                    "value": "debug"
+                  },
+                  {
+                    "name": "HARAKA_LOG_TIMESTAMP",
+                    "value": false
+                  },
+                  {
+                    "name": "HARAKA_LOG_FORMAT",
+                    "value": "info"
+                  }
+                ]
+              },
+              "replicaCount": 1,
+              "service": {
+                "port": 8025,
+                "type": "ClusterIP"
+              }
+            }
           }
         },
         {
@@ -601,13 +600,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.114
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.115
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.114
+  name: kubero-operator.v0.0.115
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1331,7 +1330,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.114
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.115
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1418,4 +1417,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.114
+  version: 0.0.115
