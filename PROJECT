@@ -76,4 +76,11 @@ resources:
   group: application
   kind: KuberoKafka
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: kubero.dev
+  group: application
+  kind: KuberoMail
+  version: v1alpha1
 version: "3"

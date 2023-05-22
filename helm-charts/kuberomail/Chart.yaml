@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: A Helm chart for Haraka MTA
+name: kuberomail
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: haraka
+    repository: https://haraka.kubero.dev/
+    tags:
+      - haraka
+    version: 0.x.x
