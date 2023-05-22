@@ -378,6 +378,63 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoMail",
+          "metadata": {
+            "name": "kuberomail-sample"
+          },
+          "spec": {
+            "affinity": {},
+            "autoscaling": {
+              "enabled": false,
+              "maxReplicas": 100,
+              "minReplicas": 1,
+              "targetCPUUtilizationPercentage": 80
+            },
+            "fullnameOverride": "",
+            "image": {
+              "pullPolicy": "IfNotPresent",
+              "repository": "nginx",
+              "tag": ""
+            },
+            "imagePullSecrets": [],
+            "ingress": {
+              "annotations": {},
+              "className": "",
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": [
+                    {
+                      "path": "/",
+                      "pathType": "ImplementationSpecific"
+                    }
+                  ]
+                }
+              ],
+              "tls": []
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "podAnnotations": {},
+            "podSecurityContext": {},
+            "replicaCount": 1,
+            "resources": {},
+            "securityContext": {},
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "serviceAccount": {
+              "annotations": {},
+              "create": true,
+              "name": ""
+            },
+            "tolerations": []
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoMongoDB",
           "metadata": {
             "name": "kuberomongodb-sample"
@@ -544,13 +601,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.113
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.114
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.113
+  name: kubero-operator.v0.0.114
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -586,6 +643,9 @@ spec:
       displayName: Kubero Kafka
       kind: KuberoKafka
       name: kuberokafkas.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoMail
+      name: kuberomails.application.kubero.dev
       version: v1alpha1
     - description: MongoDB(R) is a relational open source NoSQL database. Easy to
         use, it stores data in JSON-like documents. Automated scalability and high-performance.
@@ -1187,6 +1247,33 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberomails
+          - kuberomails/status
+          - kuberomails/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1240,7 +1327,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.113
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.114
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1327,4 +1414,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.113
+  version: 0.0.114
