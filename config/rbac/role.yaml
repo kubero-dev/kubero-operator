@@ -582,4 +582,35 @@ rules:
   verbs:
   - "*"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoMail
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberomails
+  - kuberomails/status
+  - kuberomails/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
 #+kubebuilder:scaffold:rules
