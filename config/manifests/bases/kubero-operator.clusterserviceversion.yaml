@@ -52,6 +52,13 @@ spec:
       kind: KuberoRedis
       name: kuberoredis.application.kubero.dev
       version: v1alpha1
+    - description: Haraka MTA is a highly scalable open source email server with a
+        modular architecture. It is written in Node.js and JavaScript and is designed
+        for modern Linux servers.
+      displayName: Kubero Mail Server
+      kind: KuberoMail
+      name: kuberomails.application.kubero.dev
+      version: v1alpha1
     - description: MongoDB(R) is a relational open source NoSQL database. Easy to
         use, it stores data in JSON-like documents. Automated scalability and high-performance.
         Ideal for developing cloud native applications.
