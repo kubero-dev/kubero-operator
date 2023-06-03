@@ -40,6 +40,13 @@ service:
   type: ClusterIP
   port: 2000
 
+registry:
+  create: false
+  host: registry-service.kubero.svc.cluster.local:5000
+  port: 5000
+  storage: 1Gi
+  storageClassName: - # set to "-" to disable dynamic provisioning
+
 ingress:
   enabled: false
   className: ""
