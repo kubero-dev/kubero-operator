@@ -1,0 +1,57 @@
+{{- if .Values.registry.create -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registry-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.registry.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.registry.storage }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: registry
+  name: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: registry
+  template:
+    metadata:
+      labels:
+        run: registry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        ports:
+        - containerPort: {{ .Values.registry.port }}
+        volumeMounts:
+        - name: registry-data
+          mountPath: /var/lib/registry
+          subPath: registry
+      volumes:
+      - name: registry-data
+        persistentVolumeClaim:
+          claimName: registry-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-service
+spec:
+  type: ClusterIP
+  selector:
+    run: registry
+  ports:
+    - name: registry-tcp
+      protocol: TCP
+      port: {{ .Values.registry.port }}
+      targetPort: {{ .Values.registry.port }}
+{{- end }}

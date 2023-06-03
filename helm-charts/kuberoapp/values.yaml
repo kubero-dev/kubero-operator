@@ -26,6 +26,7 @@ image:
   tag: main
   pullPolicy: Always
   containerPort: 8080
+  command:
   #command:
   #  - npm
   #  - start
