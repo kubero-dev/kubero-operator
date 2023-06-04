@@ -4,6 +4,7 @@
 
 buildpack: Docker
 deploymentstrategy: docker
+registry: registry-service.kubero.svc.cluster.local:5000
 
 gitrepo:
   id: 123456789
