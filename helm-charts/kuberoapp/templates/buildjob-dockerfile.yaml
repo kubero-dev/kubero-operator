@@ -1,0 +1,78 @@
+{{- if eq .Values.deploymentstrategy "dockerfile" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: buildjob
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: {{ .Chart.Name }}-fetcher
+          securityContext:
+            {{- toYaml .Values.image.fetch.securityContext | nindent 12 }}
+          image: "{{ .Values.image.fetch.repository }}:{{ .Values.image.fetch.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /app
+          env:
+            - name: GIT_REPOSITORY
+              value: {{ include "kuberoapp.clone_url" . | quote }}
+            {{- if .Values.branch }}
+            - name: GIT_BRANCH
+              value: {{ .Values.branch | quote }}
+            {{- end }}
+            {{- if .Values.ref }}
+            - name: GIT_REF
+              value: {{ .Values.ref | quote }}
+            {{- end }}
+            {{- if .Values.image.build.command }}
+            - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
+              value: {{ .Values.image.build.command | quote }}
+            {{- end }}
+            {{- if .Values.image.run.command }}
+            - name: KUBERO_BUILDPACK_DEFAULT_RUN_CMD
+              value: {{ .Values.image.run.command | quote }}
+            {{- end }}
+            {{- range .Values.envVars }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          volumeMounts:
+            - mountPath: /root/.ssh
+              name: deployment-keys
+              readOnly: true
+            - mountPath: /app
+              name: app-storage
+        - name: {{ .Chart.Name }}-builder
+          securityContext:
+            {{- toYaml .Values.image.build.securityContext | nindent 12 }}
+          image: "{{ .Values.image.build.repository }}:{{ .Values.image.build.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /app
+          command: ["./init-build.sh"]
+          volumeMounts:
+            - mountPath: /app
+              name: app-storage
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-docker
+          image: gcr.io/kaniko-project/executor:debug
+          args:
+              - "--skip-tls-verify"
+              - "--verbosity=debug"
+              - "--insecure-registry=registry-service.kaniko.svc.cluster.local:5000"
+              - "--dockerfile=/kaniko/buildcontext/Dockerfile"
+              - "--context=git://github.com/kubero-dev/template-nodeapp.git"
+              - "--destination={{ .Values.registry }}/{{ .Values.pipeline }}/{{ .Values.phase }}/{{ .Values.name }}:latest"
+          volumeMounts:
+            - mountPath: /app
+              name: app-storage
+      restartPolicy: Never
+      volumes:
+      - name: deployment-keys
+        secret:
+          defaultMode: 0600
+          secretName: deployment-keys
+      - name: app-storage
+        emptyDir: {}
+  backoffLimit: 4
+{{- end }}
