@@ -52,7 +52,6 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: app-storage
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}-docker
           image: gcr.io/kaniko-project/executor:debug
