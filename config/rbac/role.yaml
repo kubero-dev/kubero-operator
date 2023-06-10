@@ -158,6 +158,12 @@ rules:
   - "*"
   resources:
   - "clusterserviceversions"
+- apiGroups:
+  - "cert-manager.io"
+  resources:
+  - "certificates"
+  verbs:
+  - "*"
 
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: KuberoPipeline
