@@ -1,4 +1,5 @@
 {{- if .Values.registry.create -}}
+{{- if contains "svc.cluster.local" .Values.registry.host -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -32,19 +33,32 @@ spec:
         image: registry:2
         ports:
         - containerPort: {{ .Values.registry.port }}
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:{{ .Values.registry.port }}
+        - name: REGISTRY_HTTP_TLS_CERTIFICATE
+          value: /certs/tls.crt
+        - name: REGISTRY_HTTP_TLS_KEY
+          value: /certs/tls.key
         volumeMounts:
         - name: registry-data
           mountPath: /var/lib/registry
           subPath: registry
+        - name: registry-secrets
+          mountPath: /certs
+          readOnly: true
       volumes:
       - name: registry-data
         persistentVolumeClaim:
           claimName: registry-data-pvc
+      - name: registry-secrets
+        secret:
+          secretName: kubero-registry-secrets
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: registry-service
+  name: registry
 spec:
   type: ClusterIP
   selector:
@@ -54,4 +68,35 @@ spec:
       protocol: TCP
       port: {{ .Values.registry.port }}
       targetPort: {{ .Values.registry.port }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: example-com
+spec:
+  secretName: kubero-registry-secrets
+
+  duration: 43800h # 5Y
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+      - kubero
+  # The use of the common name field has been deprecated since 2000 and is
+  # discouraged from being used.
+  commonName: svc.cluster.local
+  isCA: false
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - {{ .Values.registry.host }}
+  issuerRef:
+    name: selfsigned-cluster-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+{{- end }}
 {{- end }}

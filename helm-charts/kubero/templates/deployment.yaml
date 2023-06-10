@@ -46,6 +46,10 @@ spec:
               value: "{{ .Values.kubero.webhook_url }}"
             - name: KUBERNETES_INGRESS_CLASSNAME
               value: "{{ .Values.ingress.className }}"
+            {{- if .Values.registry.create }}
+            - name: KUBERO_BUILD_REGISTRY
+              value: "{{ .Values.registry.host }}:{{ .Values.registry.port }}"
+            {{- end }}
             - name: KUBERO_WEBHOOK_SECRET
               valueFrom:
                 secretKeyRef:

@@ -42,7 +42,7 @@ service:
 
 registry:
   create: false
-  host: registry-service.kubero.svc.cluster.local:5000
+  host: registry.kubero.svc.cluster.local
   port: 5000
   storage: 1Gi
   storageClassName:
