@@ -41,8 +41,19 @@ service:
   port: 2000
 
 registry:
-  create: false
-  host: registry.kubero.svc.cluster.local
+  enabled: false
+  create: true
+  #host: registry.kubero.svc.cluster.local  # works for pushes, but not for pulls. DO NOT USE THIS :( since it requires to configure all nodes ot acceppt this "insecure" registry
+  #host: docker.io                          # requires a docker account. Might be the best choice when running on a non public domain
+  host: registry.demo.kubero.dev            # will make your images publicly avaialble with a basic auth protection
+  account:
+    # create account with:
+    # docker run --entrypoint htpasswd httpd:2 -Bbn [username] [password]
+    # http://aspirine.org/htpasswd_en.html (use bcrypt)
+    username: kubero
+    password: kubero
+    
+    #kubero:$2y$05$Cxgd/U7RTYAWWbXrSi2gyuw.yzPUwi1mgWE5rJS5PdD2D48QQkhL2
   port: 5000
   storage: 1Gi
   storageClassName:
