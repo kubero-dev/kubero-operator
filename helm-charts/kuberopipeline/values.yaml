@@ -1,4 +1,5 @@
 deploymentstrategy: git
+buildstrategy: plain
 mainnamespace: kubero
 dockerimage: kubero/template-nodeapp
 git:

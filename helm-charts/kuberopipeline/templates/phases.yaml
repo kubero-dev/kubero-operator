@@ -3,6 +3,7 @@
 {{- $name := .Values.name -}}
 {{- $mainnamespace := .Values.mainnamespace -}}
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
+{{- $buildstrategy := .Values.buildstrategy | default "plain" -}}
 {{- $deploykey := .Values.git.keys.priv -}}
 {{- $deploykeyPub := .Values.git.keys.pub -}}
 {{- range .Values.phases }}
@@ -12,6 +13,22 @@ kind: Namespace
 metadata:
   name: {{ $name }}-{{ .name }}
 ---
+# TODO: "if" condition will be removed after beta is finished
+{{- if or (eq $buildstrategy "dockerfile") (eq $buildstrategy "buildpacks") }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "pullsecrets"
+  namespace: {{ $name }}-{{ .name }}
+type: Opaque
+data:
+  # retrieve the secret data using lookup function and when not exists, return an empty dictionary / map as result
+  {{- $secretObj := (lookup "v1" "Secret" $mainnamespace "registry-login") | default dict }}
+  {{- $secretData := (get $secretObj "data") | default dict }}
+  {{- $dockerconfigjson := (get $secretData ".dockerconfigjson") | default dict }}
+  .dockerconfigjson: {{ $dockerconfigjson | quote }}
+---
+{{- end }}
 {{- if and (eq $deploymentstrategy "git") ($deploykeyPub) }}
 apiVersion: v1
 kind: Secret
