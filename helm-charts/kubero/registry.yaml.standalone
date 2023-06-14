@@ -1,0 +1,115 @@
+# Source: kubero/templates/registry.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubero-registry-ingress
+  labels:
+    helm.sh/chart: kubero-0.1.0
+    app.kubernetes.io/name: kubero
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: registry-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Kubero Registry'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - registry.demo.kubero.dev
+      secretName: kubero-registry-tls
+  rules:
+    - host: "registry.demo.kubero.dev"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: kubero-registry
+                port:
+                  number: 5000
+---
+# Source: kubero/templates/registry.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: registry
+  name: kubero-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: registry
+  template:
+    metadata:
+      labels:
+        run: registry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+        volumeMounts:
+        - name: registry-data
+          mountPath: /var/lib/registry
+          subPath: registry
+      volumes:
+      - name: registry-data
+        persistentVolumeClaim:
+          claimName: kubero-registry-data-pvc
+---
+# Source: kubero/templates/registry.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubero-registry
+spec:
+  type: ClusterIP
+  selector:
+    run: registry
+  ports:
+    - name: registry-tcp
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+# Source: kubero/templates/registry.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kubero-registry-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: linode-block-storage
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Source: kubero/templates/registry.yaml
+#enable
+apiVersion: v1
+data:
+  auth: a3ViZXJvOiQyYSQxMCRaWS5RZk9mSGszZFRhb294OG1iTmhlUHZWWnlJRFJNRWpJYUdNOG01d2MwVDlHRFFBQzVjZQ==
+kind: Secret
+metadata:
+  name: registry-basic-auth
+type: Opaque
+---
+# Source: kubero/templates/registry.yaml
+apiVersion: v1
+stringData:
+  .dockerconfigjson: '{"auths":{"registry.demo.kubero.dev":{"username":"kubero","password":"kubero","auth":"a3ViZXJvOmt1YmVybw=="}}}'
+kind: Secret
+metadata:
+  name: registry-login
+type: Opaque
