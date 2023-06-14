@@ -1,11 +1,12 @@
 {{- if .Values.registry.enabled -}}
+{{- $basicAuth := printf "%s:%s" .Values.registry.account.username .Values.registry.account.hash -}}
 apiVersion: v1
 kind: Secret
 metadata:
   name: registry-basic-auth
 type: Opaque
 data:
-  auth: {{ htpasswd .Values.registry.account.username .Values.registry.account.password | b64enc }}
+  auth: {{ $basicAuth | b64enc }}
 ---
 {{- $dockerAuth := printf "%s:%s" .Values.registry.account.username .Values.registry.account.password -}}
 apiVersion: v1

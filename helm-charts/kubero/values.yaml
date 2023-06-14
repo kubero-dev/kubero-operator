@@ -41,8 +41,8 @@ service:
   port: 2000
 
 registry:
-  enabled: false
-  create: true
+  enabled: false  # creates registry credentials for a external or a local registry (required for build strategy apps)
+  create: false   # spins up a local registry
   #host: registry.kubero.svc.cluster.local  # works for pushes, but not for pulls. DO NOT USE THIS :( since it requires to configure all nodes ot acceppt this "insecure" registry
   #host: docker.io                          # requires a docker account. Might be the best choice when running on a non public domain
   host: registry.demo.kubero.dev            # will make your images publicly avaialble with a basic auth protection
@@ -52,8 +52,7 @@ registry:
     # http://aspirine.org/htpasswd_en.html (use bcrypt)
     username: kubero
     password: kubero
-    
-    #kubero:$2y$05$Cxgd/U7RTYAWWbXrSi2gyuw.yzPUwi1mgWE5rJS5PdD2D48QQkhL2
+    hash: $2y$05$czQZpvtDYc5OzM/1r1pH0eAplT/okohh/mXoWl/Y65ZP/8/jnSWZq
   port: 5000
   storage: 1Gi
   storageClassName:
