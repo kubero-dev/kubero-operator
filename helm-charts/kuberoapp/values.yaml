@@ -2,8 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+mainnamespace: kubero
 buildpack: Docker
 deploymentstrategy: docker
+buildstrategy: plain
 registry: registry-service.kubero.svc.cluster.local:5000
 
 gitrepo:
@@ -172,59 +174,61 @@ extraVolumes: []
 #      - "ReadWriteOnce"
 #    mountPath: "/test-volume"
 
-cronjobs:
-  - name: "cronjob-sample"
-    schedule: '* */6 * * *'
-    image: busybox:1.28
-    command:
-      - /bin/sh
-      - -c
-      - date; echo Hello from the Kubernetes cluster
-    restartPolicy: OnFailure
-    env: []
 
-#addons: []
-addons:
-  - env: []
-    id: mongodb-operator
-    kind: MongoDB
-    resourceDefinitions:
-      MongoDB:
-        apiVersion: opstreelabs.in/v1alpha1
-        kind: MongoDB
-        metadata:
-          name: mongodbinstanceasdf
-        spec:
-          kubernetesConfig:
-            image: quay.io/opstree/mongo:v5.0.6
-            imagePullPolicy: IfNotPresent
-            securityContext:
-              fsGroup: 1001
-          mongoDBSecurity:
-            mongoDBAdminUser: admin
-            secretRef:
-              key: password
-              name: mongodb-secret
-          storage:
-            accessModes:
-            - ReadWriteOnce
-            storageClass: standard
-            storageSize: 1Gi
-      mongodbSecret:
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          annotations:
-            meta.helm.sh/release-name: test
-            meta.helm.sh/release-namespace: kubero-dev
-          labels:
-            app.kubernetes.io/managed-by: Kubero
-          name: mongodb-secret
-        stringData:
-          password: test
-        type: Opaque
-    version:
-      installed: 0.3.0
+cronjobs: []
+# cronjobs:
+#   - name: "cronjob-sample"
+#     schedule: '* */6 * * *'
+#     image: busybox:1.28
+#     command:
+#       - /bin/sh
+#       - -c
+#       - date; echo Hello from the Kubernetes cluster
+#     restartPolicy: OnFailure
+#     env: []
+
+addons: []
+# addons:
+#   - env: []
+#     id: mongodb-operator
+#     kind: MongoDB
+#     resourceDefinitions:
+#       MongoDB:
+#         apiVersion: opstreelabs.in/v1alpha1
+#         kind: MongoDB
+#         metadata:
+#           name: mongodbinstanceasdf
+#         spec:
+#           kubernetesConfig:
+#             image: quay.io/opstree/mongo:v5.0.6
+#             imagePullPolicy: IfNotPresent
+#             securityContext:
+#               fsGroup: 1001
+#           mongoDBSecurity:
+#             mongoDBAdminUser: admin
+#             secretRef:
+#               key: password
+#               name: mongodb-secret
+#           storage:
+#             accessModes:
+#             - ReadWriteOnce
+#             storageClass: standard
+#             storageSize: 1Gi
+#       mongodbSecret:
+#         apiVersion: v1
+#         kind: Secret
+#         metadata:
+#           annotations:
+#             meta.helm.sh/release-name: test
+#             meta.helm.sh/release-namespace: kubero-dev
+#           labels:
+#             app.kubernetes.io/managed-by: Kubero
+#           name: mongodb-secret
+#         stringData:
+#           password: test
+#         type: Opaque
+#     version:
+#       installed: 0.3.0
 
 vulnerabilityscan:
   enabled: false
