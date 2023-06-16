@@ -10,4 +10,4 @@ sed -i "" "s/VERSION ?= .*/VERSION ?= ${VERSION}/" Makefile
 sed -i "" "s/    containerImage: ghcr.io\/kubero-dev\/kubero-operator\/kuberoapp:v.*/    containerImage: ghcr.io\/kubero-dev\/kubero-operator\/kuberoapp:v${VERSION}/" config/manifests/bases/kubero-operator.clusterserviceversion.yaml
 sed -i "" "s/    containerImage: ghcr.io\/kubero-dev\/kubero-operator\/kuberoapp:v.*/    containerImage: ghcr.io\/kubero-dev\/kubero-operator\/kuberoapp:v${VERSION}/" bundle/manifests/kubero-operator.clusterserviceversion.yaml
 
-#git tag v${VERSION} --force && git push --tags --force
+#git tag v$(cat VERSION) --force && git push --tags --force
