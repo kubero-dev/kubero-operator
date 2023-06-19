@@ -30,7 +30,7 @@ spec:
       {{- end }}
       {{- else if ne .Values.buildstrategy "plain" }}
       imagePullSecrets:
-        - {{ include "kuberoapp.fullname" . }}-pull-secret
+        - name: {{ include "kuberoapp.fullname" . }}-pull-secret
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
