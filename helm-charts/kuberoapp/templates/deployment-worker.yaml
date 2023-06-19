@@ -23,14 +23,19 @@ spec:
       labels:
         {{- include "kuberoapp.selectorLabels" . | nindent 8 }}-worker
     spec:
+      {{- if .Values.imagePullSecrets }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- else if ne .Values.buildstrategy "plain" }}
+      imagePullSecrets:
+        - {{ include "kuberoapp.fullname" . }}-pull-secret
+      {{- end }}
       serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if eq .Values.deploymentstrategy "git" }}
+      {{- if and (eq .Values.deploymentstrategy "git") (eq .Values.buildstrategy "plain") }}
       initContainers:
         - name: {{ .Chart.Name }}-fetcher
           securityContext:
@@ -86,7 +91,7 @@ spec:
         - name: {{ .Chart.Name }}-worker
           securityContext:
             {{- toYaml .Values.image.run.securityContext | nindent 12 }}
-          {{- if eq .Values.deploymentstrategy "docker" }}
+          {{- if or (eq .Values.deploymentstrategy "docker") (or (eq .Values.buildstrategy "dockerfile") (eq .Values.buildstrategy "nixpacks")) }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- if .Values.image.command }}
           command:
@@ -112,7 +117,7 @@ spec:
               containerPort: {{ .Values.image.containerPort | default "8080" }}
               protocol: TCP
           volumeMounts:
-            {{- if eq .Values.deploymentstrategy "git" }}
+            {{- if and (eq .Values.deploymentstrategy "git") (eq .Values.buildstrategy "plain") }}
             - mountPath: /app
               name: app-storage
               {{- if or .Values.image.run.readOnlyAppStorage (not (hasKey .Values.image.run "readOnlyAppStorage")) }}
