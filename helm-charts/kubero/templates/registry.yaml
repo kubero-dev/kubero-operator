@@ -52,10 +52,10 @@ spec:
       - name: registry
         image: registry:2
         ports:
-        - containerPort: {{ .Values.registry.port }}
+        - containerPort: 5000
         env:
         - name: REGISTRY_HTTP_ADDR
-          value: 0.0.0.0:{{ .Values.registry.port }}
+          value: 0.0.0.0:5000
         {{- if contains "svc.cluster.local" .Values.registry.host }}
         - name: REGISTRY_HTTP_TLS_CERTIFICATE
           value: /certs/tls.crt
@@ -92,8 +92,8 @@ spec:
   ports:
     - name: registry-tcp
       protocol: TCP
-      port: {{ .Values.registry.port }}
-      targetPort: {{ .Values.registry.port }}
+      port: 5000
+      targetPort: 5000
 ---
 {{- if contains "svc.cluster.local" .Values.registry.host }}
 # creates a self-signed certificate for the registry. Requires to configure all nodes to trust the certificates CA or "insecure".
@@ -185,7 +185,7 @@ spec:
               service:
                 name: kubero-registry
                 port:
-                  number: {{ .Values.registry.port }}
+                  number: 5000
 {{- end }} #local
 {{- end }} #create
 {{- end }} #enabled

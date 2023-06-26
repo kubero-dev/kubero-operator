@@ -53,7 +53,7 @@ registry:
     username: kubero
     password: kubero
     hash: $2y$05$czQZpvtDYc5OzM/1r1pH0eAplT/okohh/mXoWl/Y65ZP/8/jnSWZq
-  port: 5000
+  port: 443
   storage: 1Gi
   storageClassName:
 
