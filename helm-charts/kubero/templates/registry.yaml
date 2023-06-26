@@ -153,6 +153,7 @@ spec:
     kind: ClusterIssuer
     group: cert-manager.io
 {{- else -}} #local (else = not local)
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kubero-registry-ingress
