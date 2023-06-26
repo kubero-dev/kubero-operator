@@ -17,7 +17,7 @@ type: Opaque
 stringData:
   username: {{ .Values.registry.account.username }}
   password: {{ .Values.registry.account.password }}
-  .dockerconfigjson: '{"auths":{"registry.demo.kubero.dev":{"username":"{{ .Values.registry.account.username }}","password":"{{ .Values.registry.account.password }}","auth":"{{ $dockerAuth | b64enc }}"}}}'
+  .dockerconfigjson: '{"auths":{"{{ .Values.registry.host }}":{"username":"{{ .Values.registry.account.username }}","password":"{{ .Values.registry.account.password }}","auth":"{{ $dockerAuth | b64enc }}"}}}'
 ---
 {{- if .Values.registry.create -}}
 apiVersion: v1
