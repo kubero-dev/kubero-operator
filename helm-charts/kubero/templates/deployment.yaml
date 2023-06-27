@@ -48,7 +48,7 @@ spec:
               value: "{{ .Values.ingress.className }}"
             {{- if .Values.registry.create }}
             - name: KUBERO_BUILD_REGISTRY
-              value: "{{ .Values.registry.host }}:{{ .Values.registry.port }}"
+              value: "{{ .Values.registry.host }}"
             {{- end }}
             - name: KUBERO_WEBHOOK_SECRET
               valueFrom:
