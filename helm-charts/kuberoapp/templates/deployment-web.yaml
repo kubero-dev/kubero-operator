@@ -119,6 +119,7 @@ spec:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 30
             periodSeconds: 15
             successThreshold: 1
             timeoutSeconds: 3
@@ -127,10 +128,10 @@ spec:
             httpGet:
               path: /
               port: http
-            periodSeconds: 5
+            periodSeconds: 2
             successThreshold: 1
-            timeoutSeconds: 3
-            failureThreshold: 5
+            timeoutSeconds: 2
+            failureThreshold: 30
           volumeMounts:
             {{- if and (eq .Values.deploymentstrategy "git") (eq .Values.buildstrategy "plain") }}
             - mountPath: /app
