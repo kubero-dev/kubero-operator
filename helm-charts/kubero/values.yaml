@@ -69,9 +69,9 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-  #  - secretName: chart-example-tls
+  #  - secretName: kubero-tls
   #    hosts:
-  #      - chart-example.local
+  #      - localhost.kubero.dev
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -126,11 +126,15 @@ kubero:
         language: JavaScript
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: node
           tag: latest
           command: "npm install"
+          securityContext:
+            runAsUser: 1000
         run:
           repository: node
           tag: latest
@@ -139,7 +143,9 @@ kubero:
         language: PHP
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: composer
           tag: latest
@@ -156,7 +162,9 @@ kubero:
         language: Python
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: python
           tag: 3.10-buster
@@ -169,7 +177,9 @@ kubero:
         language: GoLang
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: golang
           tag: alpine
@@ -182,7 +192,9 @@ kubero:
         language: GoLang
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: klakegg/hugo
           tag: latest
@@ -195,7 +207,9 @@ kubero:
         language: Ruby
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: ruby
           tag: "2.7"
@@ -208,7 +222,9 @@ kubero:
         language: HTML
         fetch:
           repository: ghcr.io/kubero-dev/buildpacks/fetch
-          tag: main
+          tag: v1.2
+          securityContext:
+            runAsUser: 1000
         build:
           repository: busybox
           tag: latest
