@@ -70,6 +70,9 @@ spec:
             - mountPath: /root/.ssh
               name: deployment-keys
               readOnly: true
+            - mountPath: /home/kubero/.ssh
+              name: deployment-keys
+              readOnly: true
             - mountPath: /app
               name: app-storage
         - name: {{ .Chart.Name }}-builder
