@@ -70,9 +70,11 @@ spec:
             - mountPath: /root/.ssh
               name: deployment-keys
               readOnly: true
-            - mountPath: /home/kubero/.ssh
+            - mountPath: /home/kubero/.ssh-mounted
               name: deployment-keys
               readOnly: true
+            - mountPath: /home/kubero/.ssh
+              name: deployment-keys-writable
             - mountPath: /app
               name: app-storage
         - name: {{ .Chart.Name }}-builder
@@ -141,6 +143,8 @@ spec:
         secret:
           defaultMode: 0600
           secretName: deployment-keys
+      - name: deployment-keys-writable
+        emptyDir: {}
       - name: app-storage
         emptyDir: {}
       - name: tmp-storage
