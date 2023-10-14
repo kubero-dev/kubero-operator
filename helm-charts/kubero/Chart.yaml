@@ -11,3 +11,4 @@ dependencies:
     tags:
       - kubito-cloudflared
     version: 1.x.x
+    condition: cloudflared.enabled
