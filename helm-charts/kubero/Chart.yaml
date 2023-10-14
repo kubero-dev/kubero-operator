@@ -4,3 +4,10 @@ description: A Helm chart for Kubero Master UI
 name: kubero
 type: application
 version: 0.1.0
+
+dependencies:
+  - name: cloudflared
+    repository: https://charts.kubito.dev
+    tags:
+      - kubito-cloudflared
+    version: 1.x.x

@@ -1,0 +1,6 @@
+dependencies:
+- name: cloudflared
+  repository: https://charts.kubito.dev
+  version: 1.0.4
+digest: sha256:2a5515383499a1cf65ebc8cd3abc0ee7451f0b29ff8bab59b196e578380351fa
+generated: "2023-10-14T17:52:06.944339+02:00"
