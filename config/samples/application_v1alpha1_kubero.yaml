@@ -81,16 +81,29 @@ spec:
           message: "Welcome to Kubero!"
           bgcolor: "#8560A9"
           fontcolor: "azure"
+      templates:
+        enabled: true
+        catalogs:
+        - name: "Kubero"
+          description: "Kubero templates"
+          templateBasePath: "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
+          index: 
+            url: "https://raw.githubusercontent.com/kubero-dev/templates/main/index.json"
+            format: "json" # json or yaml # TODO has no effect yet. json is always used
       buildpacks:
         - name: NodeJS
           language: JavaScript
           fetch:
             repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: main
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
           build:
             repository: node
             tag: latest
             command: "npm install"
+            securityContext:
+              runAsUser: 1000
           run:
             repository: node
             tag: latest
@@ -99,7 +112,9 @@ spec:
           language: PHP
           fetch:
             repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: main
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
           build:
             repository: composer
             tag: latest
@@ -116,7 +131,9 @@ spec:
           language: Python
           fetch:
             repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: main
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
           build:
             repository: python
             tag: 3.10-buster
@@ -129,7 +146,9 @@ spec:
           language: GoLang
           fetch:
             repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: main
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
           build:
             repository: golang
             tag: alpine
@@ -138,11 +157,28 @@ spec:
             repository: golang
             tag: alpine
             command: "./app"
+        - name: Hugo
+          language: GoLang
+          fetch:
+            repository: ghcr.io/kubero-dev/buildpacks/fetch
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
+          build:
+            repository: klakegg/hugo
+            tag: latest
+            command: hugo -D
+          run:
+            repository: caddy
+            tag: latest
+            command: caddy file-server --listen :8080 --root /app/public
         - name: Ruby
           language: Ruby
           fetch:
             repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: main
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
           build:
             repository: ruby
             tag: "2.7"
@@ -155,15 +191,17 @@ spec:
           language: HTML
           fetch:
             repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: main
+            tag: v1.2
+            securityContext:
+              runAsUser: 1000
           build:
             repository: busybox
             tag: latest
             command: "echo 'Buildpack not required'"
           run:
-            repository: webdevops/nginx
-            tag: alpine
-            command: "supervisord"
+            repository: caddy
+            tag: latest
+            command: caddy file-server --listen :8080 --root /app
       podSizeList:
       - name: small
         description: 'Small (CPU: 0.25, Memory: 0.5Gi)'
