@@ -276,7 +276,7 @@ cloudflared:
 
   ## @param replicaCount The number of replicas to deploy.
   ##
-  replicaCount: 3
+  replicaCount: 1
   ## @param tunnelID The Argo Tunnel ID you created. Check the configuration section for details.
   ##
   tunnelID: ""
