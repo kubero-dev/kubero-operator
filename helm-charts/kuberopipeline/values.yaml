@@ -39,7 +39,7 @@ phases:
 - context: ""
   enabled: false
   name: stage
-- context: kind-kubero
+- context: ""
   enabled: true
   name: production
 reviewapps: true
