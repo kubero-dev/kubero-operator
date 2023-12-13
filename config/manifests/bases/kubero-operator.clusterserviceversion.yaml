@@ -6,7 +6,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.144
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.145
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
@@ -94,9 +94,9 @@ spec:
       kind: KuberoRabbitMQ
       name: kuberorabbitmqs.application.kubero.dev
       version: v1alpha1
-    - description: Memcached is an in-memory key-value store for small chunks of 
-        arbitrary data (strings, objects) from results of database calls, API calls, 
-        or page rendering.
+    - description: Memcached is an in-memory key-value store for small chunks of arbitrary
+        data (strings, objects) from results of database calls, API calls, or page
+        rendering.
       displayName: Kubero Memcached
       kind: KuberoMemcached
       name: kuberomemcacheds.application.kubero.dev

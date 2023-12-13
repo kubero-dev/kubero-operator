@@ -448,6 +448,63 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoMemcached",
+          "metadata": {
+            "name": "kuberomemcached-sample"
+          },
+          "spec": {
+            "affinity": {},
+            "autoscaling": {
+              "enabled": false,
+              "maxReplicas": 100,
+              "minReplicas": 1,
+              "targetCPUUtilizationPercentage": 80
+            },
+            "fullnameOverride": "",
+            "image": {
+              "pullPolicy": "IfNotPresent",
+              "repository": "nginx",
+              "tag": ""
+            },
+            "imagePullSecrets": [],
+            "ingress": {
+              "annotations": {},
+              "className": "",
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": [
+                    {
+                      "path": "/",
+                      "pathType": "ImplementationSpecific"
+                    }
+                  ]
+                }
+              ],
+              "tls": []
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "podAnnotations": {},
+            "podSecurityContext": {},
+            "replicaCount": 1,
+            "resources": {},
+            "securityContext": {},
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "serviceAccount": {
+              "annotations": {},
+              "create": true,
+              "name": ""
+            },
+            "tolerations": []
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoMongoDB",
           "metadata": {
             "name": "kuberomongodb-sample"
@@ -671,13 +728,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.144
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.145
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.144
+  name: kubero-operator.v0.0.145
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -720,6 +777,13 @@ spec:
       displayName: Kubero Mail Server
       kind: KuberoMail
       name: kuberomails.application.kubero.dev
+      version: v1alpha1
+    - description: Memcached is an in-memory key-value store for small chunks of arbitrary
+        data (strings, objects) from results of database calls, API calls, or page
+        rendering.
+      displayName: Kubero Memcached
+      kind: KuberoMemcached
+      name: kuberomemcacheds.application.kubero.dev
       version: v1alpha1
     - description: MongoDB(R) is a relational open source NoSQL database. Easy to
         use, it stores data in JSON-like documents. Automated scalability and high-performance.
@@ -1388,6 +1452,33 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberomemcacheds
+          - kuberomemcacheds/status
+          - kuberomemcacheds/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1441,7 +1532,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.144
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.145
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1528,4 +1619,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.144
+  version: 0.0.145

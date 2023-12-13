@@ -1,0 +1,87 @@
+memcached:
+global:
+  storageClass: ""
+
+## @param architecture Memcached architecture. Allowed values: standalone or high-availability
+##
+architecture: standalone
+
+## Authentication parameters
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/memcached#creating-the-memcached-admin-user
+##
+auth:
+  ## @param auth.enabled Enable Memcached authentication
+  ##
+  enabled: false
+  ## @param auth.username Memcached admin user
+  ##
+  username: ""
+  ## @param auth.password Memcached admin password
+  ##
+  password: ""
+  ## @param auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
+  ##
+
+## @param replicaCount Number of Memcached nodes
+##
+replicaCount: 1
+
+resources:
+  limits: {}
+  requests:
+    memory: 256Mi
+
+initContainers: []
+## Memcached Autoscaling
+## @param autoscaling.enabled Enable memcached statefulset autoscaling (requires architecture: "high-availability")
+## @param autoscaling.minReplicas memcached statefulset autoscaling minimum number of replicas
+## @param autoscaling.maxReplicas memcached statefulset autoscaling maximum number of replicas
+## @param autoscaling.targetCPU memcached statefulset autoscaling target CPU percentage
+## @param autoscaling.targetMemory memcached statefulset autoscaling target CPU memory
+##
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPU: 50
+  targetMemory: 50
+
+## @section Persistence parameters
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable Memcached data persistence using PVC. If false, use emptyDir
+  ##
+  enabled: false
+  ## @param persistence.storageClass PVC Storage Class for Memcached data volume
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.accessModes PVC Access modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for Memcached data volume
+  ##
+  size: 8Gi
+  ## @param persistence.annotations Annotations for the PVC
+  ##
+  annotations: {}
+  ## @param persistence.labels Labels for the PVC
+  ##
+  labels: {}
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Memcached's data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+
