@@ -75,13 +75,13 @@ spec:
         callbackUrl: ""
     config: |
       kubero:
-        clusterissuer: letsencrypt-prod
         readonly: false
         banner:
           show: false
           message: "Welcome to Kubero!"
           bgcolor: "#8560A9"
           fontcolor: "azure"
+      clusterissuer: letsencrypt-prod
       templates:
         enabled: true
         catalogs:
