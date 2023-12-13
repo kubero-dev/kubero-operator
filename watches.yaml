@@ -47,4 +47,8 @@
   version: v1alpha1
   kind: KuberoRabbitMQ
   chart: helm-charts/kuberorabbitmq
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoMemcached
+  chart: helm-charts/kuberomemcached
 #+kubebuilder:scaffold:watch
