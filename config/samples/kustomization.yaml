@@ -11,4 +11,5 @@ resources:
 - application_v1alpha1_kuberocouchdb.yaml
 - application_v1alpha1_kuberokafka.yaml
 - application_v1alpha1_kuberomail.yaml
+- application_v1alpha1_kuberorabbitmq.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

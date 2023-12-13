@@ -1,0 +1,20 @@
+# permissions for end users to view kuberorabbitmqs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberorabbitmq-viewer-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberorabbitmqs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberorabbitmqs/status
+  verbs:
+  - get

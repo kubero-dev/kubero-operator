@@ -13,4 +13,5 @@ resources:
 - bases/application.kubero.dev_kuberocouchdbs.yaml
 - bases/application.kubero.dev_kuberokafkas.yaml
 - bases/application.kubero.dev_kuberomails.yaml
+- bases/application.kubero.dev_kuberorabbitmqs.yaml
 #+kubebuilder:scaffold:crdkustomizeresource

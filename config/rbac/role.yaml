@@ -619,4 +619,35 @@ rules:
   resources:
   - "deployments"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoRabbitMQ
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberorabbitmqs
+  - kuberorabbitmqs/status
+  - kuberorabbitmqs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+
 #+kubebuilder:scaffold:rules

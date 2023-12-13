@@ -408,6 +408,46 @@ spec:
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  name: kuberorabbitmqs.application.kubero.dev
+spec:
+  group: application.kubero.dev
+  names:
+    kind: KuberoRabbitMQ
+    listKind: KuberoRabbitMQList
+    plural: kuberorabbitmqs
+    singular: kuberorabbitmq
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: KuberoRabbitMQ is the Schema for the kuberorabbitmqs API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the desired state of KuberoRabbitMQ
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            description: Status defines the observed state of KuberoRabbitMQ
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
   name: kuberoredis.application.kubero.dev
 spec:
   group: application.kubero.dev
@@ -1059,6 +1099,33 @@ rules:
   - deployments
   verbs:
   - '*'
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberorabbitmqs
+  - kuberorabbitmqs/status
+  - kuberorabbitmqs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  - services
+  verbs:
+  - '*'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -1205,7 +1272,7 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         - --leader-election-id=kubero-operator
-        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.142
+        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.143
         livenessProbe:
           httpGet:
             path: /healthz

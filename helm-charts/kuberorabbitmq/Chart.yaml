@@ -1,0 +1,18 @@
+apiVersion: v2
+appVersion: 1.0.0
+description: A Helm chart for Kuberos RabbitMQ
+name: kuberorabbitmq
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: rabbitmq
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-rabbitmq
+    version: 12.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x

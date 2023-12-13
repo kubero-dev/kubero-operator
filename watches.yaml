@@ -43,4 +43,8 @@
   version: v1alpha1
   kind: KuberoMail
   chart: helm-charts/kuberomail
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoRabbitMQ
+  chart: helm-charts/kuberorabbitmq
 #+kubebuilder:scaffold:watch
