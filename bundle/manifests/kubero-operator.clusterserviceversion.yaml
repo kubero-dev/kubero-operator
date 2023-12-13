@@ -747,7 +747,11 @@ spec:
       kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
       version: v1alpha1
-    - kind: KuberoRabbitMQ
+    - description: RabbitMQ is an open source general-purpose message broker that
+        is designed for consistent, highly-available messaging scenarios (both synchronous
+        and asynchronous).
+      displayName: Kubero RabbitMQ
+      kind: KuberoRabbitMQ
       name: kuberorabbitmqs.application.kubero.dev
       version: v1alpha1
     - description: Redis(R) is an open source, advanced key-value store. It is often

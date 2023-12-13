@@ -3,7 +3,7 @@ rabbitmq:
     storageClass: ""
   replicaCount: 1
   auth:
-    ussername: "user"
+    username: "user"
     password: ""
     securepassword: ""
     erlangCookie: ""
