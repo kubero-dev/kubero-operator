@@ -1,0 +1,20 @@
+# permissions for end users to view kuberomemcacheds.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kuberomemcached-viewer-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberomemcacheds
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberomemcacheds/status
+  verbs:
+  - get
