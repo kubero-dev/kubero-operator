@@ -1,0 +1,16 @@
+rabbitmq:
+  global:
+    storageClass: ""
+  replicaCount: 1
+  auth:
+    ussername: "user"
+    password: ""
+    securepassword: ""
+    erlangCookie: ""
+  maxAvailableSchedulers: ""
+  onlineSchedulers: ""
+  clustering:
+    enabled: true
+    rebalance: false
+    forceboot: false
+    partitionHandling: autoheal
