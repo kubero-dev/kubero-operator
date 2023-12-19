@@ -118,6 +118,13 @@ rules:
     - "tenants"
   verbs:
     - "*"
+- apiGroups:
+    - "networking.cfargotunnel.com"
+  resources:
+    - "tunnels"
+    - "tunnelbindings"
+  verbs:
+    - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
 ##
