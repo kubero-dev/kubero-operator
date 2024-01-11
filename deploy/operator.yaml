@@ -685,6 +685,12 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - '*'
+- apiGroups:
   - networking.cfargotunnel.com
   resources:
   - tunnels
@@ -1352,7 +1358,7 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         - --leader-election-id=kubero-operator
-        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.148
+        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.149
         livenessProbe:
           httpGet:
             path: /healthz

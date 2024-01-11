@@ -125,6 +125,12 @@ rules:
   verbs:
     - "*"
 - apiGroups:
+    - "apiextensions.k8s.io"
+  resources:
+    - "customresourcedefinitions" # some how this is needed for cockroachdb
+  verbs:
+    - "*"
+- apiGroups:
     - "networking.cfargotunnel.com"
   resources:
     - "tunnels"
