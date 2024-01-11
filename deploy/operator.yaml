@@ -679,6 +679,12 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - charts.operatorhub.io
+  resources:
+  - cockroachdbs
+  verbs:
+  - '*'
+- apiGroups:
   - networking.cfargotunnel.com
   resources:
   - tunnels
@@ -1346,7 +1352,7 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         - --leader-election-id=kubero-operator
-        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.147
+        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.148
         livenessProbe:
           httpGet:
             path: /healthz
