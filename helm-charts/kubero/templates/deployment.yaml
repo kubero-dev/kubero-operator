@@ -34,6 +34,11 @@ spec:
           volumeMounts:
             - mountPath: /etc/kubero
               name: kubero-config-volume
+            {{- if .Values.kubero.auditLogs.enabled }}
+            - mountPath: /app/server/db
+              name: kubero-audit-log
+              readOnly: false
+            {{- end }}
           env:
             # TODO: needs some investigation. Crashes with UNABLE_TO_VERIFY_LEAF_SIGNATURE
             - name: NODE_TLS_REJECT_UNAUTHORIZED
@@ -46,6 +51,14 @@ spec:
               value: "{{ .Values.kubero.webhook_url }}"
             - name: KUBERNETES_INGRESS_CLASSNAME
               value: "{{ .Values.ingress.className }}"
+            {{- if .Values.kubero.auditLogs.enabled }}
+            - name: KUBERO_AUDIT
+              value: "{{ .Values.kubero.auditLogs.enabled }}"
+            - name: KUBERO_AUDIT_DB_PATH
+              value: /app/server/db
+            - name: KUBERO_AUDIT_LIMIT
+              value: "{{ .Values.kubero.auditLogs.limit }}"
+            {{- end }}
             {{- if .Values.registry.enabled }}
             - name: KUBERO_BUILD_REGISTRY
               value: "{{ .Values.registry.host }}"
@@ -181,6 +194,11 @@ spec:
         - name: kubero-config-volume
           configMap:
             name: kubero-config
+        {{- if .Values.kubero.auditLogs.enabled }}
+        - name: kubero-audit-log
+          persistentVolumeClaim:
+            claimName: {{ include "kubero.fullname" . }}-audit-logs
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
