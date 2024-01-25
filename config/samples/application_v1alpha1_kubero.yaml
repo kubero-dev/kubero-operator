@@ -73,6 +73,13 @@ spec:
         tokenUrl: ""
         secret: ""
         callbackUrl: ""
+    auditLogs:
+      enabled: false
+      storageClassName:
+      accessModes: 
+        - ReadWriteOnce
+      size: 0.1Gi
+      limit: 1000
     config: |
       kubero:
         readonly: false

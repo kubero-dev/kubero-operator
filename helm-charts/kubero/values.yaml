@@ -99,9 +99,9 @@ kubero:
   #sessionKey: "randomString"
   auth:
     github:
+      # set your secrets in the secret resource
       enabled: false
       id: ""
-      secret: ""
       callbackUrl: ""
       org: ""
     oauth2:
