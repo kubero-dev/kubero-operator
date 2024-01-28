@@ -35,14 +35,14 @@ image:
   #  - start
   fetch:
     repository: ghcr.io/kubero-dev/buildpacks/fetch
-    tag: main
+    tag: v1
     securityContext:
       readOnlyRootFilesystem: false
   # capabilities:
   #   drop:
   #   - ALL
-  # runAsNonRoot: true
-  # runAsUser: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
   build:
     repository: node
     tag: latest
@@ -52,8 +52,8 @@ image:
   # capabilities:
   #   drop:
   #   - ALL
-  # runAsNonRoot: true
-  # runAsUser: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
   run:
     readOnlyAppStorage: true
     repository: node
@@ -105,8 +105,8 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+podSecurityContext:
+  fsGroup: 1000
 
 service:
   type: ClusterIP
