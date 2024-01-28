@@ -1358,7 +1358,7 @@ spec:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         - --leader-election-id=kubero-operator
-        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.151
+        image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.152
         livenessProbe:
           httpGet:
             path: /healthz
