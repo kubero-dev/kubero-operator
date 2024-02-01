@@ -64,7 +64,243 @@ metadata:
                   "tokenUrl": ""
                 }
               },
-              "config": "kubero:\n  readonly: false\n  banner:\n    show: false\n    message: \"Welcome to Kubero!\"\n    bgcolor: \"#8560A9\"\n    fontcolor: \"azure\"\nclusterissuer: letsencrypt-prod\ntemplates:\n  enabled: true\n  catalogs:\n  - name: \"Kubero\"\n    description: \"Kubero templates\"\n    templateBasePath: \"https://raw.githubusercontent.com/kubero-dev/kubero/main/services/\"\n    index: \n      url: \"https://raw.githubusercontent.com/kubero-dev/templates/main/index.json\"\n      format: \"json\" # json or yaml # TODO has no effect yet. json is always used\n  - name: \"Kubero Frameworks\"\n    description: \"Kubero templates\"\n    templateBasePath: \"https://raw.githubusercontent.com/kubero-dev/kubero/main/services/\"\n    index: \n      url: \"https://raw.githubusercontent.com/kubero-dev/templates/main/index-frameworks.json\"\n      format: \"json\" # json or yaml # TODO has no effect yet. json is always used\nbuildpacks:\n  - name: NodeJS\n    language: JavaScript\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: node\n      tag: latest\n      command: \"npm install\"\n      securityContext:\n        runAsUser: 1000\n    run:\n      repository: node\n      tag: latest\n      command: \"node index.js\"\n  - name: PHP\n    language: PHP\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: composer\n      tag: latest\n      command: \"composer install; chown -R 1000:1000 /app\"\n    run:\n      repository: webdevops/php-apache\n      tag: \"8.1\"\n      readOnlyAppStorage: false\n      securityContext:\n        allowPrivilegeEscalation: true\n        readOnlyRootFilesystem: false\n      command: \"apache2-foreground\"\n  - name: Python\n    language: Python\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: python\n      tag: 3.10-buster\n      command: \"python3 -m venv .venv \u0026\u0026 . .venv/bin/activate \u0026\u0026 pip install -r requirements.txt\"\n    run:\n      repository: python\n      tag: 3.10-buster\n      command: \". .venv/bin/activate \u0026\u0026 python3 main.py\"\n  - name: GoLang\n    language: GoLang\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: golang\n      tag: alpine\n      command: \"go mod download \u0026\u0026 go mod verify \u0026\u0026 go build -v -o app\"\n    run:\n      repository: golang\n      tag: alpine\n      command: \"./app\"\n  - name: Hugo\n    language: GoLang\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: klakegg/hugo\n      tag: latest\n      command: hugo -D\n    run:\n      repository: caddy\n      tag: latest\n      command: caddy file-server --listen :8080 --root /app/public\n  - name: Ruby\n    language: Ruby\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: ruby\n      tag: \"2.7\"\n      command: \"export GEM_HOME=/app/bundle; bundle install --jobs=4 --retry=3\"\n    run:\n      repository: ruby\n      tag: \"2.7\"\n      command: \"export GEM_HOME=/app/bundle; bundle exec ruby main.rb\"\n  - name: Static\n    language: HTML\n    fetch:\n      repository: ghcr.io/kubero-dev/buildpacks/fetch\n      tag: v1.2\n      securityContext:\n        runAsUser: 1000\n    build:\n      repository: busybox\n      tag: latest\n      command: \"echo 'Buildpack not required'\"\n    run:\n      repository: caddy\n      tag: latest\n      command: caddy file-server --listen :8080 --root /app\npodSizeList:\n- name: small\n  description: 'Small (CPU: 0.25, Memory: 0.5Gi)'\n  default: true\n  resources:\n    requests:\n      memory: 0.5Gi\n      cpu: 250m\n    limits:\n      memory: 1Gi\n      cpu: 500m\n- name: medium\n  description: 'Medium (CPU: 1, Memory: 2Gi)'\n  resources:\n    requests:\n      memory: 2Gi\n      cpu: 1000m\n    limits:\n      memory: 4Gi\n      cpu: 2000m\n- name: large\n  description: 'Large (CPU: 2, Memory: 4Gi)'\n  active: false\n  resources:\n    requests:\n      memory: 4Gi\n      cpu: 2000m\n",
+              "config": {
+                "buildpacks": [
+                  {
+                    "build": {
+                      "command": "npm install",
+                      "repository": "node",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "latest"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "JavaScript",
+                    "name": "NodeJS",
+                    "run": {
+                      "command": "node index.js",
+                      "repository": "node",
+                      "tag": "latest"
+                    }
+                  },
+                  {
+                    "build": {
+                      "command": "composer install; chown -R 1000:1000 /app",
+                      "repository": "composer",
+                      "tag": "latest"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "PHP",
+                    "name": "PHP",
+                    "run": {
+                      "command": "apache2-foreground",
+                      "readOnlyAppStorage": false,
+                      "repository": "webdevops/php-apache",
+                      "securityContext": {
+                        "allowPrivilegeEscalation": true,
+                        "readOnlyRootFilesystem": false
+                      },
+                      "tag": "8.1"
+                    }
+                  },
+                  {
+                    "build": {
+                      "command": "python3 -m venv .venv \u0026\u0026 . .venv/bin/activate \u0026\u0026 pip install -r requirements.txt",
+                      "repository": "python",
+                      "tag": "3.10-buster"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "Python",
+                    "name": "Python",
+                    "run": {
+                      "command": ". .venv/bin/activate \u0026\u0026 python3 main.py",
+                      "repository": "python",
+                      "tag": "3.10-buster"
+                    }
+                  },
+                  {
+                    "build": {
+                      "command": "go mod download \u0026\u0026 go mod verify \u0026\u0026 go build -v -o app",
+                      "repository": "golang",
+                      "tag": "alpine"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "GoLang",
+                    "name": "GoLang",
+                    "run": {
+                      "command": "./app",
+                      "repository": "golang",
+                      "tag": "alpine"
+                    }
+                  },
+                  {
+                    "build": {
+                      "command": "hugo -D",
+                      "repository": "klakegg/hugo",
+                      "tag": "latest"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "GoLang",
+                    "name": "Hugo",
+                    "run": {
+                      "command": "caddy file-server --listen :8080 --root /app/public",
+                      "repository": "caddy",
+                      "tag": "latest"
+                    }
+                  },
+                  {
+                    "build": {
+                      "command": "export GEM_HOME=/app/bundle; bundle install --jobs=4 --retry=3",
+                      "repository": "ruby",
+                      "tag": "2.7"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "Ruby",
+                    "name": "Ruby",
+                    "run": {
+                      "command": "export GEM_HOME=/app/bundle; bundle exec ruby main.rb",
+                      "repository": "ruby",
+                      "tag": "2.7"
+                    }
+                  },
+                  {
+                    "build": {
+                      "command": "echo 'Buildpack not required'",
+                      "repository": "busybox",
+                      "tag": "latest"
+                    },
+                    "fetch": {
+                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "securityContext": {
+                        "runAsUser": 1000
+                      },
+                      "tag": "v1.2"
+                    },
+                    "language": "HTML",
+                    "name": "Static",
+                    "run": {
+                      "command": "caddy file-server --listen :8080 --root /app",
+                      "repository": "caddy",
+                      "tag": "latest"
+                    }
+                  }
+                ],
+                "clusterissuer": "letsencrypt-prod",
+                "kubero": {
+                  "banner": {
+                    "bgcolor": "#8560A9",
+                    "fontcolor": "azure",
+                    "message": "Welcome to Kubero!",
+                    "show": false
+                  },
+                  "console": {
+                    "enabled": false
+                  },
+                  "readonly": false
+                },
+                "podSizeList": [
+                  {
+                    "default": true,
+                    "description": "Small (CPU: 0.25, Memory: 0.5Gi)",
+                    "name": "small",
+                    "resources": {
+                      "limits": {
+                        "cpu": "500m",
+                        "memory": "1Gi"
+                      },
+                      "requests": {
+                        "cpu": "250m",
+                        "memory": "0.5Gi"
+                      }
+                    }
+                  },
+                  {
+                    "description": "Medium (CPU: 1, Memory: 2Gi)",
+                    "name": "medium",
+                    "resources": {
+                      "limits": {
+                        "cpu": "2000m",
+                        "memory": "4Gi"
+                      },
+                      "requests": {
+                        "cpu": "1000m",
+                        "memory": "2Gi"
+                      }
+                    }
+                  },
+                  {
+                    "active": false,
+                    "description": "Large (CPU: 2, Memory: 4Gi)",
+                    "name": "large",
+                    "resources": {
+                      "requests": {
+                        "cpu": "2000m",
+                        "memory": "4Gi"
+                      }
+                    }
+                  }
+                ],
+                "templates": {
+                  "catalogs": [
+                    {
+                      "description": "Kubero templates",
+                      "index": {
+                        "format": "json",
+                        "url": "https://raw.githubusercontent.com/kubero-dev/templates/main/index.json"
+                      },
+                      "name": "Kubero",
+                      "templateBasePath": "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
+                    },
+                    {
+                      "description": "Kubero templates",
+                      "index": {
+                        "format": "json",
+                        "url": "https://raw.githubusercontent.com/kubero-dev/templates/main/index-frameworks.json"
+                      },
+                      "name": "Kubero Frameworks",
+                      "templateBasePath": "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
+                    }
+                  ],
+                  "enabled": true
+                }
+              },
               "context": "inClusterContext",
               "debug": "",
               "namespace": "kubero",
@@ -737,13 +973,13 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.152
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.153
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.24.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.152
+  name: kubero-operator.v0.0.153
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1560,7 +1796,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.152
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.153
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1647,4 +1883,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.152
+  version: 0.0.153

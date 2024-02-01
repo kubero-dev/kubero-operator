@@ -120,9 +120,11 @@ kubero:
     size: 0.1Gi
     limit: 1000
 
-  config: |
+  config:
     kubero:
       readonly: false
+      console:
+        enabled: false
       banner:
         show: false
         message: "Welcome to Kubero!"
