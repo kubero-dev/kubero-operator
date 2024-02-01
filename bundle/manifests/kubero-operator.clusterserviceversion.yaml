@@ -1256,7 +1256,6 @@ spec:
           - persistentvolumes
           - persistentvolumeclaims/finalizers
           - persistentvolumes/finalizers
-          - pods/exec
           verbs:
           - '*'
         - apiGroups:

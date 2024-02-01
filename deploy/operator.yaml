@@ -726,7 +726,6 @@ rules:
   - persistentvolumes
   - persistentvolumeclaims/finalizers
   - persistentvolumes/finalizers
-  - pods/exec
   verbs:
   - '*'
 - apiGroups:
