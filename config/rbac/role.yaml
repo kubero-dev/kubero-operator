@@ -171,6 +171,7 @@ rules:
   - "persistentvolumes"
   - "persistentvolumeclaims/finalizers"
   - "persistentvolumes/finalizers"
+  - "pods/exec"
 - apiGroups:
   - "operators.coreos.com"
   verbs:
