@@ -67,9 +67,6 @@ spec:
               value: {{ .value | quote }}
             {{- end }}
           volumeMounts:
-            - mountPath: /root/.ssh
-              name: deployment-keys
-              readOnly: true
             - mountPath: /home/kubero/.ssh-mounted
               name: deployment-keys
               readOnly: true
@@ -139,7 +136,6 @@ spec:
       volumes:
       - name: deployment-keys
         secret:
-          defaultMode: 0600
           secretName: deployment-keys
       - name: app-storage
         emptyDir: {}
