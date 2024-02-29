@@ -169,6 +169,10 @@ spec:
               value: {{ .Values.kubero.auth.oauth2.tokenUrl | quote }}
             - name: OAUTH2_CLIENT_CALLBACKURL
               value: {{ .Values.kubero.auth.oauth2.callbackUrl | quote }}
+            {{- if .Values.kubero.auth.oauth2.scope }}
+            - name: OAUTH2_CLIENT_SCOPE
+              value: {{ .Values.kubero.auth.oauth2.scope | quote }}
+            {{- end }}
             {{- end }}
             - name: DEBUG
               value: "{{ .Values.kubero.debug }}"
