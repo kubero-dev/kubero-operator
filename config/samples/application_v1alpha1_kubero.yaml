@@ -73,6 +73,7 @@ spec:
         tokenUrl: ""
         secret: ""
         callbackUrl: ""
+        scopes: ""
     auditLogs:
       enabled: false
       storageClassName:
