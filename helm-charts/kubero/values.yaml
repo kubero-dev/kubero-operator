@@ -112,6 +112,7 @@ kubero:
       tokenUrl: ""
       secret: ""
       callbackUrl: ""
+      scope: "" # space seperated list of scopes
   auditLogs:
     enabled: false
     storageClassName:
