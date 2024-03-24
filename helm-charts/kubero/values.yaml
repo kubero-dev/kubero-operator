@@ -95,7 +95,7 @@ kubero:
   debug: ""
   namespace: kubero
   context: inClusterContext
-  webhook_url: https://localhost.kubero.dev/api/webhook
+  webhook_url: http://kubero.localhost/api/repo/webhooks
   #sessionKey: "randomString"
   auth:
     github:
@@ -124,6 +124,8 @@ kubero:
   config:
     kubero:
       readonly: false
+      admin:
+        disabled: false
       console:
         enabled: false
       banner:
