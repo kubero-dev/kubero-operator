@@ -34,6 +34,7 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}  
       {{- if and (eq .Values.deploymentstrategy "git") (eq .Values.buildstrategy "plain") }}
       initContainers:
         - name: {{ .Chart.Name }}-fetcher
