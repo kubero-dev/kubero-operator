@@ -94,6 +94,7 @@ spec:
           bgcolor: "#8560A9"
           fontcolor: "azure"
       clusterissuer: letsencrypt-prod
+      notifications: []
       templates:
         enabled: true
         catalogs:
