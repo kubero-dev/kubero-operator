@@ -6,9 +6,12 @@
 <br>
 This is the source code for the Kubero Operator. 
 <br>
-Please visit the main repository for docs and more information 
+Please raise issues in the main repository
 https://github.com/kubero-dev 
+<br>
+<br>
 <br>
 
 Here is a description, of how to install the operator on any cluster:
+
 https://docs.kubero.dev/Installation/#kubero-operator 
