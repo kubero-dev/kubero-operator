@@ -1,0 +1,6 @@
+dependencies:
+- name: prometheus
+  repository: https://charts.bitnami.com/bitnami
+  version: 1.0.6
+digest: sha256:75d792d232107be282e05cf504e6912999d61a0167eeb0092fccb6865d2e072b
+generated: "2024-04-26T13:21:18.700622+02:00"
