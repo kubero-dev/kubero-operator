@@ -43,7 +43,7 @@ service:
 prometheus:
   enabled: false
   alertmanager:
-    enabled: true
+    enabled: false
     persistence:
       ## @param alertmanager.persistence.enabled Enable Alertmanager data persistence using VolumeClaimTemplates
       ##
@@ -69,7 +69,7 @@ prometheus:
     ingress:
       ## @param server.ingress.enabled Enable ingress record generation for Prometheus
       ##
-      enabled: true
+      enabled: false
       ## @param server.ingress.hostname Default host for the ingress record
       ##
       #hostname: server.prometheus.local
