@@ -142,6 +142,10 @@ spec:
                   name: kubero-secrets
                   key: KUBECONFIG_BASE64
                   optional: true
+            {{- if .Values.prometheus.enabled }}
+            - name: KUBERO_PROMETHEUS_ENDPOINT
+              value: {{ .Values.prometheus.server.ingress.hostname | quote }}
+            {{- end }}
             {{- if .Values.kubero.auth.github.enabled }}
             - name: GITHUB_CLIENT_SECRET
               valueFrom:

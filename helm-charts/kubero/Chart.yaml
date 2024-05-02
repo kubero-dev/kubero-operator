@@ -9,4 +9,4 @@ dependencies:
   - name: prometheus
     repository: https://charts.bitnami.com/bitnami
     version: 1.0.x
-    condition: prometheus.enabled
+    condition: prometheus.create
