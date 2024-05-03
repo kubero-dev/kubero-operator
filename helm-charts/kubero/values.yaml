@@ -43,6 +43,7 @@ service:
 prometheus:
   enabled: false
   create: false
+  endpoint: http://kubero-prometheus-server # for internal access via service without ingress
   alertmanager:
     enabled: false
     persistence:
@@ -73,10 +74,9 @@ prometheus:
       enabled: false
       ## @param server.ingress.hostname Default host for the ingress record
       ##
-      #hostname: prometheus.yourdomain.com # for external access
-      #hostname: prometheus.localhost # for internal access
-      #hostname: kubero-prometheus-server # for kubernetes internal access (accessible also when ingress is not enabled)
-      hostname: kubero-prometheus-server
+      #hostname: prometheus.yourdomain.com
+      #hostname: prometheus.localhost # local development access
+      hostname: prometheus.localhost
     persistence:
       ## @param server.persistence.enabled Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir
       ##

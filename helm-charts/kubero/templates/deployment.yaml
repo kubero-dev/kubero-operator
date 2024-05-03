@@ -144,7 +144,7 @@ spec:
                   optional: true
             {{- if .Values.prometheus.enabled }}
             - name: KUBERO_PROMETHEUS_ENDPOINT
-              value: {{ .Values.prometheus.server.ingress.hostname | quote }}
+              value: {{ .Values.prometheus.endpoint | quote }}
             {{- end }}
             {{- if .Values.kubero.auth.github.enabled }}
             - name: GITHUB_CLIENT_SECRET
