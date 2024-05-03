@@ -7,6 +7,18 @@ version: 0.1.0
 
 dependencies:
   - name: prometheus
-    repository: https://charts.bitnami.com/bitnami
-    version: 1.0.x
+    repository: https://prometheus-community.github.io/helm-charts
+    version: "25.20.*"
     condition: prometheus.create
+  - name: alertmanager
+    version: "1.10.*"
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.alertmanager.enabled
+  - name: kube-state-metrics
+    version: "5.18.*"
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.kube-state-metrics.enabled
+  - name: prometheus-node-exporter
+    version: "4.32.*"
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.prometheus-node-exporter.enabled
