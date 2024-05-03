@@ -1,6 +1,12 @@
 apiVersion: v2
-appVersion: 1.16.0
+appVersion: 2.2.0
 description: A Helm chart for Kubero Master UI
 name: kubero
 type: application
 version: 0.1.0
+
+dependencies:
+  - name: prometheus
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.0.x
+    condition: prometheus.enabled
