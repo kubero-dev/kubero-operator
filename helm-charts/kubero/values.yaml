@@ -47,7 +47,7 @@ prometheus:
   alertmanager:
     enabled: false
   kube-state-metrics:
-    enabled: true
+    enabled: false
   server:
     enabled: true
     ingress:
@@ -55,7 +55,7 @@ prometheus:
       hosts:
         - prometheus.localhost
   prometheus-node-exporter:
-    enabled: true
+    enabled: false
   prometheus-pushgateway:
     enabled: false
 
