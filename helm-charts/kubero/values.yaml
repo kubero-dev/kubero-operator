@@ -52,7 +52,7 @@ prometheus:
     enabled: true
     ingress:
       enabled: false
-      hosts: 
+      hosts:
         - prometheus.localhost
   prometheus-node-exporter:
     enabled: true
