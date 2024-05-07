@@ -911,16 +911,13 @@ metadata:
           "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoPrometheus",
           "metadata": {
-            "name": "kuberoprometheus-sample"
+            "name": "kuberoprometheus"
           },
           "spec": {
             "prometheus": {
               "alertmanager": {
                 "enabled": false
               },
-              "create": false,
-              "enabled": false,
-              "endpoint": "http://kubero-prometheus-server",
               "kube-state-metrics": {
                 "enabled": false
               },
@@ -1021,14 +1018,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.164
-    createdAt: "2024-05-07T15:03:59Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.165
+    createdAt: "2024-05-07T15:27:53Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.164
+  name: kubero-operator.v0.0.165
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1875,7 +1872,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.164
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.165
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1962,4 +1959,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.164
+  version: 0.0.165
