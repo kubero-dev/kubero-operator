@@ -27,22 +27,7 @@ spec:
   podSecurityContext: {}
   prometheus:
     enabled: false
-    create: false
     endpoint: http://kubero-prometheus-server # for internal access via service without ingress
-    alertmanager:
-      enabled: false
-    kube-state-metrics:
-      enabled: false
-    server:
-      enabled: true
-      ingress:
-        enabled: false
-        hosts:
-          - prometheus.localhost
-    prometheus-node-exporter:
-      enabled: false
-    prometheus-pushgateway:
-      enabled: false
   registry:
     enabled: false  # creates registry credentials for a external or a local registry (required for build strategy apps)
     create: false   # spins up a local registry

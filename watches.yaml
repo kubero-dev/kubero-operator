@@ -51,4 +51,8 @@
   version: v1alpha1
   kind: KuberoMemcached
   chart: helm-charts/kuberomemcached
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoPrometheus
+  chart: helm-charts/kuberoprometheus
 #+kubebuilder:scaffold:watch
