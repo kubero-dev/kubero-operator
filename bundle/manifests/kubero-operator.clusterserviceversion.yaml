@@ -320,6 +320,10 @@ metadata:
             "nodeSelector": {},
             "podAnnotations": {},
             "podSecurityContext": {},
+            "prometheus": {
+              "enabled": false,
+              "endpoint": "http://kubero-prometheus-server"
+            },
             "registry": {
               "account": {
                 "hash": "$2y$05$czQZpvtDYc5OzM/1r1pH0eAplT/okohh/mXoWl/Y65ZP/8/jnSWZq",
@@ -905,6 +909,41 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoPrometheus",
+          "metadata": {
+            "name": "kuberoprometheus-sample"
+          },
+          "spec": {
+            "prometheus": {
+              "alertmanager": {
+                "enabled": false
+              },
+              "create": false,
+              "enabled": false,
+              "endpoint": "http://kubero-prometheus-server",
+              "kube-state-metrics": {
+                "enabled": false
+              },
+              "prometheus-node-exporter": {
+                "enabled": false
+              },
+              "prometheus-pushgateway": {
+                "enabled": false
+              },
+              "server": {
+                "enabled": true,
+                "ingress": {
+                  "enabled": false,
+                  "hosts": [
+                    "prometheus.localhost"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoRabbitMQ",
           "metadata": {
             "name": "kuberorabbitmq-sample"
@@ -982,14 +1021,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.163
-    createdAt: "2024-05-03T21:59:26Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.164
+    createdAt: "2024-05-07T15:03:59Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.163
+  name: kubero-operator.v0.0.164
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1065,6 +1104,9 @@ spec:
       displayName: Kubero Postgresql
       kind: KuberoPostgresql
       name: kuberopostgresqls.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoPrometheus
+      name: kuberoprometheuses.application.kubero.dev
       version: v1alpha1
     - description: RabbitMQ is an open source general-purpose message broker that
         is designed for consistent, highly-available messaging scenarios (both synchronous
@@ -1753,6 +1795,33 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoprometheuses
+          - kuberoprometheuses/status
+          - kuberoprometheuses/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1806,7 +1875,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.163
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.164
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1893,4 +1962,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.163
+  version: 0.0.164
