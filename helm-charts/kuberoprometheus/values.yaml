@@ -1,7 +1,4 @@
 prometheus:
-  enabled: false
-  create: false
-  endpoint: http://kubero-prometheus-server # for internal access via service without ingress
   alertmanager:
     enabled: false
   kube-state-metrics:
