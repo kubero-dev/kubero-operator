@@ -1,0 +1,27 @@
+# permissions for end users to view kuberoprometheuses.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: kuberoprometheus-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: kubero-operator
+    app.kubernetes.io/part-of: kubero-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: kuberoprometheus-viewer-role
+rules:
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoprometheuses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoprometheuses/status
+  verbs:
+  - get

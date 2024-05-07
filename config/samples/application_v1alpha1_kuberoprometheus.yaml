@@ -1,0 +1,24 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoPrometheus
+metadata:
+  name: kuberoprometheus-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberoprometheus/values.yaml
+  prometheus:
+    enabled: false
+    create: false
+    endpoint: http://kubero-prometheus-server # for internal access via service without ingress
+    alertmanager:
+      enabled: false
+    kube-state-metrics:
+      enabled: false
+    server:
+      enabled: true
+      ingress:
+        enabled: false
+        hosts:
+          - prometheus.localhost
+    prometheus-node-exporter:
+      enabled: false
+    prometheus-pushgateway:
+      enabled: false
