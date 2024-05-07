@@ -1,7 +1,7 @@
 apiVersion: application.kubero.dev/v1alpha1
 kind: KuberoPrometheus
 metadata:
-  name: kuberoprometheus
+  name: kubero-prometheus
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberoprometheus/values.yaml
   prometheus:
