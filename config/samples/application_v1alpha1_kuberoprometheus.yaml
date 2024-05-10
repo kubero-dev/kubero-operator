@@ -9,13 +9,38 @@ spec:
       enabled: false
     kube-state-metrics:
       enabled: false
+    prometheus-node-exporter:
+      enabled: false
+    prometheus-pushgateway:
+      enabled: false
     server:
       enabled: true
       ingress:
         enabled: false
         hosts:
           - prometheus.localhost
-    prometheus-node-exporter:
-      enabled: false
-    prometheus-pushgateway:
-      enabled: false
+    serverFiles:
+      alerting_rules.yml:
+        groups:
+        - name: Instances
+          rules:
+          - alert: 5xxServerError
+            expr: increase(nginx_ingress_controller_requests{status=~"5..", service=~".*-kuberoapp"}[5m]) > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: High 5xx error rate on {{ $labels.namespace }}/{{ $labels.service }}
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has high 5xx
+                error rate'
+          - alert: 4xxServerError
+            expr: increase(nginx_ingress_controller_requests{status=~"4..", service=~".*-kuberoapp"[5m]}) > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: High 4xx error rate on {{ $labels.namespace }}/{{ $labels.service }}
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has high 4xx
+                error rate'
