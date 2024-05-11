@@ -33,7 +33,7 @@ spec:
             annotations:
               summary: High 5xx error rate on {{ $labels.namespace }}/{{ $labels.service }}
               description: '{{ $labels.namespace }}/{{ $labels.service }} has high 5xx
-                error rate'
+                error rate on host: {{ $labels.host }}'
           - alert: 4xxServerError
             expr: increase(nginx_ingress_controller_requests{status=~"4..", service=~".*-kuberoapp"[5m]}) > 0
             for: 30s
@@ -43,4 +43,24 @@ spec:
             annotations:
               summary: High 4xx error rate on {{ $labels.namespace }}/{{ $labels.service }}
               description: '{{ $labels.namespace }}/{{ $labels.service }} has high 4xx
-                error rate'
+                error rate on host: {{ $labels.host }}'
+          - alert: DeploymentReplicasNotReady
+            expr: kube_deployment_status_replicas{deployment=~".*-kuberoapp-(web|worker)"} - kube_deployment_status_replicas_ready{deployment=~".*kuberoapp-(web|worker)"} > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: Deployment Replicast in {{ $labels.namespace }}/{{ $labels.service }} are not ready
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has deployment replicas
+                not'
+          - alert: ReplicaSetReplicasNotReady
+            expr: kube_replicaset_spec_replicas{replicaset=~".*-kuberoapp-.*"} - kube_replicaset_status_ready_replicas{replicaset=~".*-kuberoapp-.*"} > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: Deployment Replicast in {{ $labels.namespace }}/{{ $labels.service }} are not ready
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has deployment replicas
+                not'
