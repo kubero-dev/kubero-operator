@@ -35,7 +35,7 @@ spec:
               description: '{{ $labels.namespace }}/{{ $labels.service }} has high 5xx
                 error rate on host: {{ $labels.host }}'
           - alert: 4xxServerError
-            expr: increase(nginx_ingress_controller_requests{status=~"4..", service=~".*-kuberoapp"[5m]}) > 0
+            expr: increase(nginx_ingress_controller_requests{status=~"4..", service=~".*-kuberoapp"}[5m]) > 0
             for: 30s
             keep_firing_for: 30s
             labels:
