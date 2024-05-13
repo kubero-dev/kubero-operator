@@ -1,0 +1,536 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoPrometheus
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"application.kubero.dev/v1alpha1","kind":"KuberoPrometheus","metadata":{"annotations":{},"name":"kubero-prometheus","namespace":"kubero"},"spec":{"prometheus":{"alertmanager":{"enabled":false},"kube-state-metrics":{"enabled":false},"prometheus-node-exporter":{"enabled":false},"prometheus-pushgateway":{"enabled":false},"server":{"enabled":true,"ingress":{"enabled":false,"hosts":["prometheus.localhost"]}}}}}
+    operator-sdk/primary-resource: /kubero-prometheus-server
+    operator-sdk/primary-resource-type: ClusterRoleBinding.rbac.authorization.k8s.io
+  creationTimestamp: "2024-05-08T08:01:03Z"
+  finalizers:
+  - helm.sdk.operatorframework.io/uninstall-release
+  generation: 41
+  name: kubero-prometheus
+  namespace: kubero
+  resourceVersion: "1135376"
+  uid: a6e51019-1a0f-4761-ad46-dfbbac75cd63
+spec:
+  prometheus:
+    alertmanager:
+      enabled: false
+      ingress:
+        enabled: true
+        hosts:
+        - host: am.localhost
+          paths:
+          - path: /
+            pathType: ImplementationSpecific
+    kube-state-metrics:
+      enabled: true
+    prometheus-node-exporter:
+      enabled: false
+    prometheus-pushgateway:
+      enabled: false
+    server:
+      enabled: true
+      ingress:
+        enabled: true
+        hosts:
+        - prometheus.localhost
+    serverFiles:
+      alerting_rules.yml:
+        groups:
+        - name: Instances
+          rules:
+          - alert: 5xxServerError
+            annotations:
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has high
+                5xx error rate'
+              summary: High 5xx error rate on {{ $labels.namespace }}/{{ $labels.service
+                }}
+            expr: increase(nginx_ingress_controller_requests{status=~"5..", service=~".*-kuberoapp"}[5m])
+              > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+          - alert: 4xxServerError10p
+            annotations:
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has high
+                4xx error rate'
+              summary: High 4xx error rate on {{ $labels.namespace }}/{{ $labels.service
+                }}
+            expr: (sum(increase(nginx_ingress_controller_requests{status=~"4..", service=~".*-kuberoapp"}[5m]))
+              * 100) / sum(increase(nginx_ingress_controller_requests{ service=~".*-kuberoapp"}[5m]))
+              > 10
+            for: 1m
+            keep_firing_for: 1m
+            labels:
+              severity: page
+          - alert: DeploymentReplicasNotReady
+            annotations:
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has deployment
+                replicas not'
+              summary: Deployment Replicast in {{ $labels.namespace }}/{{ $labels.service
+                }} are not ready
+            expr: kube_deployment_status_replicas{deployment=~".*-kuberoapp-(web|worker)"}
+              - kube_deployment_status_replicas_ready{deployment=~".*kuberoapp-(web|worker)"}
+              > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+          - alert: CPULimit80p
+            annotations:
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has deployment
+                replicas not'
+              summary: Deployment Replicast in {{ $labels.namespace }}/{{ $labels.service
+                }} are not ready
+            expr: (increase(container_cpu_usage_seconds_total{id=~".*.slice",namespace="yyy-production"}[5m])
+              / on(app) kube_pod_container_resource_limits{namespace="yyy-production",
+              unit="core"} ) * 100 > 80
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+status:
+  conditions:
+  - lastTransitionTime: "2024-05-08T08:01:03Z"
+    status: "True"
+    type: Initialized
+  - lastTransitionTime: "2024-05-08T08:01:04Z"
+    reason: UpgradeSuccessful
+    status: "True"
+    type: Deployed
+  deployedRelease:
+    manifest: "---\n# Source: kuberoprometheus/charts/kube-state-metrics/templates/serviceaccount.yaml\napiVersion:
+      v1\nkind: ServiceAccount\nmetadata:\n  labels:    \n    helm.sh/chart: kube-state-metrics-5.18.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/component: metrics\n
+      \   app.kubernetes.io/part-of: kube-state-metrics\n    app.kubernetes.io/name:
+      kube-state-metrics\n    app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      \"2.12.0\"\n  name: kubero-prometheus-kube-state-metrics\n  namespace: kubero\n---\n#
+      Source: kuberoprometheus/charts/prometheus/charts/kube-state-metrics/templates/serviceaccount.yaml\napiVersion:
+      v1\nkind: ServiceAccount\nmetadata:\n  labels:    \n    helm.sh/chart: kube-state-metrics-5.18.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/component: metrics\n
+      \   app.kubernetes.io/part-of: kube-state-metrics\n    app.kubernetes.io/name:
+      kube-state-metrics\n    app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      \"2.12.0\"\n  name: kubero-prometheus-kube-state-metrics\n  namespace: kubero\n---\n#
+      Source: kuberoprometheus/charts/prometheus/templates/serviceaccount.yaml\napiVersion:
+      v1\nkind: ServiceAccount\nmetadata:\n  labels:\n    app.kubernetes.io/component:
+      server\n    app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: v2.51.2\n    helm.sh/chart:
+      prometheus-25.20.1\n    app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of:
+      prometheus\n  name: kubero-prometheus-server\n  namespace: kubero\n  annotations:\n
+      \   {}\n---\n# Source: kuberoprometheus/charts/prometheus/templates/cm.yaml\napiVersion:
+      v1\nkind: ConfigMap\nmetadata:\n  labels:\n    app.kubernetes.io/component:
+      server\n    app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: v2.51.2\n    helm.sh/chart:
+      prometheus-25.20.1\n    app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of:
+      prometheus\n  name: kubero-prometheus-server\n  namespace: kubero\ndata:\n  allow-snippet-annotations:
+      \"false\"\n  alerting_rules.yml: |\n    groups:\n    - name: Instances\n      rules:\n
+      \     - alert: 5xxServerError\n        annotations:\n          description:
+      '{{ $labels.namespace }}/{{ $labels.service }} has high 5xx error\n            rate'\n
+      \         summary: High 5xx error rate on {{ $labels.namespace }}/{{ $labels.service
+      }}\n        expr: increase(nginx_ingress_controller_requests{status=~\"5..\",
+      service=~\".*-kuberoapp\"}[5m])\n          > 0\n        for: 30s\n        keep_firing_for:
+      30s\n        labels:\n          severity: page\n      - alert: 4xxServerError10p\n
+      \       annotations:\n          description: '{{ $labels.namespace }}/{{ $labels.service
+      }} has high 4xx error\n            rate'\n          summary: High 4xx error
+      rate on {{ $labels.namespace }}/{{ $labels.service }}\n        expr: (sum(increase(nginx_ingress_controller_requests{status=~\"4..\",
+      service=~\".*-kuberoapp\"}[5m]))\n          * 100) / sum(increase(nginx_ingress_controller_requests{
+      service=~\".*-kuberoapp\"}[5m]))\n          > 10\n        for: 1m\n        keep_firing_for:
+      1m\n        labels:\n          severity: page\n      - alert: DeploymentReplicasNotReady\n
+      \       annotations:\n          description: '{{ $labels.namespace }}/{{ $labels.service
+      }} has deployment replicas\n            not'\n          summary: Deployment
+      Replicast in {{ $labels.namespace }}/{{ $labels.service\n            }} are
+      not ready\n        expr: kube_deployment_status_replicas{deployment=~\".*-kuberoapp-(web|worker)\"}\n
+      \         - kube_deployment_status_replicas_ready{deployment=~\".*kuberoapp-(web|worker)\"}\n
+      \         > 0\n        for: 30s\n        keep_firing_for: 30s\n        labels:\n
+      \         severity: page\n      - alert: ReplicaSetReplicasNotReady\n        annotations:\n
+      \         description: '{{ $labels.namespace }}/{{ $labels.service }} has deployment
+      replicas\n            not'\n          summary: Deployment Replicast in {{ $labels.namespace
+      }}/{{ $labels.service\n            }} are not ready\n        expr: (increase(container_cpu_usage_seconds_total{id=~\".*.slice\",namespace=\"yyy-production\"}[5m])\n
+      \         / on(app) kube_pod_container_resource_limits{namespace=\"yyy-production\",
+      unit=\"core\"}\n          ) * 100 > 80\n        for: 30s\n        keep_firing_for:
+      30s\n        labels:\n          severity: page\n  alerts: |\n    {}\n  prometheus.yml:
+      |\n    global:\n      evaluation_interval: 1m\n      scrape_interval: 1m\n      scrape_timeout:
+      10s\n    rule_files:\n    - /etc/config/recording_rules.yml\n    - /etc/config/alerting_rules.yml\n
+      \   - /etc/config/rules\n    - /etc/config/alerts\n    scrape_configs:\n    -
+      job_name: prometheus\n      static_configs:\n      - targets:\n        - localhost:9090\n
+      \   - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n
+      \     job_name: kubernetes-apiservers\n      kubernetes_sd_configs:\n      -
+      role: endpoints\n      relabel_configs:\n      - action: keep\n        regex:
+      default;kubernetes;https\n        source_labels:\n        - __meta_kubernetes_namespace\n
+      \       - __meta_kubernetes_service_name\n        - __meta_kubernetes_endpoint_port_name\n
+      \     scheme: https\n      tls_config:\n        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt\n
+      \       insecure_skip_verify: true\n    - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n
+      \     job_name: kubernetes-nodes\n      kubernetes_sd_configs:\n      - role:
+      node\n      relabel_configs:\n      - action: labelmap\n        regex: __meta_kubernetes_node_label_(.+)\n
+      \     - replacement: kubernetes.default.svc:443\n        target_label: __address__\n
+      \     - regex: (.+)\n        replacement: /api/v1/nodes/$1/proxy/metrics\n        source_labels:\n
+      \       - __meta_kubernetes_node_name\n        target_label: __metrics_path__\n
+      \     scheme: https\n      tls_config:\n        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt\n
+      \       insecure_skip_verify: true\n    - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n
+      \     job_name: kubernetes-nodes-cadvisor\n      kubernetes_sd_configs:\n      -
+      role: node\n      relabel_configs:\n      - action: labelmap\n        regex:
+      __meta_kubernetes_node_label_(.+)\n      - replacement: kubernetes.default.svc:443\n
+      \       target_label: __address__\n      - regex: (.+)\n        replacement:
+      /api/v1/nodes/$1/proxy/metrics/cadvisor\n        source_labels:\n        - __meta_kubernetes_node_name\n
+      \       target_label: __metrics_path__\n      scheme: https\n      tls_config:\n
+      \       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt\n        insecure_skip_verify:
+      true\n    - honor_labels: true\n      job_name: kubernetes-service-endpoints\n
+      \     kubernetes_sd_configs:\n      - role: endpoints\n      relabel_configs:\n
+      \     - action: keep\n        regex: true\n        source_labels:\n        -
+      __meta_kubernetes_service_annotation_prometheus_io_scrape\n      - action: drop\n
+      \       regex: true\n        source_labels:\n        - __meta_kubernetes_service_annotation_prometheus_io_scrape_slow\n
+      \     - action: replace\n        regex: (https?)\n        source_labels:\n        -
+      __meta_kubernetes_service_annotation_prometheus_io_scheme\n        target_label:
+      __scheme__\n      - action: replace\n        regex: (.+)\n        source_labels:\n
+      \       - __meta_kubernetes_service_annotation_prometheus_io_path\n        target_label:
+      __metrics_path__\n      - action: replace\n        regex: (.+?)(?::\\d+)?;(\\d+)\n
+      \       replacement: $1:$2\n        source_labels:\n        - __address__\n
+      \       - __meta_kubernetes_service_annotation_prometheus_io_port\n        target_label:
+      __address__\n      - action: labelmap\n        regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)\n
+      \       replacement: __param_$1\n      - action: labelmap\n        regex: __meta_kubernetes_service_label_(.+)\n
+      \     - action: replace\n        source_labels:\n        - __meta_kubernetes_namespace\n
+      \       target_label: namespace\n      - action: replace\n        source_labels:\n
+      \       - __meta_kubernetes_service_name\n        target_label: service\n      -
+      action: replace\n        source_labels:\n        - __meta_kubernetes_pod_node_name\n
+      \       target_label: node\n    - honor_labels: true\n      job_name: kubernetes-service-endpoints-slow\n
+      \     kubernetes_sd_configs:\n      - role: endpoints\n      relabel_configs:\n
+      \     - action: keep\n        regex: true\n        source_labels:\n        -
+      __meta_kubernetes_service_annotation_prometheus_io_scrape_slow\n      - action:
+      replace\n        regex: (https?)\n        source_labels:\n        - __meta_kubernetes_service_annotation_prometheus_io_scheme\n
+      \       target_label: __scheme__\n      - action: replace\n        regex: (.+)\n
+      \       source_labels:\n        - __meta_kubernetes_service_annotation_prometheus_io_path\n
+      \       target_label: __metrics_path__\n      - action: replace\n        regex:
+      (.+?)(?::\\d+)?;(\\d+)\n        replacement: $1:$2\n        source_labels:\n
+      \       - __address__\n        - __meta_kubernetes_service_annotation_prometheus_io_port\n
+      \       target_label: __address__\n      - action: labelmap\n        regex:
+      __meta_kubernetes_service_annotation_prometheus_io_param_(.+)\n        replacement:
+      __param_$1\n      - action: labelmap\n        regex: __meta_kubernetes_service_label_(.+)\n
+      \     - action: replace\n        source_labels:\n        - __meta_kubernetes_namespace\n
+      \       target_label: namespace\n      - action: replace\n        source_labels:\n
+      \       - __meta_kubernetes_service_name\n        target_label: service\n      -
+      action: replace\n        source_labels:\n        - __meta_kubernetes_pod_node_name\n
+      \       target_label: node\n      scrape_interval: 5m\n      scrape_timeout:
+      30s\n    - honor_labels: true\n      job_name: prometheus-pushgateway\n      kubernetes_sd_configs:\n
+      \     - role: service\n      relabel_configs:\n      - action: keep\n        regex:
+      pushgateway\n        source_labels:\n        - __meta_kubernetes_service_annotation_prometheus_io_probe\n
+      \   - honor_labels: true\n      job_name: kubernetes-services\n      kubernetes_sd_configs:\n
+      \     - role: service\n      metrics_path: /probe\n      params:\n        module:\n
+      \       - http_2xx\n      relabel_configs:\n      - action: keep\n        regex:
+      true\n        source_labels:\n        - __meta_kubernetes_service_annotation_prometheus_io_probe\n
+      \     - source_labels:\n        - __address__\n        target_label: __param_target\n
+      \     - replacement: blackbox\n        target_label: __address__\n      - source_labels:\n
+      \       - __param_target\n        target_label: instance\n      - action: labelmap\n
+      \       regex: __meta_kubernetes_service_label_(.+)\n      - source_labels:\n
+      \       - __meta_kubernetes_namespace\n        target_label: namespace\n      -
+      source_labels:\n        - __meta_kubernetes_service_name\n        target_label:
+      service\n    - honor_labels: true\n      job_name: kubernetes-pods\n      kubernetes_sd_configs:\n
+      \     - role: pod\n      relabel_configs:\n      - action: keep\n        regex:
+      true\n        source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_scrape\n
+      \     - action: drop\n        regex: true\n        source_labels:\n        -
+      __meta_kubernetes_pod_annotation_prometheus_io_scrape_slow\n      - action:
+      replace\n        regex: (https?)\n        source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_scheme\n
+      \       target_label: __scheme__\n      - action: replace\n        regex: (.+)\n
+      \       source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_path\n
+      \       target_label: __metrics_path__\n      - action: replace\n        regex:
+      (\\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})\n        replacement: '[$2]:$1'\n
+      \       source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_port\n
+      \       - __meta_kubernetes_pod_ip\n        target_label: __address__\n      -
+      action: replace\n        regex: (\\d+);((([0-9]+?)(\\.|$)){4})\n        replacement:
+      $2:$1\n        source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_port\n
+      \       - __meta_kubernetes_pod_ip\n        target_label: __address__\n      -
+      action: labelmap\n        regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)\n
+      \       replacement: __param_$1\n      - action: labelmap\n        regex: __meta_kubernetes_pod_label_(.+)\n
+      \     - action: replace\n        source_labels:\n        - __meta_kubernetes_namespace\n
+      \       target_label: namespace\n      - action: replace\n        source_labels:\n
+      \       - __meta_kubernetes_pod_name\n        target_label: pod\n      - action:
+      drop\n        regex: Pending|Succeeded|Failed|Completed\n        source_labels:\n
+      \       - __meta_kubernetes_pod_phase\n      - action: replace\n        source_labels:\n
+      \       - __meta_kubernetes_pod_node_name\n        target_label: node\n    -
+      honor_labels: true\n      job_name: kubernetes-pods-slow\n      kubernetes_sd_configs:\n
+      \     - role: pod\n      relabel_configs:\n      - action: keep\n        regex:
+      true\n        source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_scrape_slow\n
+      \     - action: replace\n        regex: (https?)\n        source_labels:\n        -
+      __meta_kubernetes_pod_annotation_prometheus_io_scheme\n        target_label:
+      __scheme__\n      - action: replace\n        regex: (.+)\n        source_labels:\n
+      \       - __meta_kubernetes_pod_annotation_prometheus_io_path\n        target_label:
+      __metrics_path__\n      - action: replace\n        regex: (\\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})\n
+      \       replacement: '[$2]:$1'\n        source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_port\n
+      \       - __meta_kubernetes_pod_ip\n        target_label: __address__\n      -
+      action: replace\n        regex: (\\d+);((([0-9]+?)(\\.|$)){4})\n        replacement:
+      $2:$1\n        source_labels:\n        - __meta_kubernetes_pod_annotation_prometheus_io_port\n
+      \       - __meta_kubernetes_pod_ip\n        target_label: __address__\n      -
+      action: labelmap\n        regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)\n
+      \       replacement: __param_$1\n      - action: labelmap\n        regex: __meta_kubernetes_pod_label_(.+)\n
+      \     - action: replace\n        source_labels:\n        - __meta_kubernetes_namespace\n
+      \       target_label: namespace\n      - action: replace\n        source_labels:\n
+      \       - __meta_kubernetes_pod_name\n        target_label: pod\n      - action:
+      drop\n        regex: Pending|Succeeded|Failed|Completed\n        source_labels:\n
+      \       - __meta_kubernetes_pod_phase\n      - action: replace\n        source_labels:\n
+      \       - __meta_kubernetes_pod_node_name\n        target_label: node\n      scrape_interval:
+      5m\n      scrape_timeout: 30s\n  recording_rules.yml: |\n    {}\n  rules: |\n
+      \   {}\n---\n# Source: kuberoprometheus/charts/prometheus/templates/pvc.yaml\napiVersion:
+      v1\nkind: PersistentVolumeClaim\nmetadata:\n  labels:\n    app.kubernetes.io/component:
+      server\n    app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: v2.51.2\n    helm.sh/chart:
+      prometheus-25.20.1\n    app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of:
+      prometheus\n  name: kubero-prometheus-server\n  namespace: kubero\nspec:\n  accessModes:\n
+      \   - ReadWriteOnce\n  resources:\n    requests:\n      storage: \"8Gi\"\n---\n#
+      Source: kuberoprometheus/charts/kube-state-metrics/templates/role.yaml\napiVersion:
+      rbac.authorization.k8s.io/v1\nkind: ClusterRole\nmetadata:\n  labels:    \n
+      \   helm.sh/chart: kube-state-metrics-5.18.1\n    app.kubernetes.io/managed-by:
+      Helm\n    app.kubernetes.io/component: metrics\n    app.kubernetes.io/part-of:
+      kube-state-metrics\n    app.kubernetes.io/name: kube-state-metrics\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: \"2.12.0\"\n  name: kubero-prometheus-kube-state-metrics\nrules:\n\n-
+      apiGroups: [\"certificates.k8s.io\"]\n  resources:\n  - certificatesigningrequests\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - configmaps\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"batch\"]\n  resources:\n  -
+      cronjobs\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"extensions\", \"apps\"]\n
+      \ resources:\n  - daemonsets\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"extensions\", \"apps\"]\n  resources:\n  - deployments\n  verbs: [\"list\",
+      \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - endpoints\n  verbs: [\"list\",
+      \"watch\"]\n\n- apiGroups: [\"autoscaling\"]\n  resources:\n  - horizontalpodautoscalers\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"extensions\", \"networking.k8s.io\"]\n
+      \ resources:\n  - ingresses\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"batch\"]\n  resources:\n  - jobs\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"coordination.k8s.io\"]\n  resources:\n  - leases\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - limitranges\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"admissionregistration.k8s.io\"]\n  resources:\n    - mutatingwebhookconfigurations\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - namespaces\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"networking.k8s.io\"]\n  resources:\n
+      \ - networkpolicies\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n
+      \ resources:\n  - nodes\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n
+      \ resources:\n  - persistentvolumeclaims\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - persistentvolumes\n  verbs: [\"list\",
+      \"watch\"]\n\n- apiGroups: [\"policy\"]\n  resources:\n    - poddisruptionbudgets\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - pods\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"extensions\", \"apps\"]\n
+      \ resources:\n  - replicasets\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"\"]\n  resources:\n  - replicationcontrollers\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - resourcequotas\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - secrets\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - services\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"apps\"]\n  resources:\n  - statefulsets\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"storage.k8s.io\"]\n  resources:\n    - storageclasses\n  verbs:
+      [\"list\", \"watch\"]\n\n- apiGroups: [\"admissionregistration.k8s.io\"]\n  resources:\n
+      \   - validatingwebhookconfigurations\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"storage.k8s.io\"]\n  resources:\n    - volumeattachments\n  verbs: [\"list\",
+      \"watch\"]\n---\n# Source: kuberoprometheus/charts/prometheus/charts/kube-state-metrics/templates/role.yaml\napiVersion:
+      rbac.authorization.k8s.io/v1\nkind: ClusterRole\nmetadata:\n  labels:    \n
+      \   helm.sh/chart: kube-state-metrics-5.18.1\n    app.kubernetes.io/managed-by:
+      Helm\n    app.kubernetes.io/component: metrics\n    app.kubernetes.io/part-of:
+      kube-state-metrics\n    app.kubernetes.io/name: kube-state-metrics\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: \"2.12.0\"\n  name: kubero-prometheus-kube-state-metrics\nrules:\n\n-
+      apiGroups: [\"certificates.k8s.io\"]\n  resources:\n  - certificatesigningrequests\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - configmaps\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"batch\"]\n  resources:\n  -
+      cronjobs\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"extensions\", \"apps\"]\n
+      \ resources:\n  - daemonsets\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"extensions\", \"apps\"]\n  resources:\n  - deployments\n  verbs: [\"list\",
+      \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - endpoints\n  verbs: [\"list\",
+      \"watch\"]\n\n- apiGroups: [\"autoscaling\"]\n  resources:\n  - horizontalpodautoscalers\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"extensions\", \"networking.k8s.io\"]\n
+      \ resources:\n  - ingresses\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"batch\"]\n  resources:\n  - jobs\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"coordination.k8s.io\"]\n  resources:\n  - leases\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - limitranges\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"admissionregistration.k8s.io\"]\n  resources:\n    - mutatingwebhookconfigurations\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - namespaces\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"networking.k8s.io\"]\n  resources:\n
+      \ - networkpolicies\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n
+      \ resources:\n  - nodes\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n
+      \ resources:\n  - persistentvolumeclaims\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - persistentvolumes\n  verbs: [\"list\",
+      \"watch\"]\n\n- apiGroups: [\"policy\"]\n  resources:\n    - poddisruptionbudgets\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"\"]\n  resources:\n  - pods\n
+      \ verbs: [\"list\", \"watch\"]\n\n- apiGroups: [\"extensions\", \"apps\"]\n
+      \ resources:\n  - replicasets\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"\"]\n  resources:\n  - replicationcontrollers\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - resourcequotas\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - secrets\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"\"]\n  resources:\n  - services\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"apps\"]\n  resources:\n  - statefulsets\n  verbs: [\"list\", \"watch\"]\n\n-
+      apiGroups: [\"storage.k8s.io\"]\n  resources:\n    - storageclasses\n  verbs:
+      [\"list\", \"watch\"]\n\n- apiGroups: [\"admissionregistration.k8s.io\"]\n  resources:\n
+      \   - validatingwebhookconfigurations\n  verbs: [\"list\", \"watch\"]\n\n- apiGroups:
+      [\"storage.k8s.io\"]\n  resources:\n    - volumeattachments\n  verbs: [\"list\",
+      \"watch\"]\n---\n# Source: kuberoprometheus/charts/prometheus/templates/clusterrole.yaml\napiVersion:
+      rbac.authorization.k8s.io/v1\nkind: ClusterRole\nmetadata:\n  labels:\n    app.kubernetes.io/component:
+      server\n    app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: v2.51.2\n    helm.sh/chart:
+      prometheus-25.20.1\n    app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of:
+      prometheus\n  name: kubero-prometheus-server\nrules:\n  - apiGroups:\n      -
+      \"\"\n    resources:\n      - nodes\n      - nodes/proxy\n      - nodes/metrics\n
+      \     - services\n      - endpoints\n      - pods\n      - ingresses\n      -
+      configmaps\n    verbs:\n      - get\n      - list\n      - watch\n  - apiGroups:\n
+      \     - \"extensions\"\n      - \"networking.k8s.io\"\n    resources:\n      -
+      ingresses/status\n      - ingresses\n    verbs:\n      - get\n      - list\n
+      \     - watch\n  - apiGroups:\n      - \"discovery.k8s.io\"\n    resources:\n
+      \     - endpointslices\n    verbs:\n      - get\n      - list\n      - watch\n
+      \ - nonResourceURLs:\n      - \"/metrics\"\n    verbs:\n      - get\n---\n#
+      Source: kuberoprometheus/charts/kube-state-metrics/templates/clusterrolebinding.yaml\napiVersion:
+      rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  labels:
+      \   \n    helm.sh/chart: kube-state-metrics-5.18.1\n    app.kubernetes.io/managed-by:
+      Helm\n    app.kubernetes.io/component: metrics\n    app.kubernetes.io/part-of:
+      kube-state-metrics\n    app.kubernetes.io/name: kube-state-metrics\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: \"2.12.0\"\n  name: kubero-prometheus-kube-state-metrics\nroleRef:\n
+      \ apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: kubero-prometheus-kube-state-metrics\nsubjects:\n-
+      kind: ServiceAccount\n  name: kubero-prometheus-kube-state-metrics\n  namespace:
+      kubero\n---\n# Source: kuberoprometheus/charts/prometheus/charts/kube-state-metrics/templates/clusterrolebinding.yaml\napiVersion:
+      rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  labels:
+      \   \n    helm.sh/chart: kube-state-metrics-5.18.1\n    app.kubernetes.io/managed-by:
+      Helm\n    app.kubernetes.io/component: metrics\n    app.kubernetes.io/part-of:
+      kube-state-metrics\n    app.kubernetes.io/name: kube-state-metrics\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: \"2.12.0\"\n  name: kubero-prometheus-kube-state-metrics\nroleRef:\n
+      \ apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: kubero-prometheus-kube-state-metrics\nsubjects:\n-
+      kind: ServiceAccount\n  name: kubero-prometheus-kube-state-metrics\n  namespace:
+      kubero\n---\n# Source: kuberoprometheus/charts/prometheus/templates/clusterrolebinding.yaml\napiVersion:
+      rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  labels:\n
+      \   app.kubernetes.io/component: server\n    app.kubernetes.io/name: prometheus\n
+      \   app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      v2.51.2\n    helm.sh/chart: prometheus-25.20.1\n    app.kubernetes.io/managed-by:
+      Helm\n    app.kubernetes.io/part-of: prometheus\n  name: kubero-prometheus-server\nsubjects:\n
+      \ - kind: ServiceAccount\n    name: kubero-prometheus-server\n    namespace:
+      kubero\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n
+      \ name: kubero-prometheus-server\n---\n# Source: kuberoprometheus/charts/kube-state-metrics/templates/service.yaml\napiVersion:
+      v1\nkind: Service\nmetadata:\n  name: kubero-prometheus-kube-state-metrics\n
+      \ namespace: kubero\n  labels:    \n    helm.sh/chart: kube-state-metrics-5.18.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/component: metrics\n
+      \   app.kubernetes.io/part-of: kube-state-metrics\n    app.kubernetes.io/name:
+      kube-state-metrics\n    app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      \"2.12.0\"\n  annotations:\n    prometheus.io/scrape: 'true'\nspec:\n  type:
+      \"ClusterIP\"\n  ports:\n  - name: \"http\"\n    protocol: TCP\n    port: 8080\n
+      \   targetPort: 8080\n  \n  selector:    \n    app.kubernetes.io/name: kube-state-metrics\n
+      \   app.kubernetes.io/instance: kubero-prometheus\n---\n# Source: kuberoprometheus/charts/prometheus/charts/kube-state-metrics/templates/service.yaml\napiVersion:
+      v1\nkind: Service\nmetadata:\n  name: kubero-prometheus-kube-state-metrics\n
+      \ namespace: kubero\n  labels:    \n    helm.sh/chart: kube-state-metrics-5.18.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/component: metrics\n
+      \   app.kubernetes.io/part-of: kube-state-metrics\n    app.kubernetes.io/name:
+      kube-state-metrics\n    app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      \"2.12.0\"\n  annotations:\n    prometheus.io/scrape: 'true'\nspec:\n  type:
+      \"ClusterIP\"\n  ports:\n  - name: \"http\"\n    protocol: TCP\n    port: 8080\n
+      \   targetPort: 8080\n  \n  selector:    \n    app.kubernetes.io/name: kube-state-metrics\n
+      \   app.kubernetes.io/instance: kubero-prometheus\n---\n# Source: kuberoprometheus/charts/prometheus/templates/service.yaml\napiVersion:
+      v1\nkind: Service\nmetadata:\n  labels:\n    app.kubernetes.io/component: server\n
+      \   app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance: kubero-prometheus\n
+      \   app.kubernetes.io/version: v2.51.2\n    helm.sh/chart: prometheus-25.20.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of: prometheus\n
+      \ name: kubero-prometheus-server\n  namespace: kubero\nspec:\n  ports:\n    -
+      name: http\n      port: 80\n      protocol: TCP\n      targetPort: 9090\n  selector:\n
+      \   app.kubernetes.io/component: server\n    app.kubernetes.io/name: prometheus\n
+      \   app.kubernetes.io/instance: kubero-prometheus\n  sessionAffinity: None\n
+      \ type: \"ClusterIP\"\n---\n# Source: kuberoprometheus/charts/kube-state-metrics/templates/deployment.yaml\napiVersion:
+      apps/v1\nkind: Deployment\nmetadata:\n  name: kubero-prometheus-kube-state-metrics\n
+      \ namespace: kubero\n  labels:    \n    helm.sh/chart: kube-state-metrics-5.18.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/component: metrics\n
+      \   app.kubernetes.io/part-of: kube-state-metrics\n    app.kubernetes.io/name:
+      kube-state-metrics\n    app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      \"2.12.0\"\nspec:\n  selector:\n    matchLabels:      \n      app.kubernetes.io/name:
+      kube-state-metrics\n      app.kubernetes.io/instance: kubero-prometheus\n  replicas:
+      1\n  strategy:\n    type: RollingUpdate\n  revisionHistoryLimit: 10\n  template:\n
+      \   metadata:\n      labels:        \n        helm.sh/chart: kube-state-metrics-5.18.1\n
+      \       app.kubernetes.io/managed-by: Helm\n        app.kubernetes.io/component:
+      metrics\n        app.kubernetes.io/part-of: kube-state-metrics\n        app.kubernetes.io/name:
+      kube-state-metrics\n        app.kubernetes.io/instance: kubero-prometheus\n
+      \       app.kubernetes.io/version: \"2.12.0\"\n    spec:\n      hostNetwork:
+      false\n      serviceAccountName: kubero-prometheus-kube-state-metrics\n      securityContext:\n
+      \       fsGroup: 65534\n        runAsGroup: 65534\n        runAsNonRoot: true\n
+      \       runAsUser: 65534\n        seccompProfile:\n          type: RuntimeDefault\n
+      \     containers:\n      - name: kube-state-metrics\n        args:\n        -
+      --port=8080\n        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments\n
+      \       imagePullPolicy: IfNotPresent\n        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0\n
+      \       ports:\n        - containerPort: 8080\n          name: \"http\"\n        livenessProbe:\n
+      \         failureThreshold: 3\n          httpGet:\n            httpHeaders:\n
+      \           path: /healthz\n            port: 8080\n            scheme: HTTP\n
+      \         initialDelaySeconds: 5\n          periodSeconds: 10\n          successThreshold:
+      1\n          timeoutSeconds: 5\n        readinessProbe:\n          failureThreshold:
+      3\n          httpGet:\n            httpHeaders:\n            path: /\n            port:
+      8080\n            scheme: HTTP\n          initialDelaySeconds: 5\n          periodSeconds:
+      10\n          successThreshold: 1\n          timeoutSeconds: 5\n        securityContext:\n
+      \         allowPrivilegeEscalation: false\n          capabilities:\n            drop:\n
+      \           - ALL\n          readOnlyRootFilesystem: true\n---\n# Source: kuberoprometheus/charts/prometheus/charts/kube-state-metrics/templates/deployment.yaml\napiVersion:
+      apps/v1\nkind: Deployment\nmetadata:\n  name: kubero-prometheus-kube-state-metrics\n
+      \ namespace: kubero\n  labels:    \n    helm.sh/chart: kube-state-metrics-5.18.1\n
+      \   app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/component: metrics\n
+      \   app.kubernetes.io/part-of: kube-state-metrics\n    app.kubernetes.io/name:
+      kube-state-metrics\n    app.kubernetes.io/instance: kubero-prometheus\n    app.kubernetes.io/version:
+      \"2.12.0\"\nspec:\n  selector:\n    matchLabels:      \n      app.kubernetes.io/name:
+      kube-state-metrics\n      app.kubernetes.io/instance: kubero-prometheus\n  replicas:
+      1\n  strategy:\n    type: RollingUpdate\n  revisionHistoryLimit: 10\n  template:\n
+      \   metadata:\n      labels:        \n        helm.sh/chart: kube-state-metrics-5.18.1\n
+      \       app.kubernetes.io/managed-by: Helm\n        app.kubernetes.io/component:
+      metrics\n        app.kubernetes.io/part-of: kube-state-metrics\n        app.kubernetes.io/name:
+      kube-state-metrics\n        app.kubernetes.io/instance: kubero-prometheus\n
+      \       app.kubernetes.io/version: \"2.12.0\"\n    spec:\n      hostNetwork:
+      false\n      serviceAccountName: kubero-prometheus-kube-state-metrics\n      securityContext:\n
+      \       fsGroup: 65534\n        runAsGroup: 65534\n        runAsNonRoot: true\n
+      \       runAsUser: 65534\n        seccompProfile:\n          type: RuntimeDefault\n
+      \     containers:\n      - name: kube-state-metrics\n        args:\n        -
+      --port=8080\n        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments\n
+      \       imagePullPolicy: IfNotPresent\n        image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0\n
+      \       ports:\n        - containerPort: 8080\n          name: \"http\"\n        livenessProbe:\n
+      \         failureThreshold: 3\n          httpGet:\n            httpHeaders:\n
+      \           path: /healthz\n            port: 8080\n            scheme: HTTP\n
+      \         initialDelaySeconds: 5\n          periodSeconds: 10\n          successThreshold:
+      1\n          timeoutSeconds: 5\n        readinessProbe:\n          failureThreshold:
+      3\n          httpGet:\n            httpHeaders:\n            path: /\n            port:
+      8080\n            scheme: HTTP\n          initialDelaySeconds: 5\n          periodSeconds:
+      10\n          successThreshold: 1\n          timeoutSeconds: 5\n        securityContext:\n
+      \         allowPrivilegeEscalation: false\n          capabilities:\n            drop:\n
+      \           - ALL\n          readOnlyRootFilesystem: true\n---\n# Source: kuberoprometheus/charts/prometheus/templates/deploy.yaml\napiVersion:
+      apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app.kubernetes.io/component:
+      server\n    app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: v2.51.2\n    helm.sh/chart:
+      prometheus-25.20.1\n    app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of:
+      prometheus\n  name: kubero-prometheus-server\n  namespace: kubero\nspec:\n  selector:\n
+      \   matchLabels:\n      app.kubernetes.io/component: server\n      app.kubernetes.io/name:
+      prometheus\n      app.kubernetes.io/instance: kubero-prometheus\n  replicas:
+      1\n  revisionHistoryLimit: 10\n  strategy:\n    type: Recreate\n    rollingUpdate:
+      null\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/component:
+      server\n        app.kubernetes.io/name: prometheus\n        app.kubernetes.io/instance:
+      kubero-prometheus\n        app.kubernetes.io/version: v2.51.2\n        helm.sh/chart:
+      prometheus-25.20.1\n        app.kubernetes.io/managed-by: Helm\n        app.kubernetes.io/part-of:
+      prometheus\n    spec:\n      enableServiceLinks: true\n      serviceAccountName:
+      kubero-prometheus-server\n      containers:\n        - name: prometheus-server-configmap-reload\n
+      \         image: \"quay.io/prometheus-operator/prometheus-config-reloader:v0.72.0\"\n
+      \         imagePullPolicy: \"IfNotPresent\"\n          args:\n            -
+      --watched-dir=/etc/config\n            - --reload-url=http://127.0.0.1:9090/-/reload\n
+      \         volumeMounts:\n            - name: config-volume\n              mountPath:
+      /etc/config\n              readOnly: true\n\n        - name: prometheus-server\n
+      \         image: \"quay.io/prometheus/prometheus:v2.51.2\"\n          imagePullPolicy:
+      \"IfNotPresent\"\n          args:\n            - --storage.tsdb.retention.time=15d\n
+      \           - --config.file=/etc/config/prometheus.yml\n            - --storage.tsdb.path=/data\n
+      \           - --web.console.libraries=/etc/prometheus/console_libraries\n            -
+      --web.console.templates=/etc/prometheus/consoles\n            - --web.enable-lifecycle\n
+      \         ports:\n            - containerPort: 9090\n          readinessProbe:\n
+      \           httpGet:\n              path: /-/ready\n              port: 9090\n
+      \             scheme: HTTP\n            initialDelaySeconds: 30\n            periodSeconds:
+      5\n            timeoutSeconds: 4\n            failureThreshold: 3\n            successThreshold:
+      1\n          livenessProbe:\n            httpGet:\n              path: /-/healthy\n
+      \             port: 9090\n              scheme: HTTP\n            initialDelaySeconds:
+      30\n            periodSeconds: 15\n            timeoutSeconds: 10\n            failureThreshold:
+      3\n            successThreshold: 1\n          volumeMounts:\n            - name:
+      config-volume\n              mountPath: /etc/config\n            - name: storage-volume\n
+      \             mountPath: /data\n              subPath: \"\"\n      dnsPolicy:
+      ClusterFirst\n      securityContext:\n        fsGroup: 65534\n        runAsGroup:
+      65534\n        runAsNonRoot: true\n        runAsUser: 65534\n      terminationGracePeriodSeconds:
+      300\n      volumes:\n        - name: config-volume\n          configMap:\n            name:
+      kubero-prometheus-server\n        - name: storage-volume\n          persistentVolumeClaim:\n
+      \           claimName: kubero-prometheus-server\n---\n# Source: kuberoprometheus/charts/prometheus/templates/ingress.yaml\napiVersion:
+      networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  labels:\n    app.kubernetes.io/component:
+      server\n    app.kubernetes.io/name: prometheus\n    app.kubernetes.io/instance:
+      kubero-prometheus\n    app.kubernetes.io/version: v2.51.2\n    helm.sh/chart:
+      prometheus-25.20.1\n    app.kubernetes.io/managed-by: Helm\n    app.kubernetes.io/part-of:
+      prometheus\n  name: kubero-prometheus-server\n  namespace: kubero\nspec:\n  rules:\n
+      \   - host: prometheus.localhost\n      http:\n        paths:\n\n          -
+      path: /\n            pathType: Prefix\n            backend:\n              service:\n
+      \               name: kubero-prometheus-server\n                port:\n                  number:
+      80\n"
+    name: kubero-prometheus
