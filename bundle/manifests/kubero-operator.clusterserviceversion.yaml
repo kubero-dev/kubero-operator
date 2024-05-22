@@ -911,7 +911,7 @@ metadata:
           "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoPrometheus",
           "metadata": {
-            "name": "kuberoprometheus"
+            "name": "kubero-prometheus"
           },
           "spec": {
             "prometheus": {
@@ -933,6 +933,82 @@ metadata:
                   "enabled": false,
                   "hosts": [
                     "prometheus.localhost"
+                  ]
+                }
+              },
+              "serverFiles": {
+                "alerting_rules.yml": {
+                  "groups": [
+                    {
+                      "name": "Instances",
+                      "rules": [
+                        {
+                          "alert": "High 5xx server error rate",
+                          "annotations": {
+                            "description": "{{ $labels.namespace }}/{{ $labels.service }} has high 5xx error rate on host: {{ $labels.host }}",
+                            "summary": "High 5xx error rate on {{ $labels.namespace }}/{{ $labels.service }}"
+                          },
+                          "expr": "increase(nginx_ingress_controller_requests{status=~\"5..\", service=~\".*-kuberoapp\"}[5m]) \u003e 0",
+                          "for": "30s",
+                          "keep_firing_for": "30s",
+                          "labels": {
+                            "severity": "page"
+                          }
+                        },
+                        {
+                          "alert": "More than 10% 4xx errors",
+                          "annotations": {
+                            "description": "{{ $labels.namespace }}/{{ $labels.service }} has more than 10% 4xx error rate on host: {{ $labels.host }}",
+                            "summary": "10% 4xx error rate on {{ $labels.namespace }}/{{ $labels.service }}"
+                          },
+                          "expr": "(sum(increase(nginx_ingress_controller_requests{status=~\"4..\", service=~\".*-kuberoapp\"}[5m])) * 100) / sum(increase(nginx_ingress_controller_requests{status=~\"2..\", service=~\".*-kuberoapp\"}[5m])) \u003e 10",
+                          "for": "30s",
+                          "keep_firing_for": "30s",
+                          "labels": {
+                            "severity": "page"
+                          }
+                        },
+                        {
+                          "alert": "Deployment Replicas not ready",
+                          "annotations": {
+                            "description": "{{ $labels.namespace }}/{{ $labels.service }} has deployment replicas not",
+                            "summary": "Deployment Replicast in {{ $labels.namespace }}/{{ $labels.service }} are not ready"
+                          },
+                          "expr": "kube_deployment_status_replicas{deployment=~\".*-kuberoapp-(web|worker)\"} - kube_deployment_status_replicas_ready{deployment=~\".*kuberoapp-(web|worker)\"} \u003e 0",
+                          "for": "30s",
+                          "keep_firing_for": "30s",
+                          "labels": {
+                            "severity": "page"
+                          }
+                        },
+                        {
+                          "alert": "CPU limit used by 80%",
+                          "annotations": {
+                            "description": "{{ $labels.namespace }}/{{ $labels.service }} used more than 80% of configured CPU limit",
+                            "summary": "CPU Usage to high in {{ $labels.namespace }}/{{ $labels.service}}"
+                          },
+                          "expr": "(rate(container_cpu_usage_seconds_total{id=~\".*.slice\", namespace=~\".*-(review|test|stage|production)\"}[5m]) / on (pod) kube_pod_container_resource_limits{unit=\"core\", namespace=~\".*-(review|test|stage|production)\"}) * 100 \u003e 80",
+                          "for": "30s",
+                          "keep_firing_for": "30s",
+                          "labels": {
+                            "severity": "page"
+                          }
+                        },
+                        {
+                          "alert": "Memory limit used by 80%",
+                          "annotations": {
+                            "description": "{{ $labels.namespace }}/{{ $labels.service }} used more than 80% of configured Memory limit",
+                            "summary": "Memory Usage to high in {{ $labels.namespace }}/{{ $labels.service}}"
+                          },
+                          "expr": "(container_memory_usage_bytes{namespace=\"yyy-production\", container=~\"kuberoapp-(web|worker)\"} / on (pod) kube_pod_container_resource_limits{unit=\"byte\", namespace=~\".*-(review|test|stage|production)\"}) * 100 \u003e 80",
+                          "for": "30s",
+                          "keep_firing_for": "30s",
+                          "labels": {
+                            "severity": "page"
+                          }
+                        }
+                      ]
+                    }
                   ]
                 }
               }
@@ -1018,14 +1094,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.165
-    createdAt: "2024-05-07T15:27:53Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.166
+    createdAt: "2024-05-22T15:42:04Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.165
+  name: kubero-operator.v0.0.166
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1872,7 +1948,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.165
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.166
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -1959,4 +2035,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.165
+  version: 0.0.166
