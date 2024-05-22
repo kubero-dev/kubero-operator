@@ -63,9 +63,13 @@ prometheus:
 registry:
   enabled: false  # creates registry credentials for a external or a local registry (required for build strategy apps)
   create: false   # spins up a local registry
-  #host: registry.kubero.svc.cluster.local  # works for pushes, but not for pulls. DO NOT USE THIS :( since it requires to configure all nodes ot acceppt this "insecure" registry
+  public: false   # makes the local registry public accessible (required, when cluster can't be configured to pull from nonHTTPS sources)
   #host: docker.io                          # requires a docker account. Might be the best choice when running on a non public domain
-  host: registry.demo.kubero.dev            # will make your images publicly avaialble with a basic auth protection
+  #protocol: https
+  #port: 443
+  host: registry-kubero.kubero.svc          # internal registry. Use a FQDN for a public registry
+  protocol: http
+  port: 5000
   account:
     # create account with:
     # docker run --entrypoint htpasswd httpd:2 -Bbn [username] [password]
@@ -73,7 +77,6 @@ registry:
     username: kubero
     password: kubero
     hash: $2y$05$czQZpvtDYc5OzM/1r1pH0eAplT/okohh/mXoWl/Y65ZP/8/jnSWZq
-  port: 443
   storage: 1Gi
   storageClassName:
 
@@ -157,18 +160,18 @@ kubero:
     templates:
       enabled: true
       catalogs:
-      - name: "Kubero"
-        description: "Kubero templates"
-        templateBasePath: "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
-        index: 
-          url: "https://raw.githubusercontent.com/kubero-dev/templates/main/index.json"
-          format: "json" # json or yaml # TODO has no effect yet. json is always used
-      - name: "Kubero Frameworks"
-        description: "Kubero templates"
-        templateBasePath: "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
-        index: 
-          url: "https://raw.githubusercontent.com/kubero-dev/templates/main/index-frameworks.json"
-          format: "json" # json or yaml # TODO has no effect yet. json is always used
+        - name: "Kubero"
+          description: "Kubero templates"
+          templateBasePath: "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
+          index: 
+            url: "https://raw.githubusercontent.com/kubero-dev/templates/main/index.json"
+            format: "json" # json or yaml # TODO has no effect yet. json is always used
+        - name: "Kubero Frameworks"
+          description: "Kubero templates"
+          templateBasePath: "https://raw.githubusercontent.com/kubero-dev/kubero/main/services/"
+          index: 
+            url: "https://raw.githubusercontent.com/kubero-dev/templates/main/index-frameworks.json"
+            format: "json" # json or yaml # TODO has no effect yet. json is always used
     buildpacks:
       - name: NodeJS
         language: JavaScript
@@ -282,32 +285,32 @@ kubero:
           tag: latest
           command: caddy file-server --listen :8080 --root /app
     podSizeList:
-    - name: small
-      description: 'Small (CPU: 0.25, Memory: 0.5Gi)'
-      default: true
-      resources:
-        requests:
-          memory: 0.5Gi
-          cpu: 250m
-        limits:
-          memory: 1Gi
-          cpu: 500m
-    - name: medium
-      description: 'Medium (CPU: 1, Memory: 2Gi)'
-      resources:
-        requests:
-          memory: 2Gi
-          cpu: 1000m
-        limits:
-          memory: 4Gi
-          cpu: 2000m
-    - name: large
-      description: 'Large (CPU: 2, Memory: 4Gi)'
-      active: false
-      resources:
-        requests:
-          memory: 4Gi
-          cpu: 2000m
-        limits:
-          memory: 4Gi
-          cpu: 2000m
+      - name: small
+        description: 'Small (CPU: 0.25, Memory: 0.5Gi)'
+        default: true
+        resources:
+          requests:
+            memory: 0.5Gi
+            cpu: 250m
+          limits:
+            memory: 1Gi
+            cpu: 500m
+      - name: medium
+        description: 'Medium (CPU: 1, Memory: 2Gi)'
+        resources:
+          requests:
+            memory: 2Gi
+            cpu: 1000m
+          limits:
+            memory: 4Gi
+            cpu: 2000m
+      - name: large
+        description: 'Large (CPU: 2, Memory: 4Gi)'
+        active: false
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 2000m
+          limits:
+            memory: 4Gi
+            cpu: 2000m
