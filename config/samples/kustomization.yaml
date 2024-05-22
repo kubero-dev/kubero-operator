@@ -14,4 +14,5 @@ resources:
 - application_v1alpha1_kuberorabbitmq.yaml
 - application_v1alpha1_kuberomemcached.yaml
 - application_v1alpha1_kuberoprometheus.yaml
+- application_v1alpha1_kuberobuild.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

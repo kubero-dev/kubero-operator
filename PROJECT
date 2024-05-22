@@ -108,4 +108,11 @@ resources:
   group: application
   kind: KuberoPrometheus
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: kubero.dev
+  group: application
+  kind: KuberoBuild
+  version: v1alpha1
 version: "3"

@@ -1,0 +1,49 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoBuild
+metadata:
+  name: kuberobuild-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 100
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+  fullnameOverride: ""
+  image:
+    pullPolicy: IfNotPresent
+    repository: nginx
+    tag: ""
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    className: ""
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+    tls: []
+  nameOverride: ""
+  nodeSelector: {}
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  replicaCount: 1
+  resources: {}
+  securityContext: {}
+  service:
+    port: 80
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automount: true
+    create: true
+    name: ""
+  tolerations: []
+  volumeMounts: []
+  volumes: []
+  
+  
