@@ -30,7 +30,7 @@ spec:
       {{- end }}
       {{- else if ne .Values.buildstrategy "plain" }}
       imagePullSecrets:
-        - name: {{ include "kuberoapp.fullname" . }}-pull-secret
+        - name: kubero-pull-secret
       {{- end }}
       serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}
       securityContext:

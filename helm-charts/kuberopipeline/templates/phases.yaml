@@ -1,5 +1,20 @@
 # https://itnext.io/manage-auto-generated-secrets-in-your-helm-charts-5aee48ba6918
 
+{{- $mainnamespace := .Values.mainnamespace | default "kubero" -}}
+# retrieve the secret data using lookup function and when not exists, return an empty dictionary / map as result
+{{- $secretObj := (lookup "v1" "Secret" $mainnamespace "registry-login") | default dict }}
+{{- $secretData := (get $secretObj "data") | default dict }}
+{{- $dockerconfigjson := (get $secretData ".dockerconfigjson") | default "" }}
+{{- $registryUsername := (get $secretData "username") | default "" }}
+{{- $registryPassword := (get $secretData "password") | default "" }}
+
+{{- $kuberoObj := (lookup "application.kubero.dev/v1alpha1" "Kubero" $mainnamespace "kubero") | default dict }}
+{{- $specData := (get $kuberoObj "spec") | default dict }}
+{{- $registryData := (get $specData "registry") | default dict }}
+{{- $registryHost := (get $registryData "host") | default "kubero-registry.kubero.svc" }}
+{{- $registryProtocol := (get $registryData "protocol") | default "http" }}
+{{- $registryPort := (get $registryData "port") | default 5000 }}
+
 {{- $name := .Values.name -}}
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
 {{- $deploykey := .Values.git.keys.priv -}}
@@ -22,6 +37,48 @@ data:
   deploykey: {{ $deploykey | quote }}
   deploykey.pub: {{ $deploykeyPub | quote }}
 ---
-{{- end }}
-{{- end }}
-{{- end }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubero-pull-secret
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ $dockerconfigjson | quote }}
+---
+# kpack
+apiVersion: v1
+kind: Secret
+metadata:
+  name: git-ssh-auth
+  annotations:
+    kpack.io/git: git@github.com
+type: kubernetes.io/ssh-auth
+data:
+  ssh-privatekey: {{ $deploykey | quote }}
+---
+# kpack
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-user-pass
+  annotations:
+    kpack.io/docker: {{ $registryProtocol }}://{{ $registryHost }}:{{ $registryPort }}
+type: kubernetes.io/basic-auth
+data:
+  username: {{ $registryUsername | quote }}
+  password: {{ $registryPassword | quote }}
+---
+# kpack
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kpack-sa
+secrets:
+  - name: registry-user-pass
+  - name: git-ssh-auth
+imagePullSecrets:
+  - name: registry-user-pass
+---
+{{- end }} # end of git deploymentstrategy
+{{- end }} # end of enabled
+{{- end }} # end of range
