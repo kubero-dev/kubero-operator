@@ -45,9 +45,9 @@ spec:
         - name: BUILDER
           value: {{ .Values.kpack.builder }}
         - name: URL
-          value: {{ .Values.url }}
+          value: {{ .Values.git.url }}
         - name: REVISION
-          value: {{ .Values.revision }}
+          value: {{ .Values.git.revision }}
         #command:
         #- tail
         #- -f

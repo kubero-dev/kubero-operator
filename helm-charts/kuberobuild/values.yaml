@@ -1,11 +1,11 @@
-buildstrategy: "kpack" # kpack, dockerfile, nixpack
+buildstrategy: "dockerfile" # kpack, dockerfile, nixpack
 app: "example"
-phase: "dev"
 pipeline: "pipelinename"
 repository: "registry-kubero.kubero.svc:5000/kapck/example"
 tag: "latest"
-url: "https://github.com/kubero-dev/template-nodeapp.git"
-revision: "main"
+git:
+  url: "git@github.com:kubero-dev/template-nodeapp.git"
+  revision: "main"
 
 # kpack specific values
 kpack:
@@ -13,3 +13,11 @@ kpack:
   serviceAccount: "kpack-sa"
   # kpack builder
   builder: "gcr.io/paketo-buildpacks/builder:base"
+dockerfile:
+  path: "Dockerfile"
+  fetcher: "ghcr.io/kubero-dev/buildpacks/build:latest"
+  builder: "quay.io/containers/buildah:v1.29"
+nixpack:
+  path: ".nixpacks/Dockerfile"
+  fetcher: "ghcr.io/kubero-dev/buildpacks/build:latest"
+  builder: "quay.io/containers/buildah:v1.29"
