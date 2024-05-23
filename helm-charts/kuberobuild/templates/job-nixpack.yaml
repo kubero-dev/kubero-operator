@@ -27,6 +27,8 @@ spec:
         job-name: {{ $name }}
     spec:
       automountServiceAccountToken: true
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
           - name: REPOSITORY
@@ -46,7 +48,6 @@ spec:
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          dnsPolicy: ClusterFirst
       initContainers:
         - env:
           - name: GIT_REPOSITORY
@@ -55,16 +56,20 @@ spec:
             value: {{ .Values.git.revision }}
           - name: GIT_REF
             value: refs/heads/dummy-pr
-          image: ghcr.io/kubero-dev/buildpacks/fetch:main
+          - name: KUBERO_BUILDPACK_DEFAULT_RUN_CMD
+            value: "exit 0"
+          - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
+            value: "exit 0"
+          image: {{ .Values.nixpack.fetcher }}
           imagePullPolicy: Always
-          name: kuberoapp-fetcher
+          name: fetch
           resources: {}
           securityContext:
             readOnlyRootFilesystem: false
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /root/.ssh
+          - mountPath: /home/kubero/.ssh-mounted
             name: deployment-keys
             readOnly: true
           - mountPath: /app
@@ -74,9 +79,9 @@ spec:
           - sh
           - -c
           - nixpacks build . -o .
-          image: {{ .Values.nixpack.fetcher }}
+          image: {{ .Values.nixpack.builder }}
           imagePullPolicy: Always
-          name: kuberoapp-nixpacks
+          name: build
           resources: {}
           securityContext:
             privileged: false
@@ -99,9 +104,9 @@ spec:
             value: {{ .Values.repository }}:{{ .Values.tag }}
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/{{ .Values.dockerfile.path }}
-          image: {{ .Values.nixpack.builder }}
+          image: {{ .Values.nixpack.pusher }}
           imagePullPolicy: IfNotPresent
-          name: kuberoapp-docker
+          name: push
           resources: {}
           securityContext:
             privileged: true
@@ -118,13 +123,13 @@ spec:
       restartPolicy: Never
       schedulerName: default-scheduler
       securityContext: {}
-      serviceAccount: {{ .Values.app }}-sa
-      serviceAccountName: {{ .Values.app }}-sa
+      serviceAccount: {{ .Values.app }}-kuberoapp
+      serviceAccountName: {{ .Values.app }}-kuberoapp
       terminationGracePeriodSeconds: 30
       volumes:
       - name: deployment-keys
         secret:
-          defaultMode: 384
+          defaultMode: 0666
           secretName: deployment-keys
       - emptyDir: {}
         name: app-storage
