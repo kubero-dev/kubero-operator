@@ -4,6 +4,7 @@ export IMG=ghcr.io/kubero-dev/kubero-operator/kuberoapp:v$VERSION
 export BUNDLE_IMG=ghcr.io/kubero-dev/kubero-operator/kuberoapp-bundle:v$VERSION
 make bundle
 ./bin/kustomize build config/default > deploy/operator.yaml
+./bin/kustomize build config/default > deploy/operator.$VERSION.yaml
 
 
 sed -i "" "s/VERSION ?= .*/VERSION ?= ${VERSION}/" Makefile
