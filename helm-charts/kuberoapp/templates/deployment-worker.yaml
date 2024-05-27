@@ -28,9 +28,9 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- else if ne .Values.buildstrategy "plain" }}
+      {{- else if eq .Values.deploymentstrategy "git" }}
       imagePullSecrets:
-        - name: kubero-pull-secret
+        - name: kubero-pull-secret # created by kuberopipeline/phases.yaml
       {{- end }}
       serviceAccountName: {{ include "kuberoapp.serviceAccountName" . }}
       securityContext:

@@ -731,4 +731,28 @@ rules:
   resources:
   - "deployments"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoBuild
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberobuilds
+  - kuberobuilds/status
+  - kuberobuilds/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - "batch"
+  resources:
+  - "jobs"
+
 #+kubebuilder:scaffold:rules

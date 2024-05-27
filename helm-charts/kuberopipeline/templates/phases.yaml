@@ -19,6 +19,8 @@
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
 {{- $deploykey := .Values.git.keys.priv -}}
 {{- $deploykeyPub := .Values.git.keys.pub -}}
+{{- $deploykeySshUrl := splitList ":" .Values.git.repository.ssh_url | first -}}
+
 {{- range .Values.phases }}
 {{- if .enabled }}
 apiVersion: v1
@@ -27,6 +29,7 @@ metadata:
   name: {{ $name }}-{{ .name }}
 ---
 {{- if and (eq $deploymentstrategy "git") ($deploykeyPub) }}
+# used by kuberoes Runpacks to pull the code
 apiVersion: v1
 kind: Secret
 metadata:
@@ -53,10 +56,11 @@ metadata:
   name: git-ssh-auth
   namespace: {{ $name }}-{{ .name }}
   annotations:
-    kpack.io/git: git@github.com
+    kpack.io/git: {{ $deploykeySshUrl }}
 type: kubernetes.io/ssh-auth
 data:
   ssh-privatekey: {{ $deploykey | quote }}
+  ssh-publickey: {{ $deploykeyPub | quote }}
 ---
 # kpack
 apiVersion: v1

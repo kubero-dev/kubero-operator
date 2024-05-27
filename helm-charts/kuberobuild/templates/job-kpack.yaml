@@ -1,0 +1,61 @@
+{{- if eq .Values.buildstrategy "kpack" }}
+{{- $date := now | date "2006-01-02-150405" }}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline $date -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    batch.kubernetes.io/job-name: {{ $name }}
+    job-name: {{ $name }}
+  name: {{ $name }}
+spec:
+  backoffLimit: 2
+  completionMode: NonIndexed
+  completions: 1
+  manualSelector: false
+  parallelism: 1
+  podReplacementPolicy: TerminatingOrFailed
+  suspend: false
+  template:
+    metadata:
+      labels:
+        batch.kubernetes.io/job-name: {{ $name }}
+        job-name: {{ $name }}
+    spec:
+      containers:
+      - image: ghcr.io/kubero-dev/deployer:latest
+        imagePullPolicy: Always
+        name: {{ $name }}
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        env:
+        - name: APP
+          value: {{ .Values.app }}
+        - name: PHASE
+          value: {{ .Values.phase }}
+        - name: PIPELINE
+          value: {{ .Values.pipeline }}
+        - name: REPOSITORY
+          value: {{ .Values.repository }}
+        - name: TAG
+          value: {{ .Values.tag }}
+        - name: SERVICE_ACCOUNT
+          value: {{ .Values.kpack.serviceAccount }}
+        - name: BUILDER
+          value: {{ .Values.kpack.builder }}
+        - name: URL
+          value: {{ .Values.git.url }}
+        - name: REVISION
+          value: {{ .Values.git.revision }}
+        #command:
+        #- tail
+        #- -f
+        #- /dev/null
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: kpack-sa
+{{- end }}

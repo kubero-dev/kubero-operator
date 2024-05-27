@@ -1,0 +1,123 @@
+{{- if eq .Values.buildstrategy "dockerfile" }}
+{{- $date := now | date "2006-01-02-150405" }}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline $date -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generation: 1
+  labels:
+    batch.kubernetes.io/job-name: {{ $name }}
+    build: dockerfile
+    job-name: {{ $name }}
+  name: {{ $name }}
+spec:
+  backoffLimit: 1
+  completionMode: NonIndexed
+  completions: 1
+  manualSelector: false
+  parallelism: 1
+  podReplacementPolicy: TerminatingOrFailed
+  suspend: false
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        batch.kubernetes.io/job-name: {{ $name }}
+        build: dockerfile
+        job-name: {{ $name }}
+    spec:
+      automountServiceAccountToken: true
+
+      containers:
+        - env:
+          - name: REPOSITORY
+            value: {{ .Values.repository }}
+          - name: TAG
+            value: {{ .Values.tag }}
+          - name: APP
+            value: {{ .Values.app }}
+          command:
+          - sh
+          - -c
+          - 'kubectl patch kuberoapps $APP --type=merge -p ''{"spec":{"image":{"repository":
+              "$REPOSITORY","tag": "$TAG"}}}'''
+          image: bitnami/kubectl:latest
+          imagePullPolicy: Always
+          name: kuberoapp-deployer
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      initContainers:
+        - env:
+          - name: GIT_REPOSITORY
+            value: {{ .Values.git.url }}
+          - name: GIT_BRANCH
+            value: {{ .Values.git.revision }}
+          - name: GIT_REF
+            value: refs/heads/dummy-pr
+          - name: KUBERO_BUILDPACK_DEFAULT_RUN_CMD
+            value: "exit 0"
+          - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
+            value: "exit 0"
+          image: {{ .Values.dockerfile.fetcher }}
+          imagePullPolicy: Always
+          name: fetch
+          resources: {}
+          securityContext:
+            readOnlyRootFilesystem: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /home/kubero/.ssh-mounted
+            name: deployment-keys
+            readOnly: true
+          - mountPath: /app
+            name: app-storage
+          workingDir: /app
+        - command:
+          - sh
+          - -c
+          - |-
+            buildah build -f $BUILDAH_DOCKERFILE_PATH --isolation chroot -t $BUILD_IMAGE .
+            buildah push --tls-verify=false $BUILD_IMAGE
+          env:
+          - name: REGISTRY_AUTH_FILE
+            value: /etc/buildah/auth/.dockerconfigjson
+          - name: BUILD_IMAGE
+            value: {{ .Values.repository }}:{{ .Values.tag }}
+          - name: BUILDAH_DOCKERFILE_PATH
+            value: /app/{{ .Values.dockerfile.path}}
+          image: {{ .Values.dockerfile.builder }}
+          imagePullPolicy: IfNotPresent
+          name: push
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app
+            name: app-storage
+            readOnly: true
+          - mountPath: /etc/buildah/auth
+            name: pull-secret
+            readOnly: true
+          workingDir: /app
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: {{ .Values.app }}-kuberoapp
+      serviceAccountName: {{ .Values.app }}-kuberoapp
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: deployment-keys
+        secret:
+          defaultMode: 0666
+          secretName: deployment-keys
+      - emptyDir: {}
+        name: app-storage
+      - name: pull-secret
+        secret:
+          defaultMode: 384
+          secretName: kubero-pull-secret
+  ttlSecondsAfterFinished: 86400
+{{- end }}
