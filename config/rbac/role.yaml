@@ -751,15 +751,8 @@ rules:
 - verbs:
   - "*"
   apiGroups:
-  - ""
+  - "batch"
   resources:
-  - "serviceaccounts"
-  - "services"
-- verbs:
-  - "*"
-  apiGroups:
-  - "apps"
-  resources:
-  - "deployments"
+  - "jobs"
 
 #+kubebuilder:scaffold:rules
