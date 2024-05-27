@@ -1,0 +1,139 @@
+---
+# Source: kuberobuild/templates/job-nixpack.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generation: 1
+  labels:
+    batch.kubernetes.io/job-name: oo-test-2024-05-24-001659
+    build: nix
+    job-name: oo-test-2024-05-24-001659
+  name: oo-test-2024-05-24-001659
+spec:
+  backoffLimit: 1
+  completionMode: NonIndexed
+  completions: 1
+  manualSelector: false
+  parallelism: 1
+  podReplacementPolicy: TerminatingOrFailed
+  suspend: false
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        batch.kubernetes.io/job-name: oo-test-2024-05-24-001659
+        build: nix
+        job-name: oo-test-2024-05-24-001659
+    spec:
+      automountServiceAccountToken: true
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - env:
+          - name: REPOSITORY
+            value: kubero-registry.kubero.svc:5000/kapck/example
+          - name: TAG
+            value: latest
+          - name: APP
+            value: oo
+          command:
+          - sh
+          - -c
+          - 'kubectl patch kuberoapps $APP --type=merge -p ''{"spec":{"image":{"repository":
+            "$REPOSITORY","tag": "$TAG"}}}'''
+          image: bitnami/kubectl:latest
+          imagePullPolicy: Always
+          name: kuberoapp-deployer
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      initContainers:
+        - env:
+          - name: GIT_REPOSITORY
+            value: git@github.com:kubero-dev/template-nodeapp.git
+          - name: GIT_BRANCH
+            value: main
+          - name: GIT_REF
+            value: refs/heads/dummy-pr
+          - name: KUBERO_BUILDPACK_DEFAULT_RUN_CMD
+            value: "exit 0"
+          - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
+            value: "exit 0"
+          image: ghcr.io/kubero-dev/buildpacks/fetch:latest
+          imagePullPolicy: Always
+          name: fetch
+          resources: {}
+          securityContext:
+            readOnlyRootFilesystem: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /home/kubero/.ssh-mounted
+            name: deployment-keys
+            readOnly: true
+          - mountPath: /app
+            name: app-storage
+          workingDir: /app
+        - command:
+          - sh
+          - -c
+          - nixpacks build . -o .
+          image: ghcr.io/kubero-dev/buildpacks/build:latest
+          imagePullPolicy: Always
+          name: build
+          resources: {}
+          securityContext:
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app
+            name: app-storage
+          workingDir: /app
+        - command:
+          - sh
+          - -c
+          - |-
+            buildah build -f $BUILDAH_DOCKERFILE_PATH --isolation chroot -t $BUILD_IMAGE .
+            buildah push --tls-verify=false $BUILD_IMAGE
+          env:
+          - name: REGISTRY_AUTH_FILE
+            value: /etc/buildah/auth/.dockerconfigjson
+          - name: BUILD_IMAGE
+            value: kubero-registry.kubero.svc:5000/kapck/example:latest
+          - name: BUILDAH_DOCKERFILE_PATH
+            value: /app/Dockerfile
+          image: quay.io/containers/buildah:v1.29
+          imagePullPolicy: IfNotPresent
+          name: push
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app
+            name: app-storage
+            readOnly: true
+          - mountPath: /etc/buildah/auth
+            name: pull-secret
+            readOnly: true
+          workingDir: /app
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: oo-kuberoapp
+      serviceAccountName: oo-kuberoapp
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: deployment-keys
+        secret:
+          defaultMode: 0666
+          secretName: deployment-keys
+      - emptyDir: {}
+        name: app-storage
+      - name: pull-secret
+        secret:
+          defaultMode: 384
+          secretName: kubero-pull-secret
+  ttlSecondsAfterFinished: 10

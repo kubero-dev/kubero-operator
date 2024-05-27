@@ -27,6 +27,7 @@ metadata:
   name: {{ $name }}-{{ .name }}
 ---
 {{- if and (eq $deploymentstrategy "git") ($deploykeyPub) }}
+# used by kuberoes Runpacks to pull the code
 apiVersion: v1
 kind: Secret
 metadata:
@@ -53,10 +54,11 @@ metadata:
   name: git-ssh-auth
   namespace: {{ $name }}-{{ .name }}
   annotations:
-    kpack.io/git: git@github.com
+    kpack.io/git: git@github.com # TODO: neeeds to be dynamic per backend
 type: kubernetes.io/ssh-auth
 data:
   ssh-privatekey: {{ $deploykey | quote }}
+  ssh-publickey: {{ $deploykeyPub | quote }}
 ---
 # kpack
 apiVersion: v1
