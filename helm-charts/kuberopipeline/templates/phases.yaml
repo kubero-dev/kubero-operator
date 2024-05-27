@@ -19,6 +19,8 @@
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
 {{- $deploykey := .Values.git.keys.priv -}}
 {{- $deploykeyPub := .Values.git.keys.pub -}}
+{{- $deploykeySshUrl := splitList ":" .Values.git.repository.ssh_url | first -}}
+
 {{- range .Values.phases }}
 {{- if .enabled }}
 apiVersion: v1
@@ -54,7 +56,7 @@ metadata:
   name: git-ssh-auth
   namespace: {{ $name }}-{{ .name }}
   annotations:
-    kpack.io/git: git@github.com # TODO: neeeds to be dynamic per backend
+    kpack.io/git: {{ $deploykeySshUrl }}
 type: kubernetes.io/ssh-auth
 data:
   ssh-privatekey: {{ $deploykey | quote }}
