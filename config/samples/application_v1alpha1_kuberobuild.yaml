@@ -5,7 +5,7 @@ metadata:
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
   buildstrategy: "nixpack" # kpack, dockerfile, nixpack
-  app: "oo"
+  app: "example"
   pipeline: "test"
   repository: "kubero-registry.kubero.svc:5000/kapck/example"
   tag: "latest"
