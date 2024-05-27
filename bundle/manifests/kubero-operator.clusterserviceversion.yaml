@@ -567,6 +567,42 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoBuild",
+          "metadata": {
+            "name": "kuberobuild-sample"
+          },
+          "spec": {
+            "app": "example",
+            "buildstrategy": "nixpack",
+            "dockerfile": {
+              "builder": "quay.io/containers/buildah:v1.29",
+              "fetcher": "ghcr.io/kubero-dev/buildpacks/fetch:latest",
+              "path": "Dockerfile"
+            },
+            "git": {
+              "revision": "main",
+              "url": "git@github.com:kubero-dev/template-nodeapp.git"
+            },
+            "kpack": {
+              "builder": "gcr.io/paketo-buildpacks/builder:base",
+              "serviceAccount": "kpack-sa"
+            },
+            "nixpack": {
+              "builder": "ghcr.io/kubero-dev/buildpacks/build:latest",
+              "fetcher": "ghcr.io/kubero-dev/buildpacks/fetch:latest",
+              "path": ".nixpacks/Dockerfile",
+              "pusher": "quay.io/containers/buildah:v1.29"
+            },
+            "pipeline": "test",
+            "podSecurityContext": {
+              "fsGroup": 1000
+            },
+            "repository": "kubero-registry.kubero.svc:5000/kapck/example",
+            "tag": "latest"
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoCouchDB",
           "metadata": {
             "name": "kuberocouchdb-sample"
@@ -1094,14 +1130,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.167
-    createdAt: "2024-05-22T19:12:33Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.0
+    createdAt: "2024-05-27T14:57:45Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.0.167
+  name: kubero-operator.v0.1.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1111,6 +1147,10 @@ spec:
       displayName: Kubero App
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
+      version: v1alpha1
+    - description: KuberoBuild triggers a build for a given application
+      kind: KuberoBuild
+      name: kuberobuilds.application.kubero.dev
       version: v1alpha1
     - description: Apache CouchDB is a database featuring seamless multi-master sync,
         that scales from big data to mobile, with an intuitive HTTP/JSON API and designed
@@ -1895,6 +1935,26 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberobuilds
+          - kuberobuilds/status
+          - kuberobuilds/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - batch
+          resources:
+          - jobs
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -1948,7 +2008,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.167
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.0
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2035,4 +2095,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.0.167
+  version: 0.1.0

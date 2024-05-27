@@ -6,7 +6,7 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.0.167
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.0
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
@@ -20,6 +20,10 @@ spec:
       displayName: Kubero App
       kind: KuberoApp
       name: kuberoapps.application.kubero.dev
+      version: v1alpha1
+    - description: KuberoBuild triggers a build for a given application
+      kind: KuberoBuild
+      name: kuberobuilds.application.kubero.dev
       version: v1alpha1
     - description: Starts the Kubero UI and API
       displayName: Kubero UI and API
