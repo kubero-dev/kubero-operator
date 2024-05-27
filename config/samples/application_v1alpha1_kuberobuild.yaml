@@ -4,46 +4,29 @@ metadata:
   name: kuberobuild-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
-  affinity: {}
-  autoscaling:
-    enabled: false
-    maxReplicas: 100
-    minReplicas: 1
-    targetCPUUtilizationPercentage: 80
-  fullnameOverride: ""
-  image:
-    pullPolicy: IfNotPresent
-    repository: nginx
-    tag: ""
-  imagePullSecrets: []
-  ingress:
-    annotations: {}
-    className: ""
-    enabled: false
-    hosts:
-    - host: chart-example.local
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-    tls: []
-  nameOverride: ""
-  nodeSelector: {}
-  podAnnotations: {}
-  podLabels: {}
-  podSecurityContext: {}
-  replicaCount: 1
-  resources: {}
-  securityContext: {}
-  service:
-    port: 80
-    type: ClusterIP
-  serviceAccount:
-    annotations: {}
-    automount: true
-    create: true
-    name: ""
-  tolerations: []
-  volumeMounts: []
-  volumes: []
-  
-  
+  buildstrategy: "nixpack" # kpack, dockerfile, nixpack
+  app: "oo"
+  pipeline: "test"
+  repository: "kubero-registry.kubero.svc:5000/kapck/example"
+  tag: "latest"
+  git:
+    url: "git@github.com:kubero-dev/template-nodeapp.git"
+    revision: "main"
+  podSecurityContext:
+    fsGroup: 1000
+
+  # kpack specific values
+  kpack:
+    # kpack service account
+    serviceAccount: "kpack-sa"
+    # kpack builder
+    builder: "gcr.io/paketo-buildpacks/builder:base"
+  dockerfile:
+    path: "Dockerfile"
+    fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
+    builder: "quay.io/containers/buildah:v1.29"
+  nixpack:
+    path: ".nixpacks/Dockerfile"
+    fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
+    builder: "ghcr.io/kubero-dev/buildpacks/build:latest"
+    pusher: "quay.io/containers/buildah:v1.29"
