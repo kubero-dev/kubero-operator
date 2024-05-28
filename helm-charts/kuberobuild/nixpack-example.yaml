@@ -31,7 +31,7 @@ spec:
       containers:
         - env:
           - name: REPOSITORY
-            value: kubero-registry.kubero.svc:5000/kapck/example
+            value: registry.local.kubero.net/kapck/example
           - name: TAG
             value: latest
           - name: APP
@@ -39,8 +39,8 @@ spec:
           command:
           - sh
           - -c
-          - 'kubectl patch kuberoapps $APP --type=merge -p ''{"spec":{"image":{"repository":
-            "$REPOSITORY","tag": "$TAG"}}}'''
+          - 'kubectl patch kuberoapps $APP --type=merge -p "{\"spec\":{\"image\":{\"repository\":
+            \"$REPOSITORY\",\"tag\": \"$TAG\"}}}"'
           image: bitnami/kubectl:latest
           imagePullPolicy: Always
           name: kuberoapp-deployer
@@ -100,7 +100,7 @@ spec:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson
           - name: BUILD_IMAGE
-            value: kubero-registry.kubero.svc:5000/kapck/example:latest
+            value: registry.local.kubero.net/kapck/example:latest
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/Dockerfile
           image: quay.io/containers/buildah:v1.29
@@ -136,4 +136,4 @@ spec:
         secret:
           defaultMode: 384
           secretName: kubero-pull-secret
-  ttlSecondsAfterFinished: 10
+  ttlSecondsAfterFinished: 600
