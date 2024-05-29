@@ -1,8 +1,11 @@
 buildstrategy: "nixpack" # kpack, dockerfile, nixpack
-app: "oo"
+app: "example"
 pipeline: "test"
-repository: "kubero-registry.kubero.svc:5000/kapck/example"
-tag: "latest"
+repository: 
+  push: "kubero-registry.kubero.svc:5000"
+  pull: "registry.local.kubero.net"
+  image: "/kapck/example"
+  tag: "latest"
 git:
   url: "git@github.com:kubero-dev/template-nodeapp.git"
   revision: "main"
@@ -18,7 +21,7 @@ kpack:
 dockerfile:
   path: "Dockerfile"
   fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
-  builder: "quay.io/containers/buildah:v1.29"
+  pusher: "quay.io/containers/buildah:v1.29"
 nixpack:
   path: ".nixpacks/Dockerfile"
   fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"

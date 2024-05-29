@@ -31,9 +31,9 @@ spec:
       containers:
         - env:
           - name: REPOSITORY
-            value: {{ .Values.repository }}
+            value: {{ .Values.repository.pull }}{{ .Values.repository.image }}
           - name: TAG
-            value: {{ .Values.tag }}
+            value: {{ .Values.repository.tag }}
           - name: APP
             value: {{ .Values.app }}
           command:
@@ -83,10 +83,10 @@ spec:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson
           - name: BUILD_IMAGE
-            value: {{ .Values.repository }}:{{ .Values.tag }}
+            value: {{ .Values.repository.push }}{{ .Values.repository.push }}:{{ .Values.repository.tag }}
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/{{ .Values.dockerfile.path}}
-          image: {{ .Values.dockerfile.builder }}
+          image: {{ .Values.dockerfile.pusher }}
           imagePullPolicy: IfNotPresent
           name: push
           resources: {}

@@ -96,6 +96,9 @@ spec:
           - |-
             buildah build -f $BUILDAH_DOCKERFILE_PATH --isolation chroot -t $BUILD_IMAGE .
             buildah push --tls-verify=false $BUILD_IMAGE
+#          - tail
+#          - -f
+#          - /dev/null
           env:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson

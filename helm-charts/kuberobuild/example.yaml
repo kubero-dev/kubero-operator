@@ -1,0 +1,35 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoBuild
+metadata:
+  name: kuberobuild-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
+  buildstrategy: "nixpack" # kpack, dockerfile, nixpack
+  app: "example"
+  pipeline: "test"
+  repository: 
+    push: "kubero-registry.kubero.svc:5000"
+    pull: "registry.local.kubero.net"
+    image: "/kapck/example"
+    tag: "latest"
+  git:
+    url: "git@github.com:kubero-dev/template-nodeapp.git"
+    revision: "main"
+  podSecurityContext:
+    fsGroup: 1000
+
+  # kpack specific values
+  kpack:
+    # kpack service account
+    serviceAccount: "kpack-sa"
+    # kpack builder
+    builder: "gcr.io/paketo-buildpacks/builder:base"
+  dockerfile:
+    path: "Dockerfile"
+    fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
+    pusher: "quay.io/containers/buildah:v1.29"
+  nixpack:
+    path: ".nixpacks/Dockerfile"
+    fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
+    builder: "ghcr.io/kubero-dev/buildpacks/build:latest"
+    pusher: "quay.io/containers/buildah:v1.29"
