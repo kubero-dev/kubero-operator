@@ -103,7 +103,7 @@ spec:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson
           - name: BUILD_IMAGE
-            value: registry.local.kubero.net/kapck/example:latest
+            value: kubero-registry.kubero.svc:5000/kapck/example:latest
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/Dockerfile
           image: quay.io/containers/buildah:v1.29

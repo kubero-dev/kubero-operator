@@ -754,5 +754,11 @@ rules:
   - "batch"
   resources:
   - "jobs"
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "pods"
 
 #+kubebuilder:scaffold:rules
