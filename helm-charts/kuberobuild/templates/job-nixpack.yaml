@@ -1,6 +1,6 @@
 {{- if eq .Values.buildstrategy "nixpack" }}
 {{- $date := now | date "2006-01-02-150405" }}
-{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline $date -}}
+{{- $name := printf "%s-%s" .Values.app .Values.pipeline -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
