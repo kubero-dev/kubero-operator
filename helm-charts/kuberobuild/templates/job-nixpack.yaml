@@ -101,7 +101,7 @@ spec:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson
           - name: BUILD_IMAGE
-            value: {{ .Values.repository.push }}{{ .Values.repository.push }}:{{ .Values.repository.tag }}
+            value: {{ .Values.repository.push }}{{ .Values.repository.image }}:{{ .Values.repository.tag }}
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/{{ .Values.dockerfile.path }}
           image: {{ .Values.nixpack.pusher }}
