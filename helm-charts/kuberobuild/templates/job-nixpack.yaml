@@ -16,7 +16,7 @@ spec:
   completions: 1
   manualSelector: false
   parallelism: 1
-  podReplacementPolicy: TerminatingOrFailed
+  podReplacementPolicy: Failed
   suspend: false
   template:
     metadata:
