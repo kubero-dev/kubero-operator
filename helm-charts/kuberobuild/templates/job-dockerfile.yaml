@@ -39,8 +39,8 @@ spec:
           command:
           - sh
           - -c
-          - 'kubectl patch kuberoapps $APP --type=merge -p ''{"spec":{"image":{"repository":
-              "$REPOSITORY","tag": "$TAG"}}}'''
+          - 'kubectl patch kuberoapps $APP --type=merge -p "{\"spec\":{\"image\":{\"repository\":
+            \"$REPOSITORY\",\"tag\": \"$TAG\"}}}"'
           image: bitnami/kubectl:latest
           imagePullPolicy: Always
           name: kuberoapp-deployer
