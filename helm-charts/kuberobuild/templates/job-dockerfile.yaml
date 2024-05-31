@@ -48,7 +48,8 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       initContainers:
-        - env:
+        - name: fetch
+          env:
           - name: GIT_REPOSITORY
             value: {{ .Values.git.url }}
           - name: GIT_BRANCH
@@ -61,7 +62,6 @@ spec:
             value: "exit 0"
           image: {{ .Values.dockerfile.fetcher }}
           imagePullPolicy: Always
-          name: fetch
           resources: {}
           securityContext:
             readOnlyRootFilesystem: false
@@ -74,7 +74,8 @@ spec:
           - mountPath: /app
             name: app-storage
           workingDir: /app
-        - command:
+        - name: push
+          command:
           - sh
           - -c
           - |-
@@ -89,7 +90,6 @@ spec:
             value: /app/{{ .Values.dockerfile.path}}
           image: {{ .Values.dockerfile.pusher }}
           imagePullPolicy: IfNotPresent
-          name: push
           resources: {}
           securityContext:
             privileged: true
