@@ -1,6 +1,5 @@
 {{- if eq .Values.buildstrategy "dockerfile" }}
-{{- $date := now | date "2006-01-02-150405" }}
-{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline $date -}}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -27,7 +26,8 @@ spec:
         job-name: {{ $name }}
     spec:
       automountServiceAccountToken: true
-
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
           - name: REPOSITORY
@@ -44,6 +44,7 @@ spec:
           image: bitnami/kubectl:latest
           imagePullPolicy: Always
           name: kuberoapp-deployer
+          resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       initContainers:
@@ -119,5 +120,5 @@ spec:
         secret:
           defaultMode: 384
           secretName: kubero-pull-secret
-  ttlSecondsAfterFinished: 86400
+  ttlSecondsAfterFinished: 31536000
 {{- end }}
