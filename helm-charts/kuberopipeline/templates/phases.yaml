@@ -87,6 +87,19 @@ secrets:
 imagePullSecrets:
   - name: registry-user-pass
 ---
+# kpack role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kpack-role
+rules:
+  - apiGroups:
+      - kpack.io
+    resources:
+      - 'builds'
+    verbs:
+      - '*'
+---
 # kpack rolebinding
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -101,19 +114,6 @@ subjects:
   - kind: ServiceAccount
     name: kpack-sa
     namespace: {{ $name }}-{{ .name }}
----
-# kpack role
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kpack-role
-rules:
-  - apiGroups:
-      - kpack.io
-    resources:
-      - 'builds'
-    verbs:
-      - '*'
 ---
 {{- end }} # end of git deploymentstrategy
 {{- end }} # end of enabled
