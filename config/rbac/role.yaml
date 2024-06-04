@@ -760,5 +760,11 @@ rules:
   - ""
   resources:
   - "pods"
+- verbs:
+  - "*"
+  apiGroups:
+  - "kpack.io"
+  resources:
+  - "builds"
 
 #+kubebuilder:scaffold:rules
