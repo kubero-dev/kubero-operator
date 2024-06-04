@@ -8,7 +8,7 @@ repository:
   tag: "latest"
 git:
   url: "git@github.com:kubero-dev/template-nodeapp.git"
-  revision: "main"
+  ref: "main"
 podSecurityContext:
   fsGroup: 1000
 
@@ -20,10 +20,10 @@ kpack:
   builder: "gcr.io/paketo-buildpacks/builder:base"
 dockerfile:
   path: "Dockerfile"
-  fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
+  fetcher: "ghcr.io/kubero-dev/fetch:latest"
   pusher: "quay.io/containers/buildah:v1.29"
 nixpack:
   path: ".nixpacks/Dockerfile"
-  fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
-  builder: "ghcr.io/kubero-dev/buildpacks/build:latest"
+  fetcher: "ghcr.io/kubero-dev/fetch:latest"
+  builder: "ghcr.io/kubero-dev/build:latest"
   pusher: "quay.io/containers/buildah:v1.29"

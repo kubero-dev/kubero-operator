@@ -5,7 +5,7 @@ metadata:
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
   buildstrategy: "nixpack" # kpack, dockerfile, nixpack
-  app: "example"
+  app: "oo"
   pipeline: "test"
   repository: 
     push: "kubero-registry.kubero.svc:5000"
@@ -26,10 +26,10 @@ spec:
     builder: "gcr.io/paketo-buildpacks/builder:base"
   dockerfile:
     path: "Dockerfile"
-    fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
+    fetcher: "ghcr.io/kubero-dev/fetch:latest"
     pusher: "quay.io/containers/buildah:v1.29"
   nixpack:
     path: ".nixpacks/Dockerfile"
-    fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
-    builder: "ghcr.io/kubero-dev/buildpacks/build:latest"
+    fetcher: "ghcr.io/kubero-dev/fetch:latest"
+    builder: "ghcr.io/kubero-dev/build:latest"
     pusher: "quay.io/containers/buildah:v1.29"
