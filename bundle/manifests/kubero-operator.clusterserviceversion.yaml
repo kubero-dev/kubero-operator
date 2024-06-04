@@ -597,8 +597,12 @@ metadata:
             "podSecurityContext": {
               "fsGroup": 1000
             },
-            "repository": "kubero-registry.kubero.svc:5000/kapck/example",
-            "tag": "latest"
+            "repository": {
+              "image": "/kapck/example",
+              "pull": "registry.local.kubero.net",
+              "push": "kubero-registry.kubero.svc:5000",
+              "tag": "latest"
+            }
           }
         },
         {
@@ -1131,7 +1135,7 @@ metadata:
     categories: Integration & Delivery
     certified: "false"
     containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
-    createdAt: "2024-05-30T09:52:50Z"
+    createdAt: "2024-06-04T14:43:37Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
