@@ -15,14 +15,14 @@ spec:
   completions: 1
   manualSelector: false
   parallelism: 1
-  podReplacementPolicy: Failed
+  podReplacementPolicy: TerminatingOrFailed
   suspend: false
   template:
     metadata:
       creationTimestamp: null
       labels:
         batch.kubernetes.io/job-name: {{ $name }}
-        build: nix
+        build: {{ .Values.buildstrategy }}
         job-name: {{ $name }}
     spec:
       automountServiceAccountToken: true

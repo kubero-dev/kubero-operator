@@ -22,7 +22,7 @@ spec:
       creationTimestamp: null
       labels:
         batch.kubernetes.io/job-name: {{ $name }}
-        build: dockerfile
+        build: {{ .Values.buildstrategy }}
         job-name: {{ $name }}
     spec:
       automountServiceAccountToken: true

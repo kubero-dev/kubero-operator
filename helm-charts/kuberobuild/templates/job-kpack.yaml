@@ -1,6 +1,6 @@
 {{- if eq .Values.buildstrategy "kpack" }}
 {{- $date := now | date "2006-01-02-150405" }}
-{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline $date -}}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,7 +9,7 @@ metadata:
     job-name: {{ $name }}
   name: {{ $name }}
 spec:
-  backoffLimit: 2
+  backoffLimit: 1
   completionMode: NonIndexed
   completions: 1
   manualSelector: false
@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         batch.kubernetes.io/job-name: {{ $name }}
+        build: {{ .Values.buildstrategy }}
         job-name: {{ $name }}
     spec:
       containers:
@@ -42,7 +43,7 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       initContainers:
-      - image: ghcr.io/kubero-dev/dispatch:latest
+      - image: {{ .Values.kpack.dispatcher }}
         imagePullPolicy: Always
         name: {{ $name }}
         resources: {}

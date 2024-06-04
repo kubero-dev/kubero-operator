@@ -2,8 +2,8 @@ buildstrategy: "nixpack" # kpack, dockerfile, nixpack
 app: "example"
 pipeline: "test"
 repository: 
-  push: "kubero-registry.kubero.svc:5000"
-  pull: "registry.local.kubero.net"
+  push: "kubero-registry.kubero.svc:5000" # where to push the new image
+  pull: "registry.local.kubero.net"       # where to pull the image (must be accessible from the cluster, kuber.net points to 127.0.0.1)
   image: "/kapck/example"
   tag: "latest"
 git:
@@ -16,6 +16,7 @@ podSecurityContext:
 kpack:
   # kpack service account
   serviceAccount: "kpack-sa"
+  dispatcher: "ghcr.io/kubero-dev/dispatch:latest"
   # kpack builder
   builder: "gcr.io/paketo-buildpacks/builder:base"
 dockerfile:
