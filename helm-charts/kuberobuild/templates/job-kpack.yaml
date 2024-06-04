@@ -45,7 +45,7 @@ spec:
       initContainers:
       - image: {{ .Values.kpack.dispatcher }}
         imagePullPolicy: Always
-        name: {{ $name }}
+        name: dispatch
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
