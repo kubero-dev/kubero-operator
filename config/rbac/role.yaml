@@ -730,7 +730,12 @@ rules:
   - "apps"
   resources:
   - "deployments"
-
+- apiGroups:
+  - "" # strange but required by "system:serviceaccount:kubero-operator-system:kubero-operator-controlle" from User "kubero-prometheus-kube-state-metrics" 
+  resources:
+  - "clusterrolebindings"
+  verbs:
+  - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: KuberoBuild
 ##
