@@ -100,6 +100,12 @@ rules:
       - 'builds'
     verbs:
       - '*'
+  - apiGroups:
+    - ''
+    resources:
+    - 'pods'
+    verbs:
+    - '*'
 ---
 # kpack rolebinding
 apiVersion: rbac.authorization.k8s.io/v1
