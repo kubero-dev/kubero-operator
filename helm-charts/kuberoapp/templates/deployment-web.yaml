@@ -91,7 +91,7 @@ spec:
         - name: {{ .Chart.Name }}-web
           securityContext:
             {{- toYaml .Values.image.run.securityContext | nindent 12 }}
-          {{- if or (eq .Values.deploymentstrategy "docker") (or (eq .Values.buildstrategy "dockerfile") (eq .Values.buildstrategy "nixpacks")) }}
+          {{- if or (eq .Values.deploymentstrategy "docker") (or (eq .Values.buildstrategy "dockerfile") (eq .Values.buildstrategy "nixpacks") (eq .Values.buildstrategy "kpacks") (eq .Values.buildstrategy "external")) }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- if .Values.image.command }}
           command:

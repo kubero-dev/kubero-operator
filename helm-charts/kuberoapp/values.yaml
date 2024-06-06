@@ -5,7 +5,7 @@
 mainnamespace: kubero
 buildpack: Docker
 deploymentstrategy: git # git|docker
-buildstrategy: plain # plain|nixpacks|dockerfile
+buildstrategy: plain # plain|nixpacks|dockerfile|kpacks|external
 registry: registry-service.kubero.svc.cluster.local:5000
 
 gitrepo:
