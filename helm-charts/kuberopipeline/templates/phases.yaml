@@ -85,7 +85,8 @@ secrets:
   - name: registry-user-pass
   - name: git-ssh-auth
 imagePullSecrets:
-  - name: registry-user-pass
+#  - name: registry-user-pass
+  - name: kubero-pull-secret
 ---
 # kpack role
 apiVersion: rbac.authorization.k8s.io/v1
