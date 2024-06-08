@@ -2,7 +2,7 @@ buildstrategy: "nixpack" # kpack, dockerfile, nixpack
 app: "example"
 pipeline: "test"
 repository: 
-  push: "kubero-registry.kubero.svc:5000" # where to push the new image
+  push: "kubero-registry.kubero.svc:5000" # (optional, when running on a local only cluster) where to push the new image
   pull: "registry.local.kubero.net"       # where to pull the image (must be accessible from the cluster, kuber.net points to 127.0.0.1)
   image: "/kapck/example"
   tag: "latest"

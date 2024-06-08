@@ -98,8 +98,13 @@ spec:
           env:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson
+          {{- if .Values.repository.push }}
           - name: BUILD_IMAGE
             value: {{ .Values.repository.push }}{{ .Values.repository.image }}:{{ .Values.repository.tag }}
+          {{- else }}
+          - name: BUILD_IMAGE
+            value: {{ .Values.repository.pull }}{{ .Values.repository.image }}:{{ .Values.repository.tag }}
+          {{- end }}
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/{{ .Values.dockerfile.path }}
           image: {{ .Values.nixpack.pusher }}
