@@ -34,7 +34,7 @@ image:
   #  - npm
   #  - start
   fetch:
-    repository: ghcr.io/kubero-dev/buildpacks/fetch
+    repository: ghcr.io/kubero-dev/fetch
     tag: v1
     securityContext:
       readOnlyRootFilesystem: false
