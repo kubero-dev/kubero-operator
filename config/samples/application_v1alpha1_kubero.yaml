@@ -117,8 +117,8 @@ spec:
         - name: NodeJS
           language: JavaScript
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
@@ -134,8 +134,8 @@ spec:
         - name: PHP
           language: PHP
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
@@ -153,8 +153,8 @@ spec:
         - name: Python
           language: Python
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
@@ -168,8 +168,8 @@ spec:
         - name: GoLang
           language: GoLang
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
@@ -183,8 +183,8 @@ spec:
         - name: Hugo
           language: GoLang
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
@@ -198,8 +198,8 @@ spec:
         - name: Ruby
           language: Ruby
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
@@ -213,8 +213,8 @@ spec:
         - name: Static
           language: HTML
           fetch:
-            repository: ghcr.io/kubero-dev/buildpacks/fetch
-            tag: v1.2
+            repository: ghcr.io/kubero-dev/fetch
+            tag: v1
             securityContext:
               runAsUser: 1000
           build:
