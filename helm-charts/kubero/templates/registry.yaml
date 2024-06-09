@@ -82,7 +82,6 @@ spec:
       port: 5000
       targetPort: 5000
 ---
-{{- if .Values.registry.public }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -121,6 +120,5 @@ spec:
                 name: kubero-registry
                 port:
                   number: 5000
-{{- end }} #public
 {{- end }} #create
 {{- end }} #enabled

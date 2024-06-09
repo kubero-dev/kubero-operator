@@ -77,11 +77,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "JavaScript",
                     "name": "NodeJS",
@@ -98,11 +98,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "PHP",
                     "name": "PHP",
@@ -124,11 +124,11 @@ metadata:
                       "tag": "3.10-buster"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "Python",
                     "name": "Python",
@@ -145,11 +145,11 @@ metadata:
                       "tag": "alpine"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "GoLang",
                     "name": "GoLang",
@@ -166,11 +166,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "GoLang",
                     "name": "Hugo",
@@ -187,11 +187,11 @@ metadata:
                       "tag": "2.7"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "Ruby",
                     "name": "Ruby",
@@ -208,11 +208,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "HTML",
                     "name": "Static",
@@ -1135,7 +1135,7 @@ metadata:
     categories: Integration & Delivery
     certified: "false"
     containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
-    createdAt: "2024-06-08T17:39:24Z"
+    createdAt: "2024-06-09T19:24:44Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
