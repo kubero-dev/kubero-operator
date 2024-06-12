@@ -4,7 +4,7 @@ metadata:
   name: kuberobuild-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
-  buildstrategy: "nixpack" # kpack, dockerfile, nixpack
+  buildstrategy: "nixpacks" # kpack, dockerfile, nixpacks
   app: "oo"
   pipeline: "test"
   repository: 

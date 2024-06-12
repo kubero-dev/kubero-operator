@@ -1,4 +1,4 @@
-{{- if eq .Values.buildstrategy "nixpack" }}
+{{- if eq .Values.buildstrategy "nixpacks" }}
 {{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
 apiVersion: batch/v1
 kind: Job
