@@ -1,4 +1,4 @@
-{{- if eq .Values.buildstrategy "kpack" }}
+{{- if eq .Values.buildstrategy "buildpacks" }}
 {{- $date := now | date "2006-01-02-150405" }}
 {{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
 apiVersion: batch/v1
@@ -43,7 +43,7 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       initContainers:
-      - image: {{ .Values.kpack.dispatcher }}
+      - image: {{ .Values.buildpack.dispatcher }}
         imagePullPolicy: Always
         name: dispatch
         resources: {}
@@ -59,9 +59,9 @@ spec:
         - name: TAG
           value: {{ .Values.repository.tag }}
         - name: SERVICE_ACCOUNT
-          value: {{ .Values.kpack.serviceAccount }}
+          value: {{ .Values.buildpack.serviceAccount }}
         - name: BUILDER
-          value: {{ .Values.kpack.builder }}
+          value: {{ .Values.buildpack.builder }}
         - name: GIT_URL
           value: {{ .Values.git.url }}
         - name: GIT_REF
@@ -75,5 +75,5 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      serviceAccountName: kpack-sa
+      serviceAccountName: {{ .Values.buildpack.serviceAccount }}
 {{- end }}

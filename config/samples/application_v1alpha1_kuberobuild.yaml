@@ -4,7 +4,7 @@ metadata:
   name: kuberobuild-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
-  buildstrategy: "nixpack" # kpack, dockerfile, nixpack
+  buildstrategy: "nixpack" # buildpacks, dockerfile, nixpacks
   app: "example"
   pipeline: "test"
   repository: 
@@ -18,8 +18,7 @@ spec:
   podSecurityContext:
     fsGroup: 1000
 
-  # kpack specific values
-  kpack:
+  buildpack:
     # kpack service account
     serviceAccount: "kpack-sa"
     # kpack builder

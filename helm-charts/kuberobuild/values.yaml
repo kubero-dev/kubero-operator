@@ -1,4 +1,4 @@
-buildstrategy: "nixpack" # kpack, dockerfile, nixpack
+buildstrategy: "nixpacks" # buildpacks, dockerfile, nixpacks
 app: "example"
 pipeline: "test"
 repository: 
@@ -13,7 +13,7 @@ podSecurityContext:
   fsGroup: 1000
 
 # kpack specific values
-kpack:
+buildpack:
   # kpack service account
   serviceAccount: "kpack-sa"
   dispatcher: "ghcr.io/kubero-dev/dispatch:latest"
