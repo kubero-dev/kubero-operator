@@ -579,9 +579,9 @@ metadata:
             },
             "buildstrategy": "nixpack",
             "dockerfile": {
-              "builder": "quay.io/containers/buildah:v1.29",
               "fetcher": "ghcr.io/kubero-dev/buildpacks/fetch:latest",
-              "path": "Dockerfile"
+              "path": "Dockerfile",
+              "pusher": "quay.io/containers/buildah:v1.29"
             },
             "git": {
               "revision": "main",
@@ -598,8 +598,8 @@ metadata:
               "fsGroup": 1000
             },
             "repository": {
+              "host": "registry.local.kubero.net",
               "image": "/kapck/example",
-              "pull": "registry.local.kubero.net",
               "push": "kubero-registry.kubero.svc:5000",
               "tag": "latest"
             }
@@ -1135,7 +1135,7 @@ metadata:
     categories: Integration & Delivery
     certified: "false"
     containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
-    createdAt: "2024-06-17T12:17:04Z"
+    createdAt: "2024-06-18T14:02:38Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1

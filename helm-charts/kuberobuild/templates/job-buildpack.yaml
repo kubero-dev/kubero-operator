@@ -26,9 +26,9 @@ spec:
       containers:
         - env:
           - name: REPOSITORY
-            value: {{ .Values.repository.pull }}{{ .Values.repository.image }}
+            value: {{ .Values.repository.image }}
           - name: TAG
-            value: {{ .Values.repository.tag }}
+            value: {{ .Values.repository.tag | default "latest"}}
           - name: APP
             value: {{ .Values.app }}
           command:
@@ -55,7 +55,7 @@ spec:
         - name: PIPELINE
           value: {{ .Values.pipeline }}
         - name: REPOSITORY
-          value: {{ .Values.repository.push }}{{ .Values.repository.image }}
+          value: {{ .Values.repository.image }}
         - name: TAG
           value: {{ .Values.repository.tag }}
         - name: SERVICE_ACCOUNT

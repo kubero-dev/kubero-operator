@@ -2,10 +2,8 @@ buildstrategy: "nixpacks" # buildpacks, dockerfile, nixpacks
 app: "example"
 pipeline: "test"
 repository: 
-  push: "kubero-registry.kubero.svc:5000" # (optional, when running on a local only cluster) where to push the new image
-  pull: "registry.local.kubero.net"       # where to pull the image (must be accessible from the cluster, kuber.net points to 127.0.0.1)
-  image: "/kapck/example"
-  tag: "latest"
+  image: "registry-kubero.yourdomain.com/optionalrepositoryowner/pipeline/app"
+  tag: "123456" # (optional) defaults to "latest
 git:
   url: "git@github.com:kubero-dev/template-nodeapp.git"
   ref: "main"
@@ -20,11 +18,11 @@ buildpack:
   # kpack builder
   builder: "gcr.io/paketo-buildpacks/builder:base"
 dockerfile:
-  path: "Dockerfile"
+  path: "Dockerfile" # path to the Dockerfile relative to the repository root
   fetcher: "ghcr.io/kubero-dev/fetch:latest"
-  pusher: "quay.io/containers/buildah:v1.29"
+  pusher: "quay.io/containers/buildah:v1.35"
 nixpack:
-  path: ".nixpacks/Dockerfile"
+  path: ".nixpacks/Dockerfile" # path to the Dockerfile relative to the repository root
   fetcher: "ghcr.io/kubero-dev/fetch:latest"
   builder: "ghcr.io/kubero-dev/build:latest"
-  pusher: "quay.io/containers/buildah:v1.29"
+  pusher: "quay.io/containers/buildah:v1.35"

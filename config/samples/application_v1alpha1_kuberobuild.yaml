@@ -9,7 +9,7 @@ spec:
   pipeline: "test"
   repository: 
     push: "kubero-registry.kubero.svc:5000"
-    pull: "registry.local.kubero.net"
+    host: "registry.local.kubero.net"
     image: "/kapck/example"
     tag: "latest"
   git:
@@ -26,7 +26,7 @@ spec:
   dockerfile:
     path: "Dockerfile"
     fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
-    builder: "quay.io/containers/buildah:v1.29"
+    pusher: "quay.io/containers/buildah:v1.29"
   nixpack:
     path: ".nixpacks/Dockerfile"
     fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
