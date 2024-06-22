@@ -63,7 +63,7 @@ prometheus:
 registry:
   enabled: false  # creates registry credentials for a external or a local registry (required for build strategy apps)
   create: false   # spins up a local registry
-  public: false   # makes the local registry public accessible (required, when cluster can't be configured to pull from nonHTTPS sources)
+  public: true   # makes the local registry public accessible (required, when cluster can't be configured to pull from nonHTTPS sources)
   #host: docker.io                          # requires a docker account. Might be the best choice when running on a non public domain
   #protocol: https
   #port: 443
