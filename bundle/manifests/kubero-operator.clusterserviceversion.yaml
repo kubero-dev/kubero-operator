@@ -77,11 +77,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "JavaScript",
                     "name": "NodeJS",
@@ -98,11 +98,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "PHP",
                     "name": "PHP",
@@ -124,11 +124,11 @@ metadata:
                       "tag": "3.10-buster"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "Python",
                     "name": "Python",
@@ -145,11 +145,11 @@ metadata:
                       "tag": "alpine"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "GoLang",
                     "name": "GoLang",
@@ -166,11 +166,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "GoLang",
                     "name": "Hugo",
@@ -187,11 +187,11 @@ metadata:
                       "tag": "2.7"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "Ruby",
                     "name": "Ruby",
@@ -208,11 +208,11 @@ metadata:
                       "tag": "latest"
                     },
                     "fetch": {
-                      "repository": "ghcr.io/kubero-dev/buildpacks/fetch",
+                      "repository": "ghcr.io/kubero-dev/fetch",
                       "securityContext": {
                         "runAsUser": 1000
                       },
-                      "tag": "v1.2"
+                      "tag": "v1"
                     },
                     "language": "HTML",
                     "name": "Static",
@@ -573,19 +573,19 @@ metadata:
           },
           "spec": {
             "app": "example",
+            "buildpack": {
+              "builder": "gcr.io/paketo-buildpacks/builder:base",
+              "serviceAccount": "kpack-sa"
+            },
             "buildstrategy": "nixpack",
             "dockerfile": {
-              "builder": "quay.io/containers/buildah:v1.29",
               "fetcher": "ghcr.io/kubero-dev/buildpacks/fetch:latest",
-              "path": "Dockerfile"
+              "path": "Dockerfile",
+              "pusher": "quay.io/containers/buildah:v1.29"
             },
             "git": {
               "revision": "main",
               "url": "git@github.com:kubero-dev/template-nodeapp.git"
-            },
-            "kpack": {
-              "builder": "gcr.io/paketo-buildpacks/builder:base",
-              "serviceAccount": "kpack-sa"
             },
             "nixpack": {
               "builder": "ghcr.io/kubero-dev/buildpacks/build:latest",
@@ -598,8 +598,8 @@ metadata:
               "fsGroup": 1000
             },
             "repository": {
+              "host": "registry.local.kubero.net",
               "image": "/kapck/example",
-              "pull": "registry.local.kubero.net",
               "push": "kubero-registry.kubero.svc:5000",
               "tag": "latest"
             }
@@ -1135,7 +1135,7 @@ metadata:
     categories: Integration & Delivery
     certified: "false"
     containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
-    createdAt: "2024-06-06T12:23:51Z"
+    createdAt: "2024-06-22T21:06:18Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
@@ -1936,6 +1936,12 @@ spec:
           - apps
           resources:
           - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - clusterrolebindings
           verbs:
           - '*'
         - apiGroups:

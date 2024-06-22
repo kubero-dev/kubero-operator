@@ -1320,6 +1320,12 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - ""
+  resources:
+  - clusterrolebindings
+  verbs:
+  - '*'
+- apiGroups:
   - application.kubero.dev
   resources:
   - kuberobuilds

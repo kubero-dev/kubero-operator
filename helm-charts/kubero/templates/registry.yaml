@@ -1,5 +1,6 @@
 {{- if .Values.registry.enabled -}}
 {{- $basicAuth := printf "%s:%s" .Values.registry.account.username .Values.registry.account.hash -}}
+# used by the registry ingress to authenticate users
 apiVersion: v1
 kind: Secret
 metadata:
@@ -10,6 +11,7 @@ data:
 ---
 {{- $dockerAuth := (printf "%s:%s" .Values.registry.account.username .Values.registry.account.password) | b64enc -}}
 {{- $dockerconfigjson := printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.registry.host .Values.registry.account.username .Values.registry.account.password $dockerAuth -}}
+# copied to pipeline namespace for kpack, nixpack, dockerfile and to pull images
 apiVersion: v1
 kind: Secret
 metadata:
@@ -80,7 +82,6 @@ spec:
       port: 5000
       targetPort: 5000
 ---
-{{- if .Values.registry.public }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -119,6 +120,5 @@ spec:
                 name: kubero-registry
                 port:
                   number: 5000
-{{- end }} #public
 {{- end }} #create
 {{- end }} #enabled

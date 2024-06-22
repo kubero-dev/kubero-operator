@@ -4,12 +4,12 @@ metadata:
   name: kuberobuild-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/kuberobuild/values.yaml
-  buildstrategy: "nixpack" # kpack, dockerfile, nixpack
+  buildstrategy: "nixpack" # buildpacks, dockerfile, nixpacks
   app: "example"
   pipeline: "test"
   repository: 
     push: "kubero-registry.kubero.svc:5000"
-    pull: "registry.local.kubero.net"
+    host: "registry.local.kubero.net"
     image: "/kapck/example"
     tag: "latest"
   git:
@@ -18,8 +18,7 @@ spec:
   podSecurityContext:
     fsGroup: 1000
 
-  # kpack specific values
-  kpack:
+  buildpack:
     # kpack service account
     serviceAccount: "kpack-sa"
     # kpack builder
@@ -27,7 +26,7 @@ spec:
   dockerfile:
     path: "Dockerfile"
     fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
-    builder: "quay.io/containers/buildah:v1.29"
+    pusher: "quay.io/containers/buildah:v1.29"
   nixpack:
     path: ".nixpacks/Dockerfile"
     fetcher: "ghcr.io/kubero-dev/buildpacks/fetch:latest"
