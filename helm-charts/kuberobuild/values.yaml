@@ -1,6 +1,7 @@
 buildstrategy: "nixpacks" # buildpacks, dockerfile, nixpacks
 app: "example"
 pipeline: "test"
+id: "20240631-2237"
 repository: 
   image: "registry-kubero.yourdomain.com/optionalrepositoryowner/pipeline/app"
   tag: "123456" # (optional) defaults to "latest

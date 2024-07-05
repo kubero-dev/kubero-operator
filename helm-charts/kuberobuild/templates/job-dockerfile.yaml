@@ -1,5 +1,5 @@
 {{- if eq .Values.buildstrategy "dockerfile" }}
-{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.id -}}
 apiVersion: batch/v1
 kind: Job
 metadata:

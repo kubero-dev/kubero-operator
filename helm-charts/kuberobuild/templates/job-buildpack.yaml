@@ -1,6 +1,6 @@
 {{- if eq .Values.buildstrategy "buildpacks" }}
 {{- $date := now | date "2006-01-02-150405" }}
-{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.id -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
