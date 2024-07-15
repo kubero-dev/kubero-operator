@@ -6,7 +6,9 @@ metadata:
   generation: 1
   labels:
     batch.kubernetes.io/job-name: {{ $name }}
-    build: nix
+    buildstrategy: nixpacks
+    kuberoapp: {{ .Values.app }}
+    kuberopipeline: {{ .Values.pipeline }}
     job-name: {{ $name }}
   name: {{ $name }}
 spec:
@@ -22,7 +24,9 @@ spec:
       creationTimestamp: null
       labels:
         batch.kubernetes.io/job-name: {{ $name }}
-        build: {{ .Values.buildstrategy }}
+        buildstrategy: {{ .Values.buildstrategy }}
+        kuberoapp: {{ .Values.app }}
+        kuberopipeline: {{ .Values.pipeline }}
         job-name: {{ $name }}
     spec:
       automountServiceAccountToken: true

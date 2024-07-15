@@ -1,11 +1,13 @@
 {{- if eq .Values.buildstrategy "buildpacks" }}
-{{- $date := now | date "2006-01-02-150405" }}
 {{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.id -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
   labels:
     batch.kubernetes.io/job-name: {{ $name }}
+    buildstrategy: buildpacks
+    kuberoapp: {{ .Values.app }}
+    kuberopipeline: {{ .Values.pipeline }}
     job-name: {{ $name }}
   name: {{ $name }}
 spec:
@@ -20,7 +22,9 @@ spec:
     metadata:
       labels:
         batch.kubernetes.io/job-name: {{ $name }}
-        build: {{ .Values.buildstrategy }}
+        buildstrategy: {{ .Values.buildstrategy }}
+        kuberoapp: {{ .Values.app }}
+        kuberopipeline: {{ .Values.pipeline }}
         job-name: {{ $name }}
     spec:
       containers:
