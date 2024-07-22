@@ -47,7 +47,7 @@ spec:
             \"$REPOSITORY\",\"tag\": \"$TAG\"}}}"'
           image: bitnami/kubectl:latest
           imagePullPolicy: Always
-          name: deployer
+          name: deploy
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
