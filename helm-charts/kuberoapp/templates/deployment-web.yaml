@@ -26,6 +26,9 @@ spec:
       labels:
         {{- include "kuberoapp.selectorLabels" . | nindent 8 }}-web
     spec:
+      {{- if and ( .Values.sleep ) (ne .Values.sleep "disabled") }}
+      runtimeClassName: zeropod
+      {{- end }}
       {{- if .Values.imagePullSecrets }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

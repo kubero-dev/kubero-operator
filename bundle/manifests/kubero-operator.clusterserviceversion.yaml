@@ -1136,7 +1136,7 @@ metadata:
     categories: Integration & Delivery
     certified: "false"
     containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
-    createdAt: "2024-07-31T10:25:33Z"
+    createdAt: "2024-07-31T10:42:06Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
