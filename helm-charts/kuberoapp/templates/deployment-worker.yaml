@@ -16,10 +16,13 @@ spec:
       {{- include "kuberoapp.selectorLabels" . | nindent 6 }}-worker
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+        {{- if and ( .Values.sleep ) (ne .Values.sleep "disabled") }}
+        zeropod.ctrox.dev/scaledown-duration: {{ .Values.sleep }}
+        {{- end }}
       labels:
         {{- include "kuberoapp.selectorLabels" . | nindent 8 }}-worker
     spec:
