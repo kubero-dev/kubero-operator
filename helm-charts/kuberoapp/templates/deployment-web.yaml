@@ -122,6 +122,7 @@ spec:
             - name: http
               containerPort: {{ .Values.image.containerPort | default "8080" }}
               protocol: TCP
+          {{- if or ( not .Values.sleep ) (eq .Values.sleep "disabled") }}
           livenessProbe:
             httpGet:
               path: /
@@ -139,6 +140,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 2
             failureThreshold: 30
+          {{- end }}
           volumeMounts:
             {{- if and (eq .Values.deploymentstrategy "git") (eq .Values.buildstrategy "plain") }}
             - mountPath: /app
