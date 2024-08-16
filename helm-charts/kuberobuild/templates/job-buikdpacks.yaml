@@ -112,6 +112,12 @@ spec:
           secretName: deployment-keys
       - emptyDir: {}
         name: app-storage
+      - name: docker-config
+        secret:
+          secretName: kubero-pull-secret
+          items:
+            - key: .dockerconfigjson
+              path: config.json
       - name: pull-secret
         secret:
           defaultMode: 384
