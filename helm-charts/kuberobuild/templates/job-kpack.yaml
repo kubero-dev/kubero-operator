@@ -1,11 +1,11 @@
-{{- if eq .Values.buildstrategy "buildpacks" }}
+{{- if eq .Values.buildstrategy "kpack" }}
 {{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.id -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
   labels:
     batch.kubernetes.io/job-name: {{ $name }}
-    buildstrategy: buildpacks
+    buildstrategy: kpack
     kuberoapp: {{ .Values.app }}
     kuberopipeline: {{ .Values.pipeline }}
     job-name: {{ $name }}
