@@ -705,6 +705,7 @@ rules:
   - '*'
 - apiGroups:
   - apps
+  - ""
   resources:
   - deployments
   verbs:
@@ -717,6 +718,7 @@ rules:
   - '*'
 - apiGroups:
   - networking.k8s.io
+  - ""
   resources:
   - ingresses
   verbs:

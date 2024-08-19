@@ -16,6 +16,7 @@ rules:
 # We need to manage Helm release secrets
 - apiGroups:
   - ""
+  - "apps"
   resources:
   - configmaps
   - secrets
@@ -34,11 +35,17 @@ rules:
 ##
 - apiGroups:
   - rbac.authorization.k8s.io
+  - ""
   resources:
   - "roles"
   - "clusterroles"
   - "clusterrolebindings"
   - "rolebindings"
+  - "secrets"
+  - "deployments"
+  - "namespaces"
+  - "services"
+  - "ingresses"
   verbs:
   - "*"
 - apiGroups:
@@ -66,8 +73,10 @@ rules:
   - "*"
   apiGroups:
   - "apps"
+  - ""
   resources:
   - "deployments"
+  - "serviceaccounts"
 - verbs:
   - "*"
   apiGroups:
@@ -78,8 +87,10 @@ rules:
   - "*"
   apiGroups:
   - "networking.k8s.io"
+  - ""
   resources:
   - "ingresses"
+  - "rolebindings"
 - verbs:
   - create
   - delete

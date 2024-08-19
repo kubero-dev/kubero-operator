@@ -1135,14 +1135,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
-    createdAt: "2024-07-31T10:42:06Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2-rc.21
+    createdAt: "2024-08-19T15:12:23Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.1.2
+  name: kubero-operator.v0.1.2-rc.21
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1282,6 +1282,7 @@ spec:
           - get
         - apiGroups:
           - ""
+          - apps
           resources:
           - configmaps
           - secrets
@@ -1295,11 +1296,17 @@ spec:
           - create
         - apiGroups:
           - rbac.authorization.k8s.io
+          - ""
           resources:
           - roles
           - clusterroles
           - clusterrolebindings
           - rolebindings
+          - secrets
+          - deployments
+          - namespaces
+          - services
+          - ingresses
           verbs:
           - '*'
         - apiGroups:
@@ -1325,8 +1332,10 @@ spec:
           - '*'
         - apiGroups:
           - apps
+          - ""
           resources:
           - deployments
+          - serviceaccounts
           verbs:
           - '*'
         - apiGroups:
@@ -1337,8 +1346,10 @@ spec:
           - '*'
         - apiGroups:
           - networking.k8s.io
+          - ""
           resources:
           - ingresses
+          - rolebindings
           verbs:
           - '*'
         - apiGroups:
@@ -2025,7 +2036,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=kubero-operator
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.2-rc.21
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2112,4 +2123,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.1.2
+  version: 0.1.2-rc.21
