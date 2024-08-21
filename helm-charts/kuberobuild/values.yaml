@@ -17,7 +17,8 @@ buildpack:
   serviceAccount: "kpack-sa"
   dispatcher: "ghcr.io/kubero-dev/dispatch:latest"
   # kpack builder
-  builder: "gcr.io/paketo-buildpacks/builder:base"
+  #builder: "gcr.io/paketo-buildpacks/builder:base"
+  builder: "paketobuildpacks/builder-jammy-full:latest" #List of Builders : https://paketo.io/docs/reference/builders-reference/
 dockerfile:
   path: "Dockerfile" # path to the Dockerfile relative to the repository root
   fetcher: "ghcr.io/kubero-dev/fetch:latest"

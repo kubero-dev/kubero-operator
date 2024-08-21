@@ -81,10 +81,12 @@ spec:
           - '-app=.'
           - {{ .Values.repository.image }}:{{ .Values.repository.tag | default "latest"}}
           command: ['/cnb/lifecycle/creator']
-          #command: ['/cnb/lifecycle/creator', '-app=.', 'kubero-local-dev-0037732.loca.lt/example/exampled:latest']
+          # https://github.com/buildpacks/pack/issues/564#issuecomment-943345649
+          # https://github.com/buildpacks/spec/blob/platform/v0.13/platform.md#creator
           #command: ['/cnb/lifecycle/creator', '-app=.', '-buildpacks=/cnb/buildpacks', '-platform=/platform', '-run-image=ghcr.io/kubero-dev/run:v1.4.0', '-uid=1000', '-gid=1000', 'kubero-local-dev-0037732.loca.lt/example/exampled:latest']
           #command: ['tail', '-f', '/dev/null']
-          image: gcr.io/paketo-buildpacks/builder:base
+          #image: gcr.io/paketo-buildpacks/builder:base
+          image: {{ .Values.buildpack.builder }}
           imagePullPolicy: Always
           resources: {}
           securityContext:
