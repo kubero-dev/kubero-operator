@@ -90,7 +90,7 @@ spec:
           resources: {}
           env:
           - name: CNB_PLATFORM_API
-            value: {{ .Values.buildpack.cnbPlatformApi }}
+            value: {{ .Values.buildpack.cnbPlatformApi | quote }}
           securityContext:
             privileged: true
           terminationMessagePath: /dev/termination-log

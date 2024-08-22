@@ -1,5 +1,5 @@
 # All the values must be consistent and are mandatory!
-buildstrategy: "nixpacks" # buildpacks, dockerfile, nixpacks
+buildstrategy: "buildpacks" # buildpacks, dockerfile, nixpacks
 app: "example"
 pipeline: "test"
 phase: "test" # not used yet
