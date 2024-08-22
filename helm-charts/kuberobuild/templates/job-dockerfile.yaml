@@ -62,7 +62,7 @@ spec:
             value: "exit 0"
           - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
             value: "exit 0"
-          image: {{ .Values.dockerfile.fetcher }}
+          image: "ghcr.io/kubero-dev/fetch:latest"
           imagePullPolicy: Always
           resources: {}
           securityContext:
@@ -90,7 +90,7 @@ spec:
             value: {{ .Values.repository.image }}:{{ .Values.repository.tag | default "latest"}}
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/{{ .Values.dockerfile.path}}
-          image: {{ .Values.dockerfile.pusher }}
+          image: "quay.io/containers/buildah:v1.35"
           imagePullPolicy: IfNotPresent
           resources: {}
           securityContext:

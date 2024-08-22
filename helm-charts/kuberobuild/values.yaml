@@ -15,15 +15,10 @@ podSecurityContext:
 
 # kpack specific values ar created by Kubero UI. 
 buildpack:
+  path: "." # path to the app root relative to the repository root
   cnbPlatformApi: "0.13"
-  fetcher: "ghcr.io/kubero-dev/fetch:latest"
-  builder: "paketobuildpacks/builder-jammy-full:latest" #List of Builders : https://paketo.io/docs/reference/builders-reference/
 dockerfile:
   path: "Dockerfile" # path to the Dockerfile relative to the repository root
-  fetcher: "ghcr.io/kubero-dev/fetch:latest"
-  pusher: "quay.io/containers/buildah:v1.35"
+  fetcher: 
 nixpack:
   path: ".nixpacks/Dockerfile" # path to the Dockerfile relative to the repository root
-  fetcher: "ghcr.io/kubero-dev/fetch:latest"
-  builder: "ghcr.io/kubero-dev/build:latest"
-  pusher: "quay.io/containers/buildah:v1.35"
