@@ -62,7 +62,7 @@ spec:
             value: "exit 0"
           - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
             value: "exit 0"
-          image: {{ .Values.nixpack.fetcher }}
+          image: {{ .Values.buildpack.fetcher }}
           imagePullPolicy: Always
           resources: {}
           securityContext:
@@ -85,10 +85,12 @@ spec:
           # https://github.com/buildpacks/spec/blob/platform/v0.13/platform.md#creator
           #command: ['/cnb/lifecycle/creator', '-app=.', '-buildpacks=/cnb/buildpacks', '-platform=/platform', '-run-image=ghcr.io/kubero-dev/run:v1.4.0', '-uid=1000', '-gid=1000', 'kubero-local-dev-0037732.loca.lt/example/exampled:latest']
           #command: ['tail', '-f', '/dev/null']
-          #image: gcr.io/paketo-buildpacks/builder:base
           image: {{ .Values.buildpack.builder }}
           imagePullPolicy: Always
           resources: {}
+          env:
+          - name: CNB_PLATFORM_API
+            value: {{ .Values.buildpack.cnbPlatformApi }}
           securityContext:
             privileged: true
           terminationMessagePath: /dev/termination-log

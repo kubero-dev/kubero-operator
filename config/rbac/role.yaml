@@ -91,6 +91,8 @@ rules:
   resources:
   - "ingresses"
   - "rolebindings"
+  - "services"
+  - "jobs"
 - verbs:
   - create
   - delete
