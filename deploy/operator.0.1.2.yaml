@@ -662,6 +662,7 @@ rules:
   - get
 - apiGroups:
   - ""
+  - apps
   resources:
   - configmaps
   - secrets
@@ -675,11 +676,17 @@ rules:
   - create
 - apiGroups:
   - rbac.authorization.k8s.io
+  - ""
   resources:
   - roles
   - clusterroles
   - clusterrolebindings
   - rolebindings
+  - secrets
+  - deployments
+  - namespaces
+  - services
+  - ingresses
   verbs:
   - '*'
 - apiGroups:
@@ -708,6 +715,7 @@ rules:
   - ""
   resources:
   - deployments
+  - serviceaccounts
   verbs:
   - '*'
 - apiGroups:
@@ -721,6 +729,9 @@ rules:
   - ""
   resources:
   - ingresses
+  - rolebindings
+  - services
+  - jobs
   verbs:
   - '*'
 - apiGroups:
