@@ -1,12 +1,14 @@
-{{- if eq .Values.buildstrategy "nixpack" }}
-{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.repository.tag -}}
+{{- if eq .Values.buildstrategy "nixpacks" }}
+{{- $name := printf "%s-%s-%s" .Values.app .Values.pipeline .Values.id -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
   generation: 1
   labels:
     batch.kubernetes.io/job-name: {{ $name }}
-    build: nix
+    buildstrategy: nixpacks
+    kuberoapp: {{ .Values.app }}
+    kuberopipeline: {{ .Values.pipeline }}
     job-name: {{ $name }}
   name: {{ $name }}
 spec:
@@ -22,7 +24,9 @@ spec:
       creationTimestamp: null
       labels:
         batch.kubernetes.io/job-name: {{ $name }}
-        build: {{ .Values.buildstrategy }}
+        buildstrategy: {{ .Values.buildstrategy }}
+        kuberoapp: {{ .Values.app }}
+        kuberopipeline: {{ .Values.pipeline }}
         job-name: {{ $name }}
     spec:
       automountServiceAccountToken: true
@@ -31,9 +35,9 @@ spec:
       containers:
         - env:
           - name: REPOSITORY
-            value: {{ .Values.repository.pull }}{{ .Values.repository.image }}
+            value: {{ .Values.repository.image }}
           - name: TAG
-            value: {{ .Values.repository.tag }}
+            value: {{ .Values.repository.tag | default "latest"}}
           - name: APP
             value: {{ .Values.app }}
           command:
@@ -43,7 +47,7 @@ spec:
             \"$REPOSITORY\",\"tag\": \"$TAG\"}}}"'
           image: bitnami/kubectl:latest
           imagePullPolicy: Always
-          name: deployer
+          name: deploy
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
@@ -58,7 +62,7 @@ spec:
             value: "exit 0"
           - name: KUBERO_BUILDPACK_DEFAULT_BUILD_CMD
             value: "exit 0"
-          image: {{ .Values.nixpack.fetcher }}
+          image: "ghcr.io/kubero-dev/fetch:latest"
           imagePullPolicy: Always
           resources: {}
           securityContext:
@@ -77,7 +81,7 @@ spec:
           - sh
           - -c
           - nixpacks build . -o .
-          image: {{ .Values.nixpack.builder }}
+          image: "ghcr.io/kubero-dev/build:latest"
           imagePullPolicy: Always
           resources: {}
           securityContext:
@@ -99,10 +103,10 @@ spec:
           - name: REGISTRY_AUTH_FILE
             value: /etc/buildah/auth/.dockerconfigjson
           - name: BUILD_IMAGE
-            value: {{ .Values.repository.push }}{{ .Values.repository.image }}:{{ .Values.repository.tag }}
+            value: {{ .Values.repository.image }}:{{ .Values.repository.tag | default "latest"}}
           - name: BUILDAH_DOCKERFILE_PATH
             value: /app/{{ .Values.dockerfile.path }}
-          image: {{ .Values.nixpack.pusher }}
+          image: "quay.io/containers/buildah:v1.35"
           imagePullPolicy: IfNotPresent
           resources: {}
           securityContext:

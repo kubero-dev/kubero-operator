@@ -11,9 +11,9 @@
 {{- $kuberoObj := (lookup "application.kubero.dev/v1alpha1" "Kubero" $mainnamespace "kubero") | default dict }}
 {{- $specData := (get $kuberoObj "spec") | default dict }}
 {{- $registryData := (get $specData "registry") | default dict }}
-{{- $registryHost := (get $registryData "host") | default "kubero-registry.kubero.svc" }}
-{{- $registryProtocol := (get $registryData "protocol") | default "http" }}
-{{- $registryPort := (get $registryData "port") | default 5000 }}
+{{- $registryHost := (get $registryData "host") | default "missingregistry.mydomain.com/example" }}
+{{- $registryProtocol := (get $registryData "protocol") | default "https" }}
+{{- $registryPort := (get $registryData "port") | default 443 }}
 
 {{- $name := .Values.name -}}
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
@@ -64,28 +64,13 @@ data:
 ---
 # kpack
 apiVersion: v1
-kind: Secret
-metadata:
-  name: registry-user-pass
-  namespace: {{ $name }}-{{ .name }}
-  annotations:
-    kpack.io/docker: {{ $registryProtocol }}://{{ $registryHost }}:{{ $registryPort }}
-type: kubernetes.io/basic-auth
-data:
-  username: {{ $registryUsername | quote }}
-  password: {{ $registryPassword | quote }}
----
-# kpack
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kpack-sa
   namespace: {{ $name }}-{{ .name }}
 secrets:
-  - name: registry-user-pass
   - name: git-ssh-auth
-imagePullSecrets:
-  - name: registry-user-pass
+  - name: kubero-pull-secret
 ---
 # kpack role
 apiVersion: rbac.authorization.k8s.io/v1
@@ -100,6 +85,18 @@ rules:
       - 'builds'
     verbs:
       - '*'
+  - apiGroups:
+    - ''
+    resources:
+    - 'pods'
+    verbs:
+    - '*'
+  - apiGroups:
+    - 'application.kubero.dev'
+    resources:
+    - 'kuberoapps'
+    verbs:
+    - '*'
 ---
 # kpack rolebinding
 apiVersion: rbac.authorization.k8s.io/v1

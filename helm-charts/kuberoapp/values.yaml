@@ -5,8 +5,10 @@
 mainnamespace: kubero
 buildpack: Docker
 deploymentstrategy: git # git|docker
-buildstrategy: plain # plain|nixpacks|dockerfile
+buildstrategy: plain # plain|nixpacks|dockerfile|kpacks|external
 registry: registry-service.kubero.svc.cluster.local:5000
+sleep: disabled
+restartedAt: 
 
 gitrepo:
   id: 123456789
@@ -34,7 +36,7 @@ image:
   #  - npm
   #  - start
   fetch:
-    repository: ghcr.io/kubero-dev/buildpacks/fetch
+    repository: ghcr.io/kubero-dev/fetch
     tag: v1
     securityContext:
       readOnlyRootFilesystem: false

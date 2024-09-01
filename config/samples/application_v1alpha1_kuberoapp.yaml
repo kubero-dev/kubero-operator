@@ -6,7 +6,8 @@ spec:
   # Default values copied from <project_dir>/helm-charts/kuberoapp/values.yaml
   affinity: {}
   deploymentstrategy: git
-  buildstrategy: dockerfile
+  buildstrategy: dockerfile # buildpacks, dockerfile, nixpacks
+  sleep: disabled
   autoscaling:
     enabled: false
     maxReplicas: 100
