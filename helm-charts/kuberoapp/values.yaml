@@ -70,7 +70,7 @@ image:
   # runAsUser: 1000
 
 branch: master
-ref: refs/heads/dummy-pr
+ref: 
 autodeploy: false
 envVars:
   - name: EXAMPLE

@@ -8,12 +8,12 @@
 {{- $registryUsername := (get $secretData "username") | default "" }}
 {{- $registryPassword := (get $secretData "password") | default "" }}
 
-{{- $kuberoObj := (lookup "application.kubero.dev/v1alpha1" "Kubero" $mainnamespace "kubero") | default dict }}
-{{- $specData := (get $kuberoObj "spec") | default dict }}
-{{- $registryData := (get $specData "registry") | default dict }}
-{{- $registryHost := (get $registryData "host") | default "missingregistry.mydomain.com/example" }}
-{{- $registryProtocol := (get $registryData "protocol") | default "https" }}
-{{- $registryPort := (get $registryData "port") | default 443 }}
+#{{- $kuberoObj := (lookup "application.kubero.dev/v1alpha1" "Kubero" $mainnamespace "kubero") | default dict }}
+#{{- $specData := (get $kuberoObj "spec") | default dict }}
+#{{- $registryData := (get $specData "registry") | default dict }}
+#{{- $registryHost := (get $registryData "host") | default "missingregistry.mydomain.com/example" }}
+#{{- $registryProtocol := (get $registryData "protocol") | default "https" }}
+#{{- $registryPort := (get $registryData "port") | default 443 }}
 
 {{- $name := .Values.name -}}
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
@@ -40,6 +40,8 @@ data:
   deploykey: {{ $deploykey | quote }}
   deploykey.pub: {{ $deploykeyPub | quote }}
 ---
+{{- end }}
+{{- if and (eq $deploymentstrategy "git") (ne $registryUsername "") }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -49,70 +51,81 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ $dockerconfigjson | quote }}
 ---
-# kpack
+# required by trivy to scan the image
 apiVersion: v1
 kind: Secret
 metadata:
-  name: git-ssh-auth
+  name: registry-credentials
   namespace: {{ $name }}-{{ .name }}
-  annotations:
-    kpack.io/git: {{ $deploykeySshUrl }}
-type: kubernetes.io/ssh-auth
+type: Opaque
 data:
-  ssh-privatekey: {{ $deploykey | quote }}
-  ssh-publickey: {{ $deploykeyPub | quote }}
+  username: {{ $registryUsername | quote }}
+  password: {{ $registryPassword | quote }}
 ---
-# kpack
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: kpack-sa
-  namespace: {{ $name }}-{{ .name }}
-secrets:
-  - name: git-ssh-auth
-  - name: kubero-pull-secret
----
-# kpack role
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kpack-role
-  namespace: {{ $name }}-{{ .name }}
-rules:
-  - apiGroups:
-      - kpack.io
-    resources:
-      - 'builds'
-    verbs:
-      - '*'
-  - apiGroups:
-    - ''
-    resources:
-    - 'pods'
-    verbs:
-    - '*'
-  - apiGroups:
-    - 'application.kubero.dev'
-    resources:
-    - 'kuberoapps'
-    verbs:
-    - '*'
----
-# kpack rolebinding
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kpack-rolebinding
-  namespace: {{ $name }}-{{ .name }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: kpack-role
-subjects:
-  - kind: ServiceAccount
-    name: kpack-sa
-    namespace: {{ $name }}-{{ .name }}
----
+## kpack
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: git-ssh-auth
+#  namespace: {{ $name }}-{{ .name }}
+#  annotations:
+#    kpack.io/git: {{ $deploykeySshUrl }}
+#type: kubernetes.io/ssh-auth
+#data:
+#  ssh-privatekey: {{ $deploykey | quote }}
+#  ssh-publickey: {{ $deploykeyPub | quote }}
+#---
+## kpack
+#apiVersion: v1
+#metadata:
+#  name: kpack-sa
+#kind: ServiceAccount
+#  namespace: {{ $name }}-{{ .name }}
+#secrets:
+#  - name: git-ssh-auth
+#  - name: kubero-pull-secret
+#---
+## kpack role
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: Role
+#metadata:
+#  name: kpack-role
+#  namespace: {{ $name }}-{{ .name }}
+#rules:
+#  - apiGroups:
+#      - kpack.io
+#      - 'builds'
+#    resources:
+#    verbs:
+#      - '*'
+#  - apiGroups:
+#    - ''
+#    resources:
+#    - 'pods'
+#    verbs:
+#    - '*'
+#  - apiGroups:
+#    - 'application.kubero.dev'
+#    resources:
+#    - 'kuberoapps'
+#    verbs:
+#    - '*'
+#---
+## kpack rolebinding
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: RoleBinding
+#metadata:
+#  name: kpack-rolebinding
+#  namespace: {{ $name }}-{{ .name }}
+#roleRef:
+#  apiGroup: rbac.authorization.k8s.io
+#  kind: Role
+#  name: kpack-role
+#subjects:
+#  - kind: ServiceAccount
+#    name: kpack-sa
+#    namespace: {{ $name }}-{{ .name }}
+#---
 {{- end }} # end of git deploymentstrategy
 {{- end }} # end of enabled
 {{- end }} # end of range
