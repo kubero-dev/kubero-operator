@@ -1,0 +1,74 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoPrometheus
+metadata:
+  name: kubero-prometheus
+spec:
+  # Default values copied from <project_dir>/helm-charts/kuberoprometheus/values.yaml
+  prometheus:
+    alertmanager:
+      enabled: false
+    kube-state-metrics:
+      enabled: false
+    prometheus-node-exporter:
+      enabled: false
+    prometheus-pushgateway:
+      enabled: false
+    server:
+      enabled: true
+      ingress:
+        enabled: false
+        hosts:
+          - prometheus.localhost
+    serverFiles:
+      alerting_rules.yml:
+        groups:
+        - name: Instances
+          rules:
+          - alert: High 5xx server error rate
+            expr: increase(nginx_ingress_controller_requests{status=~"5..", service=~".*-kuberoapp"}[5m]) > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: High 5xx error rate on {{ $labels.namespace }}/{{ $labels.service }}
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has high 5xx
+                error rate on host: {{ $labels.host }}'
+          - alert: More than 10% 4xx errors
+            expr: (sum(increase(nginx_ingress_controller_requests{status=~"4..", service=~".*-kuberoapp"}[5m])) * 100) / sum(increase(nginx_ingress_controller_requests{status=~"2..", service=~".*-kuberoapp"}[5m])) > 10
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: 10% 4xx error rate on {{ $labels.namespace }}/{{ $labels.service }}
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has more than 10% 4xx
+                error rate on host: {{ $labels.host }}'
+          - alert: Deployment Replicas not ready
+            expr: kube_deployment_status_replicas{deployment=~".*-kuberoapp-(web|worker)"} - kube_deployment_status_replicas_ready{deployment=~".*kuberoapp-(web|worker)"} > 0
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+            annotations:
+              summary: Deployment Replicast in {{ $labels.namespace }}/{{ $labels.service }} are not ready
+              description: '{{ $labels.namespace }}/{{ $labels.service }} has deployment replicas
+                not'
+          - alert: CPU limit used by 80%
+            annotations:
+              description: '{{ $labels.namespace }}/{{ $labels.service }} used more than 80% of configured CPU limit'
+              summary: CPU Usage to high in {{ $labels.namespace }}/{{ $labels.service}}
+            expr: (rate(container_cpu_usage_seconds_total{id=~".*.slice", namespace=~".*-(review|test|stage|production)"}[5m]) / on (pod) kube_pod_container_resource_limits{unit="core", namespace=~".*-(review|test|stage|production)"}) * 100 > 80
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
+          - alert: Memory limit used by 80%
+            annotations:
+              description: '{{ $labels.namespace }}/{{ $labels.service }} used more than 80% of configured Memory limit'
+              summary: Memory Usage to high in {{ $labels.namespace }}/{{ $labels.service}}
+            expr: (container_memory_usage_bytes{namespace="yyy-production", container=~"kuberoapp-(web|worker)"} / on (pod) kube_pod_container_resource_limits{unit="byte", namespace=~".*-(review|test|stage|production)"}) * 100 > 80
+            for: 30s
+            keep_firing_for: 30s
+            labels:
+              severity: page
