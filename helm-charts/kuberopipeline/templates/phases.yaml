@@ -35,7 +35,7 @@ kind: Secret
 metadata:
   name: "deployment-keys"
   namespace: {{ $name }}-{{ .name }}
-  labels:
+  annotations:
     app.kubernetes.io/comment: "used by kuberoes Runpacks to pull the code"
 type: Opaque
 data:
@@ -58,7 +58,7 @@ kind: Secret
 metadata:
   name: registry-credentials
   namespace: {{ $name }}-{{ .name }}
-  labels:
+  annotations:
     app.kubernetes.io/comment: "required by trivy to scan the image"
 type: Opaque
 data:
