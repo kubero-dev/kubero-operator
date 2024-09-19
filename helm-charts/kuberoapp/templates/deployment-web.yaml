@@ -39,7 +39,7 @@ spec:
       {{- end }}
       {{- else if eq .Values.deploymentstrategy "git" }}
       imagePullSecrets:
-        - name: kubero-pull-secret # created by kuberopipeline/phases.yaml
+        - name: kubero-pull-secret
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
