@@ -1,0 +1,11 @@
+{{- $name := .Values.name -}}
+
+{{- range .Values.phases }}
+{{- if .enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $name }}-{{ .name }}
+---
+{{- end }}
+{{- end }}
