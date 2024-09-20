@@ -34,10 +34,10 @@ phases:
   enabled: false
   name: review
 - context: ""
-  enabled: false
+  enabled: true
   name: test
 - context: ""
-  enabled: false
+  enabled: true
   name: stage
 - context: ""
   enabled: true

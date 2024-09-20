@@ -40,7 +40,6 @@ spec:
               readOnly: false
             {{- end }}
           env:
-            # TODO: needs some investigation. Crashes with UNABLE_TO_VERIFY_LEAF_SIGNATURE
             - name: NODE_TLS_REJECT_UNAUTHORIZED
               value: "0"
             - name: KUBERO_CONTEXT

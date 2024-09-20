@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: kubero-config
 data:
-# Backwardcompatibility for .Values.kubero.config
   config.yaml: |
 {{- if and .Values.kubero.config (kindIs "string" .Values.kubero.config) }}
 {{ .Values.kubero.config | indent 4 }}

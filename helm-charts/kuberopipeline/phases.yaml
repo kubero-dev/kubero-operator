@@ -1,19 +1,20 @@
-# https://itnext.io/manage-auto-generated-secrets-in-your-helm-charts-5aee48ba6918
-
 {{- $mainnamespace := .Values.mainnamespace | default "kubero" -}}
-# retrieve the secret data using lookup function and when not exists, return an empty dictionary / map as result
 {{- $secretObj := (lookup "v1" "Secret" $mainnamespace "registry-login") | default dict }}
 {{- $secretData := (get $secretObj "data") | default dict }}
 {{- $dockerconfigjson := (get $secretData ".dockerconfigjson") | default "" }}
 {{- $registryUsername := (get $secretData "username") | default "" }}
 {{- $registryPassword := (get $secretData "password") | default "" }}
 
+{{- if eq .Values.enabled "showcomments"  -}}
+## Do not print comments to avoid reconsiclation issues
+# https://itnext.io/manage-auto-generated-secrets-in-your-helm-charts-5aee48ba6918
 #{{- $kuberoObj := (lookup "application.kubero.dev/v1alpha1" "Kubero" $mainnamespace "kubero") | default dict }}
 #{{- $specData := (get $kuberoObj "spec") | default dict }}
 #{{- $registryData := (get $specData "registry") | default dict }}
 #{{- $registryHost := (get $registryData "host") | default "missingregistry.mydomain.com/example" }}
 #{{- $registryProtocol := (get $registryData "protocol") | default "https" }}
 #{{- $registryPort := (get $registryData "port") | default 443 }}
+{{- end }}
 
 {{- $name := .Values.name -}}
 {{- $deploymentstrategy := .Values.deploymentstrategy -}}
@@ -29,12 +30,13 @@ metadata:
   name: {{ $name }}-{{ .name }}
 ---
 {{- if and (eq $deploymentstrategy "git") ($deploykeyPub) }}
-# used by kuberoes Runpacks to pull the code
 apiVersion: v1
 kind: Secret
 metadata:
   name: "deployment-keys"
   namespace: {{ $name }}-{{ .name }}
+  annotations:
+    app.kubernetes.io/comment: "used by kuberoes Runpacks to pull the code"
 type: Opaque
 data:
   deploykey: {{ $deploykey | quote }}
@@ -51,81 +53,18 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ $dockerconfigjson | quote }}
 ---
-# required by trivy to scan the image
 apiVersion: v1
 kind: Secret
 metadata:
   name: registry-credentials
   namespace: {{ $name }}-{{ .name }}
+  annotations:
+    app.kubernetes.io/comment: "required by trivy to scan the image"
 type: Opaque
 data:
   username: {{ $registryUsername | quote }}
   password: {{ $registryPassword | quote }}
 ---
-## kpack
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: git-ssh-auth
-#  namespace: {{ $name }}-{{ .name }}
-#  annotations:
-#    kpack.io/git: {{ $deploykeySshUrl }}
-#type: kubernetes.io/ssh-auth
-#data:
-#  ssh-privatekey: {{ $deploykey | quote }}
-#  ssh-publickey: {{ $deploykeyPub | quote }}
-#---
-## kpack
-#apiVersion: v1
-#metadata:
-#  name: kpack-sa
-#kind: ServiceAccount
-#  namespace: {{ $name }}-{{ .name }}
-#secrets:
-#  - name: git-ssh-auth
-#  - name: kubero-pull-secret
-#---
-## kpack role
-#apiVersion: rbac.authorization.k8s.io/v1
-#kind: Role
-#metadata:
-#  name: kpack-role
-#  namespace: {{ $name }}-{{ .name }}
-#rules:
-#  - apiGroups:
-#      - kpack.io
-#      - 'builds'
-#    resources:
-#    verbs:
-#      - '*'
-#  - apiGroups:
-#    - ''
-#    resources:
-#    - 'pods'
-#    verbs:
-#    - '*'
-#  - apiGroups:
-#    - 'application.kubero.dev'
-#    resources:
-#    - 'kuberoapps'
-#    verbs:
-#    - '*'
-#---
-## kpack rolebinding
-#apiVersion: rbac.authorization.k8s.io/v1
-#kind: RoleBinding
-#metadata:
-#  name: kpack-rolebinding
-#  namespace: {{ $name }}-{{ .name }}
-#roleRef:
-#  apiGroup: rbac.authorization.k8s.io
-#  kind: Role
-#  name: kpack-role
-#subjects:
-#  - kind: ServiceAccount
-#    name: kpack-sa
-#    namespace: {{ $name }}-{{ .name }}
-#---
-{{- end }} # end of git deploymentstrategy
-{{- end }} # end of enabled
-{{- end }} # end of range
+{{- end }}
+{{- end }}
+{{- end }}

@@ -13,4 +13,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.kubero.auditLogs.size }}
-{{- end }} #enabled
+{{- end }}
