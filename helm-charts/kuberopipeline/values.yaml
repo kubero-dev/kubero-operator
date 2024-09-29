@@ -2,10 +2,7 @@ deploymentstrategy: git
 buildstrategy: plain
 mainnamespace: kubero
 registry:
-  # copy (from mainnamespace secret "registry-login")
-  # create (with provided credentials)
-  # none (do not create a secret)
-  createSecret: none
+  createSecret: false
   secretName: registry-login
   host: missingregistry.mydomain.com/example
   username: admin
