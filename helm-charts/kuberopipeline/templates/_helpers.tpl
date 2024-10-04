@@ -30,7 +30,8 @@
 
 {{- define "kubero.dockerconfigjson" -}}
 {{- if eq .Values.registry.createSecret "create" }}
-{{- $dockerconfigjson := .Values.registry.dockerconfigjson | b64enc }}
+{{- $dockerAuth := (printf "%s:%s" .Values.registry.username .Values.registry.password) | b64enc -}}
+{{- $dockerconfigjson := (printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.registry.host .Values.registry.username .Values.registry.password $dockerAuth) | b64enc -}}
 {{- $dockerconfigjson }}
 {{- end }}
 
