@@ -6,7 +6,7 @@ registry:
   # copy: Copy the secret from the main namespace
   # create: Create a new secret in the pipeline namespace
   # none: Do not create a secret
-  createSecret: copy
+  createSecret: create
   host: missingregistry.mydomain.com/example
   username: admin
   password: admin
