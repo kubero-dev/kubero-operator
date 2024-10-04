@@ -2,16 +2,14 @@ deploymentstrategy: git
 buildstrategy: plain
 mainnamespace: kubero
 registry:
-  # copy (from mainnamespace secret "registry-login")
-  # create (with provided credentials)
-  # none (do not create a secret)
-  createSecret: none
-  secretName: registry-login
+  # Possible values: copy, create, none (default: create)
+  # copy: Copy the secret from the main namespace
+  # create: Create a new secret in the pipeline namespace
+  # none: Do not create a secret
+  createSecret: create
   host: missingregistry.mydomain.com/example
   username: admin
   password: admin
-  auth: YWRtaW46YWRtaW4=
-  dockerconfigjson: eyJhdXRocy
 git:
   keys:
     created_at: "2022-09-21T20:51:57Z"

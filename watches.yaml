@@ -3,6 +3,7 @@
   version: v1alpha1
   kind: KuberoApp
   chart: helm-charts/kuberoapp
+  reconcilePeriod: 3m
 - group: application.kubero.dev
   version: v1alpha1
   kind: Kubero
@@ -11,7 +12,7 @@
   version: v1alpha1
   kind: KuberoPipeline
   chart: helm-charts/kuberopipeline
-  reconcilePeriod: 5m
+  reconcilePeriod: 3m
 - group: application.kubero.dev
   version: v1alpha1
   kind: KuberoMysql
