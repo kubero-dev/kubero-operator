@@ -2,11 +2,11 @@ deploymentstrategy: git
 buildstrategy: plain
 mainnamespace: kubero
 registry:
-  # Possible values: copy, create, none (default: copy)
+  # Possible values: copy, create, none (default: create)
   # copy: Copy the secret from the main namespace
   # create: Create a new secret in the pipeline namespace
   # none: Do not create a secret
-  createSecret: create
+  createSecret: copy
   host: missingregistry.mydomain.com/example
   username: admin
   password: admin
