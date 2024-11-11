@@ -165,7 +165,14 @@ spec:
             - name: OAUTO2_CLIENT_NAME
               value: {{ .Values.kubero.auth.oauth2.name | quote }}
             - name: OAUTH2_CLIENT_ID
+              {{- if .Values.kubero.auth.oauth2.id }}
               value: {{ .Values.kubero.auth.oauth2.id | quote }}
+              {{ else }}
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: OAUTH2_CLIENT_ID
+              {{- end }}
             - name: OAUTO2_CLIENT_AUTH_URL
               value: {{ .Values.kubero.auth.oauth2.authUrl | quote }}
             - name: OAUTO2_CLIENT_TOKEN_URL
