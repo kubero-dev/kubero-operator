@@ -150,6 +150,12 @@ rules:
     - "tunnelbindings"
   verbs:
     - "*"
+- apiGroups:
+    - "clickhouse.altinity.com"
+  resources:
+    - "clickhouseinstallations"
+  verbs:
+    - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
 ##
