@@ -158,6 +158,14 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+basicAuth:
+  realm: "Protected"
+  accounts: []
+    #- user: foo
+    #  password: bar
+    #- user: bar
+    #  password: foo
+
 autoscaling:
   enabled: false
 
