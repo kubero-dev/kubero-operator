@@ -160,9 +160,9 @@ resources: {}
 
 basicAuth:
   realm: "Protected"
-  accounts: []
-    #- user: foo
-    #  password: bar
+  accounts:
+    - user: foo
+      password: bar
     #- user: bar
     #  password: foo
 
