@@ -22,7 +22,7 @@ metadata:
   {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
-    {{- if gt (len .Values.basicAuth.accounts) 0 }}
+    {{- if .Values.basicAuth.enabled }}
     nginx.ingress.kubernetes.io/auth-secret: {{ include "kuberoapp.fullname" . }}-htpasswd
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-realm: {{ .Values.basicAuth.realm | quote }}
