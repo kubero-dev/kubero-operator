@@ -249,3 +249,10 @@ vulnerabilityscan:
   image:
     repository: aquasec/trivy
     tag: latest
+
+healthcheck:
+  enabled: true
+  path: /
+  startupSeconds: 90
+  timeoutSeconds: 2
+  periodSeconds: 15
