@@ -126,23 +126,32 @@ spec:
               containerPort: {{ .Values.image.containerPort | default "8080" }}
               protocol: TCP
           {{- if or ( not .Values.sleep ) (eq .Values.sleep "disabled") }}
-          livenessProbe:
+          {{- if .Values.healthcheck.enabled }}
+          startupProbe:
             httpGet:
-              path: /
+              path: {{ .Values.healthcheck.path | default "/" }}
               port: http
-            initialDelaySeconds: 30
-            periodSeconds: 15
-            successThreshold: 1
-            timeoutSeconds: 3
-            failureThreshold: 3
+            failureThreshold: 90
+            periodSeconds: 1
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.healthcheck.path | default "/" }}
               port: http
+            initialDelaySeconds: 2
             periodSeconds: 2
             successThreshold: 1
-            timeoutSeconds: 2
+            timeoutSeconds: {{ .Values.healthcheck.timeoutSeconds | default "3" }}
             failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.healthcheck.path | default "/" }}
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            timeoutSeconds: {{ .Values.healthcheck.timeoutSeconds | default "3" }}
+            failureThreshold: 3
+          {{- end }}
           {{- end }}
           volumeMounts:
             {{- if and (eq .Values.deploymentstrategy "git") (eq .Values.buildstrategy "plain") }}
