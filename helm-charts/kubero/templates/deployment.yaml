@@ -85,6 +85,12 @@ spec:
                   name: kubero-secrets
                   key: GITHUB_PERSONAL_ACCESS_TOKEN
                   optional: true
+            - name: GITHUB_BASEURL
+              valueFrom:
+                secretKeyRef:
+                  name: kubero-secrets
+                  key: GITHUB_BASEURL
+                  optional: true
             - name: GITEA_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
