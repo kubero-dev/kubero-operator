@@ -1,17 +1,14 @@
-<img width="50%" src="https://raw.githubusercontent.com/kubero-dev/kubero/main/docs/logo/kubero-logo-horizontal.png">
+![](https://raw.githubusercontent.com/kubero-dev/docs/refs/heads/main/static/assets/logo/kubero-logo-horizontal.png)
 
-> ℹ️ **NOTE**: Please open issues in the [Kubero](https://github.com/kubero-dev/kubero/issues) main repository.
+> [!NOTE]
+> Please open issues in the [Kubero](https://github.com/kubero-dev/kubero/issues) main repository.
 
-<br>
-<br>
-This is the source code for the Kubero Operator. 
-<br>
-Please raise issues in the main repository
-https://github.com/kubero-dev 
-<br>
-<br>
 <br>
 
-Here is a description, of how to install the operator on any cluster:
+### Operator installation
 
-https://docs.kubero.dev/Installation/#kubero-operator 
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubero-dev/kubero-operator/main/deploy/operator.yaml
+```
+
+Full installation instructions can be found [here](https://www.kubero.dev/docs/)
