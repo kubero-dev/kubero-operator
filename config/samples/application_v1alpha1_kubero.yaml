@@ -57,6 +57,8 @@ spec:
     name: ""
   tolerations: []
   kubero:
+    admin:
+      disabled: false
     debug: ""
     namespace: kubero
     context: inClusterContext
