@@ -5,8 +5,6 @@ metadata:
   labels:
     {{- include "kubero.labels" . | nindent 4 }}
 spec:
-  strategy:
-    type: Recreate
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -25,6 +23,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "kubero.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 0
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
