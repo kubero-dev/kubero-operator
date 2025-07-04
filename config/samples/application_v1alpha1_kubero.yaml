@@ -114,7 +114,7 @@ spec:
           index: 
             url: "https://raw.githubusercontent.com/kubero-dev/templates/main/index-frameworks.json"
             format: "json" # json or yaml # TODO has no effect yet. json is always used
-      buildpacks:
+      buildPacks:
         - name: NodeJS
           language: JavaScript
           fetch:
