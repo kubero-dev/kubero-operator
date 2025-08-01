@@ -1,9 +1,7 @@
-{{- if .Values.kubero.auditLogs.enabled -}}
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "kubero.fullname" . }}-audit-logs
+  name: {{ include "kubero.fullname" . }}-data
   labels:
     {{- include "kubero.labels" . | nindent 4 }}
 spec:
@@ -13,4 +11,3 @@ spec:
   resources:
     requests:
       storage: {{ .Values.kubero.auditLogs.size }}
-{{- end }}

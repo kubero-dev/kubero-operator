@@ -35,11 +35,9 @@ spec:
           volumeMounts:
             - mountPath: /etc/kubero
               name: kubero-config-volume
-            {{- if .Values.kubero.auditLogs.enabled }}
             - mountPath: /app/server/db
-              name: kubero-audit-log
+              name: kubero-data
               readOnly: false
-            {{- end }}
           env:
             - name: NODE_TLS_REJECT_UNAUTHORIZED
               value: "0"
@@ -215,11 +213,9 @@ spec:
         - name: kubero-config-volume
           configMap:
             name: kubero-config
-        {{- if .Values.kubero.auditLogs.enabled }}
-        - name: kubero-audit-log
+        - name: kubero-data
           persistentVolumeClaim:
-            claimName: {{ include "kubero.fullname" . }}-audit-logs
-        {{- end }}
+            claimName: {{ include "kubero.fullname" . }}-data
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
