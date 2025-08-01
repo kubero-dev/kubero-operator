@@ -6,6 +6,8 @@ metadata:
     {{- include "kubero.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "kubero.selectorLabels" . | nindent 6 }}
