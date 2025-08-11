@@ -66,7 +66,7 @@ metadata:
                 }
               },
               "config": {
-                "buildpacks": [
+                "buildPacks": [
                   {
                     "build": {
                       "command": "npm install",
@@ -1136,14 +1136,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.9
-    createdAt: "2025-01-28T14:45:45Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.10
+    createdAt: "2025-08-11T07:23:54Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
-    operators.operatorframework.io/builder: operator-sdk-v1.34.1
+    operators.operatorframework.io/builder: operator-sdk-v1.41.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.1.9
+  name: kubero-operator.v0.1.10
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -2046,7 +2046,7 @@ spec:
                 - --leader-elect
                 - --leader-election-id=kubero-operator
                 - --zap-log-level=info
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.9
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.10
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2133,4 +2133,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.1.9
+  version: 0.1.10
