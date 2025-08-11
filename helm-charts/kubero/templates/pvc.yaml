@@ -1,16 +1,21 @@
-{{- if .Values.kubero.auditLogs.enabled -}}
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "kubero.fullname" . }}-audit-logs
+  name: {{ include "kubero.fullname" . }}-data
   labels:
     {{- include "kubero.labels" . | nindent 4 }}
 spec:
-  storageClassName: {{ .Values.kubero.auditLogs.storageClassName }}
+  {{- if .Values.kubero.database.storageClassName }}
+  storageClassName: {{ .Values.kubero.database.storageClassName | quote }}
+  {{- else  }}
+  storageClassName: ""
+  {{- end }}
   accessModes:
-    {{- toYaml .Values.kubero.auditLogs.accessModes | nindent 4 }}
+    {{- if .Values.kubero.database.accessModes }}
+    {{- toYaml .Values.kubero.database.accessModes | nindent 4 }}
+    {{- else }}
+    - ReadWriteOnce
+    {{- end }}
   resources:
     requests:
-      storage: {{ .Values.kubero.auditLogs.size }}
-{{- end }}
+      storage: {{ .Values.kubero.database.size | default "1Gi" }}
