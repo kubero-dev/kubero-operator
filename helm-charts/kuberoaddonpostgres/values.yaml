@@ -1,5 +1,5 @@
-mysql:
-  ## MySQL docker image
+postgres:
+  ## PostgreSQL docker image
   image:
     tag: ""
 
@@ -11,17 +11,22 @@ mysql:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
- 
+
   ## Use Kubernetes Deployment instead of StatefulSet
   useDeployment: false
 
   ## Database configuration
   settings:
-    rootPassword: 
+    ## The default postgres superuser (default when nothing is set: "postgres")
+    superuser:
+      value: "postgres"
+
+    ## The superuser password
+    superuserPassword:
       value: "changeme"
 
   ## Optional user database which is created during first startup with user and password
-  userDatabase: 
+  userDatabase:
     name: 
        value: "kubero_database"
     user:
@@ -31,9 +36,8 @@ mysql:
 
   ## Storage parameters
   storage:
-
     ## Internal volume name and prefix of a created PVC
-    volumeName: "db-volume"
+    volumeName: "postgres-data"
 
     ## Alternative set requestedSize to define a size for a dynamically created PVC
     requestedSize:

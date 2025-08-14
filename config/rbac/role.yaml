@@ -816,4 +816,35 @@ rules:
   resources:
   - "deployments"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonPostgres
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonpostgres
+  - kuberoaddonpostgres/status
+  - kuberoaddonpostgres/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
 #+kubebuilder:scaffold:rules
