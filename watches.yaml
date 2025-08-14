@@ -69,4 +69,8 @@
   version: v1alpha1
   kind: KuberoAddonPostgres
   chart: helm-charts/kuberoaddonpostgres
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonRedis
+  chart: helm-charts/kuberoaddonredis
 #+kubebuilder:scaffold:watch

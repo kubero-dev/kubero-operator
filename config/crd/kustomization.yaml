@@ -19,4 +19,5 @@ resources:
 - bases/application.kubero.dev_kuberobuilds.yaml
 - bases/application.kubero.dev_kuberoaddonmysqls.yaml
 - bases/application.kubero.dev_kuberoaddonpostgres.yaml
+- bases/application.kubero.dev_kuberoaddonredis.yaml
 #+kubebuilder:scaffold:crdkustomizeresource

@@ -17,4 +17,5 @@ resources:
 - application_v1alpha1_kuberobuild.yaml
 - application_v1alpha1_kuberoaddonmysql.yaml
 - application_v1alpha1_kuberoaddonpostgres.yaml
+- application_v1alpha1_kuberoaddonredis.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
