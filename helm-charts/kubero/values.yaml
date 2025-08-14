@@ -144,7 +144,6 @@ kubero:
     size: 0.1Gi
     limit: 1000
   database:
-    enabled: false
     storageClassName:
     accessModes: 
       - ReadWriteOnce

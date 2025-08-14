@@ -18,4 +18,4 @@ spec:
     {{- end }}
   resources:
     requests:
-      storage: {{ .Values.kubero.database.size | default "1Gi" }}
+      storage: {{ .Values.kubero.database.size | default "10Gi" }}
