@@ -73,4 +73,8 @@
   version: v1alpha1
   kind: KuberoAddonRedis
   chart: helm-charts/kuberoaddonredis
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonRabbitmq
+  chart: helm-charts/kuberoaddonrabbitmq
 #+kubebuilder:scaffold:watch
