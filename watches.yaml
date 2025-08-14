@@ -61,4 +61,8 @@
   version: v1alpha1
   kind: KuberoBuild
   chart: helm-charts/kuberobuild
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonMysql
+  chart: helm-charts/kuberoaddonmysql
 #+kubebuilder:scaffold:watch

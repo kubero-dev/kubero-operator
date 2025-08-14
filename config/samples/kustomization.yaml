@@ -15,4 +15,5 @@ resources:
 - application_v1alpha1_kuberomemcached.yaml
 - application_v1alpha1_kuberoprometheus.yaml
 - application_v1alpha1_kuberobuild.yaml
+- application_v1alpha1_kuberoaddonmysql.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

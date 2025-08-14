@@ -17,4 +17,5 @@ resources:
 - bases/application.kubero.dev_kuberomemcacheds.yaml
 - bases/application.kubero.dev_kuberoprometheuses.yaml
 - bases/application.kubero.dev_kuberobuilds.yaml
+- bases/application.kubero.dev_kuberoaddonmysqls.yaml
 #+kubebuilder:scaffold:crdkustomizeresource

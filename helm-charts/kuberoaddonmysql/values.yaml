@@ -1,0 +1,69 @@
+mysql:
+  ## MySQL docker image
+  image:
+    tag: ""
+
+  ## Pod update strategy
+  updateStrategyType: RollingUpdate
+
+  # Resource limits and requests
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+ 
+  ## Use Kubernetes Deployment instead of StatefulSet
+  useDeployment: false
+
+  ## Database configuration
+  settings:
+    rootPassword: 
+      value: "changeme"
+
+  ## Optional user database which is created during first startup with user and password
+  userDatabase: 
+    name: 
+       value: "kubero_database"
+    user:
+      value: "kubero_user"
+    password:
+      value: "kubero_password"
+
+    ## Name of the user database
+    # name:
+    ##  Use secretKey when existingSecret was specified otherwise value
+    #   secretKey:
+    #   value:
+    ## Database user with full access rights
+    ##  Use secretKey when existingSecret was specified otherwise value
+    # user:
+    #   secretKey:
+    #   value:
+    ## Password of the database user
+    ##  Use secretKey when existingSecret was specified otherwise value
+    # password:
+    #   secretKey:
+    #   value:
+
+
+  ## Storage parameters
+  storage:
+
+    ## Internal volume name and prefix of a created PVC
+    volumeName: "db-volume"
+
+    ## Alternative set requestedSize to define a size for a dynamically created PVC
+    requestedSize:
+
+    ## the storage class name
+    className:
+
+    ## Default access mode (ReadWriteOnce)
+    accessModes:
+      - ReadWriteOnce
+
+    ## Keep a created Persistent volume claim when uninstalling the helm chart (only for option useDeployment: true)
+    keepPvc: false

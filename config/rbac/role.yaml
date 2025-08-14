@@ -785,4 +785,35 @@ rules:
   resources:
   - "pods"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonMysql
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonmysqls
+  - kuberoaddonmysqls/status
+  - kuberoaddonmysqls/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
 #+kubebuilder:scaffold:rules
