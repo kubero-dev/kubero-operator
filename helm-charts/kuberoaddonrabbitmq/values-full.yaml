@@ -1,0 +1,462 @@
+rabbitmq:
+
+  ## RabbitMQ docker image
+  image:
+    registry: "docker.io"
+    repository: "rabbitmq"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  # Default Init container image
+  initImage:
+    registry: "docker.io"
+    repository: "busybox"
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
+  ## Pull secrets and name override options
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  ## Number of replicas
+  replicaCount: 1
+
+  ## Additional labels for Deployment or StatefulSet
+  customLabels: {}
+
+  ## Additional annotations for Deployment or StatefulSet
+  customAnnotations: {}
+
+  ## Additional pod annotations
+  podAnnotations: {}
+
+  ## Additional pod labels
+  podLabels: {}
+
+  ## Pod security options
+  podSecurityContext:
+    fsGroup: 999
+    supplementalGroups:
+      - 999
+
+  ## Pod management policy
+  podManagementPolicy: OrderedReady
+
+  ## Pod update strategy
+  updateStrategyType: RollingUpdate
+
+  ## Default security options to run RabbitMq as read only container without privilege escalation
+  securityContext:
+    allowPrivilegeEscalation: false
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsGroup: 999
+    runAsUser: 999
+    capabilities:
+      drop:
+        - ALL
+
+  ## Default RabbitMq service ports (default: AMQP port 5672, Secure AMQP port 5671, Management UI port 15672)
+  service:
+    type: ClusterIP
+    ## AMQP service port
+    amqp:
+      port: 5672
+      ## The node port (only relevant for type LoadBalancer or NodePort)
+      nodePort:
+    ## Secure AMQP service port
+    amqps:
+      port: 5671
+      ## The node port (only relevant for type LoadBalancer or NodePort)
+      nodePort:
+    ## Management UI service port
+    mgmt:
+      port: 15672
+      ## The node port (only relevant for type LoadBalancer or NodePort)
+      nodePort:
+    ## Prometheus service port
+    prometheus:
+      port: 15692
+      ## The node port (only relevant for type LoadBalancer or NodePort)
+      nodePort:
+    extraPorts: []
+      ## Name of the extra port
+      # - name: stomp
+      ## Service port type
+      #   protocol: TCP
+      ## The container target port
+      #   containerPort: 12345
+      ## The service port
+      #   port: 12345
+      ## The node port (only relevant for type LoadBalancer or NodePort)
+      #   nodePort:
+
+    ## The cluster ip address (only relevant for type LoadBalancer or NodePort)
+    clusterIP:
+    ## The loadbalancer ip address (only relevant for type LoadBalancer)
+    loadBalancerIP:
+    ## The list of IP CIDR ranges that are allowed to access the load balancer (only relevent for type LoadBalancer)
+    loadBalancerSourceRanges: []
+    ## Annotations to add to the service
+    annotations: {}
+    ## Labels to add to the service
+    labels: {}
+
+  ## Custom list of extra services
+  extraServices: []
+  #  - name: stomp
+      ## Service port type
+  #    type: ClusterIP
+      ## Service protocol
+  #    protocol: TCP
+      ## The container target port
+  #    containerPort: 12345
+      ## The service port
+  #    port: 12345
+      ## The node port (only relevant for type LoadBalancer or NodePort)
+  #    nodePort:
+      ## The cluster ip address (only relevant for type LoadBalancer or NodePort)
+  #    clusterIP:
+      ## The loadbalancer ip address (only relevant for type LoadBalancer)
+  #    loadBalancerIP:
+      ## The list of IP CIDR ranges that are allowed to access the load balancer (only relevent for type LoadBalancer)
+  #    loadBalancerSourceRanges: []
+      ## Annotations to add to the service
+  #    annotations: {}
+      ## Labels to add to the service
+  #    labels: {}
+
+  ## Service monitor configuration for Prometheus metrics
+  ## Prometheus plugin must be enabled to use this
+  serviceMonitor:
+    ## Enable service monitor
+    enabled: false
+    ## Additional labels for the service monitor object
+    additionalLabels: {}
+    ## Annotations for the service monitor object
+    annotations: {}
+    ## The scrape interval for prometheus
+    # interval:
+    ## The scrape timeout value
+    # scrapeTimeout:
+    ## Extra parameters rendered to the service monitor endpoint
+    extraEndpointParameters: {}
+    ## Extra parameters rendered to the service monitor
+    extraParameters: {}
+
+  ## Ingress configuration
+  ingress:
+    enabled: false
+
+    ## Optional ingress class name
+    className:
+
+    ## Additional ingress annotations
+    annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+    ## Additional ingress labels
+    labels: {}
+
+    ## Hosts
+    hosts:
+      - host:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+    ## TLS settings for hosts
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  ## Resources of the default init container
+  initResources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## Resource limits and requests
+  resources: {}
+  # limits:
+  #    cpu: 100m
+  #    memory: 512Mi
+  # requests:
+  #    cpu: 100m
+  #    memory: 128Mi
+
+  ## Additional node selector
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment
+  tolerations: []
+
+  ## Affinity for pod assignment
+  affinity: {}
+
+  ## Topology spread constraints for pods
+  topologySpreadConstraints: {}
+
+  ## Maximum number of revisions maintained in revision history
+  revisionHistoryLimit:
+
+  ## Pod disruption budget
+  podDisruptionBudget: {}
+    ## Minimum number of pods that must be available after eviction
+    # minAvailable:
+    ## Maximum number of pods that can be unavailable after eviction
+    # maxUnavailable:
+
+  ## Custom startup probe (overwrites default startup probe)
+  customStartupProbe: {}
+
+  ## Default startup probe
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+    successThreshold: 1
+    periodSeconds: 10
+
+  ## Custom liveness probe (overwrites default liveness probe)
+  customLivenessProbe: {}
+
+  ## Default liveness probe
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    timeoutSeconds: 20
+    periodSeconds: 30
+    failureThreshold: 5
+    successThreshold: 1
+
+  ## Custom readiness probe (overwrites default readiness probe)
+  customReadinessProbe: {}
+
+  ## Default readiness probe
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    timeoutSeconds: 20
+    periodSeconds: 30
+    failureThreshold: 5
+    successThreshold: 1
+
+  ## Service account (necessary in cluster mode)
+  serviceAccount:
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the ServiceAccount to use. (If not set and create is true, a name is generated using the rabbitmq.fullname template)
+    name: ""
+
+  ## Create RBAC (necessary in cluster mode)
+  rbac:
+    create: true
+
+  ## Additional environment variables
+  env: []
+
+  ## Arguments for the container entrypoint process
+  args: []
+
+  ## Extra init containers
+  extraInitContainers: []
+
+  ## Extra containers for usage as sidecars
+  extraContainers: []
+
+  ## Default Kubernetes cluster domain
+  clusterDomain: cluster.local
+
+  ## Container termination grace period
+  terminationGracePeriodSeconds: 60
+
+  # A list of plugins (without whitespace!) - f.e.: rabbitmq_federation_management,rabbitmq_mqtt,rabbitmq_stomp
+  plugins: []
+
+  # Default user and erlang cookie
+  # The erlang cookie is important for clustered or container based usage
+  # Find more information about it at https://hub.docker.com/_/rabbitmq and https://www.rabbitmq.com/clustering.html#erlang-cookie
+  # The erlang cookie is a MANDATORY value
+  authentication:
+    ## Optional existing secret with user, password and erlang cookie
+    # existingSecret:
+
+    ## Initial user name (alternative: set environment variable RABBITMQ_DEFAULT_USER)
+    user:
+    ##  Use secretKey when existingSecret was specified otherwise value
+    #   secretKey:
+    #   value:
+
+    ## Initial password (alternative: set environment variable RABBITMQ_DEFAULT_PASS)
+    password:
+    ##  Use secretKey when existingSecret was specified otherwise value
+    #   secretKey:
+    #   value:
+
+    ## Erlang cookie (MANDATORY) (alternative: set environment variable ERLANG_COOKIE)
+    erlangCookie:
+    ##  Use secretKey when existingSecret was specified otherwise value
+    #   secretKey:
+    #   value:
+
+  # RabbitMQ specific configuration options described at https://www.rabbitmq.com/configure.html#config-items
+  options:
+    ## High memory watermark option is described at https://www.rabbitmq.com/memory.html
+    memoryHighWatermark:
+      ## Enables high memory watermark configuration (default: false)
+      enabled: false
+      ## Type of watermark value (relative or absoulte - default: relative)
+      type: "relative"
+      ## High memory watermark value (default: 0.4 - 40%)
+      value: 0.4
+      ## Paging threshold when RabbitMQ starts paging queue content before high memory watermark is reached
+      pagingRatio:
+    ## Memory options are described at https://www.rabbitmq.com/configure.html
+    memory:
+      ## Overwrites the value that is automatically calculated from resource.limits.memory
+      totalAvailableOverrideValue:
+      ## Strategy for memory usage report (rss or allocated)
+      calculationStrategy:
+
+    tcp:
+      ## AMQP tcp port (default: 5672)
+      port: 5672
+    ## RabbitMQ AMQP-over-SSL options are described at https://www.rabbitmq.com/ssl.html
+    ## If SSL is enabled certifactes must be provided as extraSecrets:
+    ## ssl_options.cacertfile, ssl_options.certfile, ssl_options.keyfile are configurable by certPaths:
+    ## Optional ssl_options.password needs to be provided as extraSecretConfig
+    ssl:
+      ## Enable secure AMQP (amqps)
+      enabled: false
+      ## AMQPS port (default: 5671)
+      port: 5671
+      ## Enables or disables peer verification (default: false)
+      verify: false
+      ## Reject TLS connection when client fails to provide a certificate (default: false)
+      failIfNoPeerCert: false
+      ## Client certificate verification depth
+      depth:
+      ## Pathes of the certificate files
+      certPaths: {}
+        ## Path to the CA certificate(s) file
+        # cacert:
+        ## Path to the server certificate file
+        # cert:
+        ## Path to the private key file (Hint: ssl_options.password configuration needs to be provided as extraSecretConfig:)
+        # key:
+
+  ## A list of additional existing secrets that will be mounted into the container
+  ## The mounted files of the secrets can be used for advanced configuration - f.e. TLS
+  extraSecrets: []
+      ## Name of the existing K8s secret
+  #  - name:
+      ## Mount default mode (0440 if parameter is omitted)
+  #    defaultMode: 0440
+      ## Mount path where the secret should be mounted into the container (f.e. /mysecretfolder)
+  #    mountPath:
+
+  ## A list of additional existing configMaps that will be mounted into the container
+  extraConfigs: []
+      ## Name of the existing K8s configMap
+  #  - name:
+      ## Mount default mode (0440 if parameter is omitted)
+  #    defaultMode: 0440
+      ## Mount path where the configMap should be mounted into the container (f.e. /mysecretfolder)
+  #    mountPath:
+
+  ## A list of existing secrets that will be mounted into the container as environment variables
+  extraEnvSecrets: []
+
+  ## Management UI plugin options
+  managementPlugin:
+    ## Enable management UI plugin with default configuration
+    enabled: true
+    tcp:
+      ## Management UI port (default: 15672)
+      port: 15672
+
+  ## K8s peer discovery plugin options
+  k8sPeerDiscoveryPlugin:
+    ## Enable K8s peer discovery plugin for a RabbitMQ HA-cluster with default configuration
+    enabled: false
+    ## K8s peer discovery plugin address type (default: hostname)
+    addressType: hostname
+
+  ## Prometheus plugin options
+  prometheusPlugin:
+    ## Enable prometheus monitoring plugin with default configuration
+    enabled: false
+    tcp:
+      ## Prometheus plugin TCP port (default: 15692)
+      port: 15692
+
+  ## Custom configuration entries for rabbitmq.conf (see https://www.rabbitmq.com/configure.html#config-file)
+  customConfig: |
+
+  ## An existing secret with files that will be added to the rabbitmq.conf
+  extraSecretConfigs:
+
+  ## Custom advanced configuration entries for advanced.config (see https://www.rabbitmq.com/configure.html#advanced-config-file)
+  customAdvancedConfig: |
+
+  ## An existing secret with files that will be added to the advanced.conf
+  extraSecretAdvancedConfigs:
+
+  ## Common (recommended) cluster settings
+  clustering:
+    ## Rebalance queues with master when new replica is created
+    rebalance: false
+    ## Force boot in case cluster peers are not available
+    forceBoot: false
+    ## Use FQDN for RabbitMQ node names
+    useLongName: true
+
+  ## Storage parameters
+  storage:
+    ## Set persistentVolumenClaimName to reference an existing PVC
+    persistentVolumeClaimName:
+
+    ## Internal volume name
+    volumeName: "rabbitmq-volume"
+
+    ## Alternative set requestedSize to define a size for a dynamically created PVC
+    requestedSize:
+
+    ## the storage class name
+    className:
+
+    ## Default access mode (ReadWriteOnce)
+    accessModes:
+      - ReadWriteOnce
+
+    ## Additional storage annotations
+    annotations: {}
+
+    ## Additional storage labels
+    labels: {}
+
+  ## Mount existing extra PVC
+  extraStorage: {}
+      ## Internal volume name
+  #  - name:
+      ## Container mount path
+  #    mountPath:
+      ## Name of existing PVC
+  #    pvcName:
+
+  ## Network policies
+  networkPolicy: {}
+    ## Ingress and Egress policies
+    # ingress: {}
+    # egress: {}

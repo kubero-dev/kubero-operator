@@ -1,0 +1,54 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoAddonMysql
+metadata:
+  name: kuberoaddonmysql-sample
+spec:
+  mysql:
+    ## MySQL docker image
+    image:
+      tag: ""
+
+    # Resource limits and requests
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+  
+    ## Use Kubernetes Deployment instead of StatefulSet
+    useDeployment: true
+
+    ## Database configuration
+    settings:
+      rootPassword: 
+        value: "changeme"
+
+    ## Optional user database which is created during first startup with user and password
+    userDatabase: 
+      name: 
+        value: "kubero_database"
+      user:
+        value: "kubero_user"
+      password:
+        value: "kubero_password"
+
+    ## Storage parameters
+    storage:
+
+      ## Internal volume name and prefix of a created PVC
+      volumeName: "db-volume"
+
+      ## Alternative set requestedSize to define a size for a dynamically created PVC
+      requestedSize:
+
+      ## the storage class name
+      className:
+
+      ## Default access mode (ReadWriteOnce)
+      accessModes:
+        - ReadWriteOnce
+
+      ## Keep a created Persistent volume claim when uninstalling the helm chart (only for option useDeployment: true)
+      keepPvc: false

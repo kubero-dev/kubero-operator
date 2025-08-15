@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 3.1.0
+description: A Helm chart for Kuberos MongoDB addon
+name: kuberoaddonmongodb
+type: application
+version: 0.1.0
+dependencies:
+  - name: mongodb
+    repository: https://groundhog2k.github.io/helm-charts/
+    version: 0.x.x

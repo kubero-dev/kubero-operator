@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: A Helm chart for Kuberos Mysql
+name: kuberoaddonmysql
+type: application
+version: 0.1.0
+dependencies:
+  - name: mysql
+    repository: https://groundhog2k.github.io/helm-charts/
+    version: 3.x.x
