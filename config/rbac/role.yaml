@@ -909,4 +909,35 @@ rules:
   resources:
   - "deployments"
 
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonMongodb
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonmongodbs
+  - kuberoaddonmongodbs/status
+  - kuberoaddonmongodbs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
 #+kubebuilder:scaffold:rules

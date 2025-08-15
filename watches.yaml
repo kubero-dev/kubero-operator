@@ -77,4 +77,8 @@
   version: v1alpha1
   kind: KuberoAddonRabbitmq
   chart: helm-charts/kuberoaddonrabbitmq
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonMongodb
+  chart: helm-charts/kuberoaddonmongodb
 #+kubebuilder:scaffold:watch
