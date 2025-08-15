@@ -3,55 +3,57 @@ kind: KuberoAddonRedis
 metadata:
   name: kuberoaddonredis-sample
 spec:
-  # Default values copied from <project_dir>/helm-charts/kuberoaddonredis/values.yaml
-  affinity: {}
-  autoscaling:
-    enabled: false
-    maxReplicas: 100
-    minReplicas: 1
-    targetCPUUtilizationPercentage: 80
-  fullnameOverride: ""
-  image:
-    pullPolicy: IfNotPresent
-    repository: nginx
-    tag: ""
-  imagePullSecrets: []
-  ingress:
-    annotations: {}
-    className: ""
-    enabled: false
-    hosts:
-    - host: chart-example.local
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-    tls: []
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-  nameOverride: ""
-  nodeSelector: {}
-  podAnnotations: {}
-  podLabels: {}
-  podSecurityContext: {}
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-  replicaCount: 1
-  resources: {}
-  securityContext: {}
-  service:
-    port: 80
-    type: ClusterIP
-  serviceAccount:
-    annotations: {}
-    automount: true
-    create: true
-    name: ""
-  tolerations: []
-  volumeMounts: []
-  volumes: []
-  
-  
+  redis:
+    ## Redis docker image
+    image:
+      tag: ""
+
+    ## Prometheus metrics and service monitor configuration
+    metrics:
+      ## Enable metrics export
+      enabled: false
+
+    ## Resource limits and requests (for Redis)
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+
+    ## Use Kubernetes Deployment instead of StatefulSet when in Non-HA mode
+    useDeploymentWhenNonHA: true
+
+    ## High availability mode (with master-slave replication and sentinel)
+    haMode:
+      ## Enable high availibility deployment mode
+      enabled: false
+      ## Use DNS names instead of Pod IPs to build the cluster
+      useDnsNames: false
+      ## Mandatory redis HA-master group name (default "redisha")
+      masterGroupName: "redisha"
+      ## Number of replicas (minimum should be 3)
+      replicas: 3
+      ## Quorum of sentinels that need to agree that a master node is not available
+      quorum: 2
+
+
+    ## Storage parameters
+    storage:
+
+      ## Internal volume name and prefix of a created PVC
+      volumeName: "redis-data"
+
+      ## Alternative set requestedSize to define a size for a dynmaically created PVC
+      requestedSize:
+
+      ## the storage class name
+      className:
+
+      ## Default access mode (ReadWriteOnce)
+      accessModes:
+        - ReadWriteOnce
+
+      ## Keep a created Persistent volume claim when uninstalling the helm chart (only for non-HA mode with option useDeploymentWhenNonHA: true)
+      keepPvc: false

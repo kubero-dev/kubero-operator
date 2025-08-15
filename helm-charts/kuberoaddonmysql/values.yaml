@@ -13,7 +13,7 @@ mysql:
     #   memory: 128Mi
  
   ## Use Kubernetes Deployment instead of StatefulSet
-  useDeployment: false
+  useDeployment: true
 
   ## Database configuration
   settings:

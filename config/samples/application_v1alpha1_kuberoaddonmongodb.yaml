@@ -3,55 +3,104 @@ kind: KuberoAddonMongodb
 metadata:
   name: kuberoaddonmongodb-sample
 spec:
-  # Default values copied from <project_dir>/helm-charts/kuberoaddonmongodb/values.yaml
-  affinity: {}
-  autoscaling:
-    enabled: false
-    maxReplicas: 100
-    minReplicas: 1
-    targetCPUUtilizationPercentage: 80
-  fullnameOverride: ""
-  image:
-    pullPolicy: IfNotPresent
-    repository: nginx
-    tag: ""
-  imagePullSecrets: []
-  ingress:
-    annotations: {}
-    className: ""
-    enabled: false
-    hosts:
-    - host: chart-example.local
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-    tls: []
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-  nameOverride: ""
-  nodeSelector: {}
-  podAnnotations: {}
-  podLabels: {}
-  podSecurityContext: {}
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-  replicaCount: 1
-  resources: {}
-  securityContext: {}
-  service:
-    port: 80
-    type: ClusterIP
-  serviceAccount:
-    annotations: {}
-    automount: true
-    create: true
-    name: ""
-  tolerations: []
-  volumeMounts: []
-  volumes: []
-  
-  
+  mongodb:
+    # Default values for kuberoaddonmongodb.
+    # This is a YAML-formatted file.
+    # Declare variables to be passed into your templates.
+
+    ## MongoDB docker image
+    image:
+      tag: ""
+
+    ## Resource limits and requests
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+
+    ## Parameters to build a MongoDB replica set (HA mode)
+    replicaSet:
+      ## Enables replica set deployment mode
+      enabled: false
+      ## Replica set name
+      name: "repl"
+      ## Key for internal replica set authentication (base64 encoded string 6-1024 chars.)
+      key:
+      ## Alternative to 'key' - Name of an existing secret with a file named "keyfile" containing the base64 encoded key string
+      keySecretName:
+      ## Default Kubernetes cluster domain
+      clusterDomain: cluster.local
+      ## Number of secondary instances (should be at least 2 - or - one secondary and an arbiter)
+      secondaries: 2
+      ## Creates hidden secondary instances when configured
+      hiddenSecondaries:
+        # Number of hidden secondary instances
+        instances: 0
+        # Internal volume name and prefix of created PVC
+        volumeName: "mongodb-hidden-volume"
+      ## Creates an additional arbiter when enabled
+      arbiter:
+        # Enable arbiter deployment
+        enabled: false
+        # Suffix of the arbiters headless service name
+        headlessServiceSuffix: arbiter
+        ## Resource limits and requests for the arbiter
+        resources: {}
+          # limits:
+          #   cpu: 100m
+          #   memory: 128Mi
+          # requests:
+          #   cpu: 100m
+          #   memory: 128Mi
+        storage:
+          ## Internal volume name and prefix of a created PVC
+          volumeName: "mongodb-arbiter-volume"
+          ## Alternative set requestedSize to define a size for a dynamically created PVC
+          requestedSize:
+          ## the storage class name
+          className:
+          ## Default access mode (ReadWriteOnce)
+          accessModes:
+            - ReadWriteOnce
+
+
+    settings:
+      ## The root username
+      #rootUsername: "kubero_user"
+      rootUsername: 
+      ## The root user password
+      #rootPassword: "kubero_password"
+      rootPassword:
+
+    ## Optional user database which is created during first startup with user and password
+    userDatabase:
+      ## Name of the user database
+      name: "kubero_database"
+      ## Database user with full access rights
+      user: "kubero_user"
+      ## Password of the database user
+      password: "kubero_password"
+
+    # Storage parameters (for primary and all secondaries - incl. hidden secondaries)
+    # When a persistentVolumenClaimName is configured the requestedSize and accessModes will be ignored and the existing PVC based on the name will be used
+    # otherwise a dynamic persistent volume will be created with PVC name of this chart and the configured requestedSize and accessModes
+    # If both parameters are missing a volatile emtpyDir volume will be used as storage
+    storage:
+      ## Internal volume name and prefix of a created PVC
+      volumeName: "mongodb-volume"
+
+      ## Alternative set requestedSize to define a size for a dynamically created PVC
+      requestedSize:
+
+      ## the storage class name
+      className:
+
+      ## Default access mode (ReadWriteOnce)
+      accessModes:
+        - ReadWriteOnce
+
+      ## Keep a created Persistent volume claim when uninstalling the helm chart (only for non-HA mode with option useDeploymentWhenNonHA: true)
+      keepPvc: false
