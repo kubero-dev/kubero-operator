@@ -156,6 +156,12 @@ rules:
     - "clickhouseinstallations"
   verbs:
     - "*"
+- apiGroups:
+    - "postgresql.cnpg.io"
+  resources:
+    - "clusters"
+  verbs:
+    - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
 ##
