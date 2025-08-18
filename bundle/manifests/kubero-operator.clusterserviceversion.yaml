@@ -360,70 +360,55 @@ metadata:
             "name": "kuberoaddonmongodb-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
-                }
-              ],
-              "tls": []
-            },
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
+            "mongodb": {
+              "image": {
+                "tag": ""
+              },
+              "replicaSet": {
+                "arbiter": {
+                  "enabled": false,
+                  "headlessServiceSuffix": "arbiter",
+                  "resources": {},
+                  "storage": {
+                    "accessModes": [
+                      "ReadWriteOnce"
+                    ],
+                    "className": null,
+                    "requestedSize": null,
+                    "volumeName": "mongodb-arbiter-volume"
+                  }
+                },
+                "clusterDomain": "cluster.local",
+                "enabled": false,
+                "hiddenSecondaries": {
+                  "instances": 0,
+                  "volumeName": "mongodb-hidden-volume"
+                },
+                "key": null,
+                "keySecretName": null,
+                "name": "repl",
+                "secondaries": 2
+              },
+              "resources": {},
+              "settings": {
+                "rootPassword": null,
+                "rootUsername": null
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "mongodb-volume"
+              },
+              "userDatabase": {
+                "name": "kubero_database",
+                "password": "kubero_password",
+                "user": "kubero_user"
               }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podLabels": {},
-            "podSecurityContext": {},
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "automount": true,
-              "create": true,
-              "name": ""
-            },
-            "tolerations": [],
-            "volumeMounts": [],
-            "volumes": []
+            }
           }
         },
         {
@@ -433,70 +418,38 @@ metadata:
             "name": "kuberoaddonmysql-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
+            "mysql": {
+              "image": {
+                "tag": ""
+              },
+              "resources": {},
+              "settings": {
+                "rootPassword": {
+                  "value": "changeme"
                 }
-              ],
-              "tls": []
-            },
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "db-volume"
+              },
+              "useDeployment": true,
+              "userDatabase": {
+                "name": {
+                  "value": "kubero_database"
+                },
+                "password": {
+                  "value": "kubero_password"
+                },
+                "user": {
+                  "value": "kubero_user"
+                }
               }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podLabels": {},
-            "podSecurityContext": {},
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "automount": true,
-              "create": true,
-              "name": ""
-            },
-            "tolerations": [],
-            "volumeMounts": [],
-            "volumes": []
+            }
           }
         },
         {
@@ -506,70 +459,41 @@ metadata:
             "name": "kuberoaddonpostgres-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
+            "postgres": {
+              "image": {
+                "tag": ""
+              },
+              "resources": {},
+              "settings": {
+                "superuser": {
+                  "value": "postgres"
+                },
+                "superuserPassword": {
+                  "value": "changeme"
                 }
-              ],
-              "tls": []
-            },
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "postgres-data"
+              },
+              "useDeployment": true,
+              "userDatabase": {
+                "name": {
+                  "value": "kubero_database"
+                },
+                "password": {
+                  "value": "kubero_password"
+                },
+                "user": {
+                  "value": "kubero_user"
+                }
               }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podLabels": {},
-            "podSecurityContext": {},
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "automount": true,
-              "create": true,
-              "name": ""
-            },
-            "tolerations": [],
-            "volumeMounts": [],
-            "volumes": []
+            }
           }
         },
         {
@@ -579,70 +503,55 @@ metadata:
             "name": "kuberoaddonrabbitmq-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
+            "rabbitmq": {
+              "authentication": {
+                "erlangCookie": {
+                  "value": "kubero_erlang_cookie"
+                },
+                "password": {
+                  "value": "kubero_password"
+                },
+                "user": {
+                  "value": "kubero_user"
                 }
-              ],
-              "tls": []
-            },
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
+              },
+              "clusterDomain": "cluster.local",
+              "image": {
+                "tag": ""
+              },
+              "managementPlugin": {
+                "enabled": false
+              },
+              "options": {
+                "memory": {
+                  "calculationStrategy": null,
+                  "totalAvailableOverrideValue": null
+                },
+                "memoryHighWatermark": {
+                  "enabled": false,
+                  "pagingRatio": null,
+                  "type": "relative",
+                  "value": 0.4
+                }
+              },
+              "plugins": [],
+              "prometheusPlugin": {
+                "enabled": true
+              },
+              "replicaCount": 1,
+              "revisionHistoryLimit": null,
+              "serviceMonitor": {
+                "enabled": false
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "requestedSize": null,
+                "volumeName": "rabbitmq-volume"
               }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podLabels": {},
-            "podSecurityContext": {},
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "automount": true,
-              "create": true,
-              "name": ""
-            },
-            "tolerations": [],
-            "volumeMounts": [],
-            "volumes": []
+            }
           }
         },
         {
@@ -652,70 +561,32 @@ metadata:
             "name": "kuberoaddonredis-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
-                }
-              ],
-              "tls": []
-            },
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podLabels": {},
-            "podSecurityContext": {},
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "automount": true,
-              "create": true,
-              "name": ""
-            },
-            "tolerations": [],
-            "volumeMounts": [],
-            "volumes": []
+            "redis": {
+              "haMode": {
+                "enabled": false,
+                "masterGroupName": "redisha",
+                "quorum": 2,
+                "replicas": 3,
+                "useDnsNames": false
+              },
+              "image": {
+                "tag": ""
+              },
+              "metrics": {
+                "enabled": false
+              },
+              "resources": {},
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "redis-data"
+              },
+              "useDeploymentWhenNonHA": true
+            }
           }
         },
         {
@@ -1501,14 +1372,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0-rc.0
-    createdAt: "2025-08-15T09:14:37Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0-rc.1
+    createdAt: "2025-08-18T22:02:23Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.41.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.2.0-rc.0
+  name: kubero-operator.v0.2.0-rc.1
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -1795,6 +1666,12 @@ spec:
           - clickhouse.altinity.com
           resources:
           - clickhouseinstallations
+          verbs:
+          - '*'
+        - apiGroups:
+          - postgresql.cnpg.io
+          resources:
+          - clusters
           verbs:
           - '*'
         - apiGroups:
@@ -2561,7 +2438,7 @@ spec:
                 - --leader-elect
                 - --leader-election-id=kubero-operator
                 - --zap-log-level=info
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0-rc.0
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0-rc.1
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2648,4 +2525,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.2.0-rc.0
+  version: 0.2.0-rc.1
