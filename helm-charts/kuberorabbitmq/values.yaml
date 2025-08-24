@@ -1,5 +1,6 @@
 rabbitmq:
   global:
+    imageRegistry: "bitnamilegacy"
     storageClass: ""
   replicaCount: 1
   auth:

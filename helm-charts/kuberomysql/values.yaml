@@ -1,5 +1,6 @@
 mysql:
   global:
+    imageRegistry: "bitnamilegacy"
     storageClass: ""
   auth:
     ## @param mysql.auth.rootPassword Password for the `root` user. Ignored if existing secret is provided

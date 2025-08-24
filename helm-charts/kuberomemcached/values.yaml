@@ -1,5 +1,6 @@
 memcached:
   global:
+    imageRegistry: "bitnamilegacy"
     storageClass: ""
 
   ## @param architecture Memcached architecture. Allowed values: standalone or high-availability

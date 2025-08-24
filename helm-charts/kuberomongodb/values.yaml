@@ -1,5 +1,6 @@
 mongodb:
   global:
+    imageRegistry: "bitnamilegacy"
     storageClass: ""
 
   ## MongoDB(&reg;) Authentication parameters

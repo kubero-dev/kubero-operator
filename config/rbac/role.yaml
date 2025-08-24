@@ -162,6 +162,12 @@ rules:
     - "clusters"
   verbs:
     - "*"
+- apiGroups:
+    - "elasticsearch.k8s.elastic.co"
+  resources:
+    - "elasticsearches"
+  verbs:
+    - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
 ##

@@ -1,5 +1,6 @@
 elasticsearch:
   global:
+    imageRegistry: "bitnamilegacy"
     storageClass: ""
   security:
     ## @param security.elasticPassword Password for 'elastic' user

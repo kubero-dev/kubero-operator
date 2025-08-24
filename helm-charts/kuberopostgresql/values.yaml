@@ -1,5 +1,6 @@
 postgresql:
   global:
+    imageRegistry: "bitnamilegacy"
     storageClass: ""
     postgresql:
       auth:
