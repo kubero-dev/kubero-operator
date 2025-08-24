@@ -1,8 +1,20 @@
 mongodb:
   global:
-    imageRegistry: "bitnamilegacy"
     storageClass: ""
-
+  image:
+    repository: "bitnamilegacy/mongodb"
+  tls:
+    image:
+      repository: "bitnamilegacy/nginx"
+  externalAccess:
+    image:
+      repository: "bitnamilegacy/kubectl"
+  volumePermissions:
+    image:
+      repository: "bitnamilegacy/bitnami-shell"
+  metrics:
+    image:
+      repository: "bitnamilegacy/mongodb-exporter"
   ## MongoDB(&reg;) Authentication parameters
   ##
   auth:

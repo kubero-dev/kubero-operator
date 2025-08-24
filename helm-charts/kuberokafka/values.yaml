@@ -1,7 +1,18 @@
 # https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 kafka:
   global:
-    imageRegistry: "bitnamilegacy"
     storageClass: ""
+  image:
+    repository: "bitnamilegacy/kafka"
+  externalAccess:
+    autoDiscovery:
+      image:
+        repository: "bitnamilegacy/kubectl"
+  volumePermissions:
+    image:
+      repository: "bitnamilegacy/bitnami-shell"
+  metrics:
+    image:
+      repository: "bitnamilegacy/kafka-exporter"
   persistence:
     size: 8Gi

@@ -1,7 +1,13 @@
 mysql:
   global:
-    imageRegistry: "bitnamilegacy"
     storageClass: ""
+  image:
+    repository: bitnamilegacy/mysql
+  volumePermissions:
+    repository: bitnamilegacy/bitnami-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/bitnami-exporter
   auth:
     ## @param mysql.auth.rootPassword Password for the `root` user. Ignored if existing secret is provided
     ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-the-root-password-on-first-run

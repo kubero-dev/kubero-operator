@@ -1,8 +1,13 @@
 memcached:
   global:
-    imageRegistry: "bitnamilegacy"
     storageClass: ""
-
+  image:
+    repository: "bitnamilegacy/memcached"
+  volumePermissions:
+    repository: "bitnamilegacy/os-shell"
+  metrics:
+    image:
+      repository: "bitnamilegacy/memcached-exporter"
   ## @param architecture Memcached architecture. Allowed values: standalone or high-availability
   ##
   architecture: standalone
