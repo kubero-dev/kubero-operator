@@ -81,6 +81,10 @@ spec:
               readOnly: true
             - mountPath: /app
               name: app-storage
+          {{- with .Values.image.fetch.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         - name: {{ .Chart.Name }}-builder
           securityContext:
             {{- toYaml .Values.image.build.securityContext | nindent 12 }}
@@ -95,12 +99,16 @@ spec:
             - mountPath: {{ .mountPath }}
               name: {{ .name }}
             {{- end }}
+          {{- with .Values.image.build.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
           securityContext:
             {{- toYaml .Values.image.run.securityContext | nindent 12 }}
-          {{- if or (eq .Values.deploymentstrategy "docker") (or (eq .Values.buildstrategy "dockerfile") (eq .Values.buildstrategy "nixpacks") (eq .Values.buildstrategy "buildpacks") (eq .Values.buildstrategy "external")) }}
+          {{- if or (eq .Values.deploymentstrategy "docker") (or (eq .Values.buildstrategy "dockerfile") (eq .Values.buildstrategy "nixpacks") (eq .Values.buildstrategy "buildpacks") (eq .Values.build[...]) }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           {{- if .Values.image.command }}
           command:
