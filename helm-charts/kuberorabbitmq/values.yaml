@@ -1,6 +1,11 @@
 rabbitmq:
   global:
     storageClass: ""
+  image:
+    repository: "bitnamilegacy/rabbitmq"
+  volumePermissions:
+    image:
+      repository: "bitnamilegacy/os-shell"
   replicaCount: 1
   auth:
     username: "user"

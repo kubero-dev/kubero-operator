@@ -2,5 +2,17 @@
 kafka:
   global:
     storageClass: ""
+  image:
+    repository: "bitnamilegacy/kafka"
+  externalAccess:
+    autoDiscovery:
+      image:
+        repository: "bitnamilegacy/kubectl"
+  volumePermissions:
+    image:
+      repository: "bitnamilegacy/bitnami-shell"
+  metrics:
+    image:
+      repository: "bitnamilegacy/kafka-exporter"
   persistence:
     size: 8Gi

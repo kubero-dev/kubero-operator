@@ -16,3 +16,23 @@ resources:
 - auth_proxy_role.yaml
 - auth_proxy_role_binding.yaml
 - auth_proxy_client_clusterrole.yaml
+# For each CRD, "Admin", "Editor" and "Viewer" roles are scaffolded by
+# default, aiding admins in cluster management. Those roles are
+# not used by the kubero-operator itself. You can comment the following lines
+# if you do not want those helpers be installed with your Project.
+- kuberoaddonmongodb_admin_role.yaml
+- kuberoaddonmongodb_editor_role.yaml
+- kuberoaddonmongodb_viewer_role.yaml
+- kuberoaddonrabbitmq_admin_role.yaml
+- kuberoaddonrabbitmq_editor_role.yaml
+- kuberoaddonrabbitmq_viewer_role.yaml
+- kuberoaddonredis_admin_role.yaml
+- kuberoaddonredis_editor_role.yaml
+- kuberoaddonredis_viewer_role.yaml
+- kuberoaddonpostgres_admin_role.yaml
+- kuberoaddonpostgres_editor_role.yaml
+- kuberoaddonpostgres_viewer_role.yaml
+- kuberoaddonmysql_admin_role.yaml
+- kuberoaddonmysql_editor_role.yaml
+- kuberoaddonmysql_viewer_role.yaml
+

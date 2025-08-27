@@ -61,4 +61,24 @@
   version: v1alpha1
   kind: KuberoBuild
   chart: helm-charts/kuberobuild
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonMysql
+  chart: helm-charts/kuberoaddonmysql
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonPostgres
+  chart: helm-charts/kuberoaddonpostgres
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonRedis
+  chart: helm-charts/kuberoaddonredis
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonRabbitmq
+  chart: helm-charts/kuberoaddonrabbitmq
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonMongodb
+  chart: helm-charts/kuberoaddonmongodb
 #+kubebuilder:scaffold:watch

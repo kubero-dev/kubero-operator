@@ -156,6 +156,18 @@ rules:
     - "clickhouseinstallations"
   verbs:
     - "*"
+- apiGroups:
+    - "postgresql.cnpg.io"
+  resources:
+    - "clusters"
+  verbs:
+    - "*"
+- apiGroups:
+    - "elasticsearch.k8s.elastic.co"
+  resources:
+    - "elasticsearches"
+  verbs:
+    - "*"
 ##
 ## Rules for application.kubero.dev/v1alpha1, Kind: Kubero
 ##
@@ -784,5 +796,160 @@ rules:
   - ""
   resources:
   - "pods"
+
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonMysql
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonmysqls
+  - kuberoaddonmysqls/status
+  - kuberoaddonmysqls/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonPostgres
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonpostgres
+  - kuberoaddonpostgres/status
+  - kuberoaddonpostgres/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonRedis
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonredis
+  - kuberoaddonredis/status
+  - kuberoaddonredis/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonRabbitmq
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonrabbitmqs
+  - kuberoaddonrabbitmqs/status
+  - kuberoaddonrabbitmqs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for application.kubero.dev/v1alpha1, Kind: KuberoAddonMongodb
+##
+- apiGroups:
+  - application.kubero.dev
+  resources:
+  - kuberoaddonmongodbs
+  - kuberoaddonmongodbs/status
+  - kuberoaddonmongodbs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
 
 #+kubebuilder:scaffold:rules

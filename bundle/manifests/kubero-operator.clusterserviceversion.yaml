@@ -355,6 +355,242 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoAddonMongodb",
+          "metadata": {
+            "name": "kuberoaddonmongodb-sample"
+          },
+          "spec": {
+            "mongodb": {
+              "image": {
+                "tag": ""
+              },
+              "replicaSet": {
+                "arbiter": {
+                  "enabled": false,
+                  "headlessServiceSuffix": "arbiter",
+                  "resources": {},
+                  "storage": {
+                    "accessModes": [
+                      "ReadWriteOnce"
+                    ],
+                    "className": null,
+                    "requestedSize": null,
+                    "volumeName": "mongodb-arbiter-volume"
+                  }
+                },
+                "clusterDomain": "cluster.local",
+                "enabled": false,
+                "hiddenSecondaries": {
+                  "instances": 0,
+                  "volumeName": "mongodb-hidden-volume"
+                },
+                "key": null,
+                "keySecretName": null,
+                "name": "repl",
+                "secondaries": 2
+              },
+              "resources": {},
+              "settings": {
+                "rootPassword": null,
+                "rootUsername": null
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "mongodb-volume"
+              },
+              "userDatabase": {
+                "name": "kubero_database",
+                "password": "kubero_password",
+                "user": "kubero_user"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoAddonMysql",
+          "metadata": {
+            "name": "kuberoaddonmysql-sample"
+          },
+          "spec": {
+            "mysql": {
+              "image": {
+                "tag": ""
+              },
+              "resources": {},
+              "settings": {
+                "rootPassword": {
+                  "value": "changeme"
+                }
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "db-volume"
+              },
+              "useDeployment": true,
+              "userDatabase": {
+                "name": {
+                  "value": "kubero_database"
+                },
+                "password": {
+                  "value": "kubero_password"
+                },
+                "user": {
+                  "value": "kubero_user"
+                }
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoAddonPostgres",
+          "metadata": {
+            "name": "kuberoaddonpostgres-sample"
+          },
+          "spec": {
+            "postgres": {
+              "image": {
+                "tag": ""
+              },
+              "resources": {},
+              "settings": {
+                "superuser": {
+                  "value": "postgres"
+                },
+                "superuserPassword": {
+                  "value": "changeme"
+                }
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "postgres-data"
+              },
+              "useDeployment": true,
+              "userDatabase": {
+                "name": {
+                  "value": "kubero_database"
+                },
+                "password": {
+                  "value": "kubero_password"
+                },
+                "user": {
+                  "value": "kubero_user"
+                }
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoAddonRabbitmq",
+          "metadata": {
+            "name": "kuberoaddonrabbitmq-sample"
+          },
+          "spec": {
+            "rabbitmq": {
+              "authentication": {
+                "erlangCookie": {
+                  "value": "kubero_erlang_cookie"
+                },
+                "password": {
+                  "value": "kubero_password"
+                },
+                "user": {
+                  "value": "kubero_user"
+                }
+              },
+              "clusterDomain": "cluster.local",
+              "image": {
+                "tag": ""
+              },
+              "managementPlugin": {
+                "enabled": false
+              },
+              "options": {
+                "memory": {
+                  "calculationStrategy": null,
+                  "totalAvailableOverrideValue": null
+                },
+                "memoryHighWatermark": {
+                  "enabled": false,
+                  "pagingRatio": null,
+                  "type": "relative",
+                  "value": 0.4
+                }
+              },
+              "plugins": [],
+              "prometheusPlugin": {
+                "enabled": true
+              },
+              "replicaCount": 1,
+              "revisionHistoryLimit": null,
+              "serviceMonitor": {
+                "enabled": false
+              },
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "requestedSize": null,
+                "volumeName": "rabbitmq-volume"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoAddonRedis",
+          "metadata": {
+            "name": "kuberoaddonredis-sample"
+          },
+          "spec": {
+            "redis": {
+              "haMode": {
+                "enabled": false,
+                "masterGroupName": "redisha",
+                "quorum": 2,
+                "replicas": 3,
+                "useDnsNames": false
+              },
+              "image": {
+                "tag": ""
+              },
+              "metrics": {
+                "enabled": false
+              },
+              "resources": {},
+              "storage": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "className": null,
+                "keepPvc": false,
+                "requestedSize": null,
+                "volumeName": "redis-data"
+              },
+              "useDeploymentWhenNonHA": true
+            }
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoApp",
           "metadata": {
             "name": "kuberoapp"
@@ -1136,19 +1372,34 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.10
-    createdAt: "2025-08-11T07:23:54Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0-rc.4
+    createdAt: "2025-08-24T17:26:37Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.41.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.1.10
+  name: kubero-operator.v0.2.0-rc.4
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - kind: KuberoAddonMongodb
+      name: kuberoaddonmongodbs.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoAddonMysql
+      name: kuberoaddonmysqls.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoAddonPostgres
+      name: kuberoaddonpostgres.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoAddonRabbitmq
+      name: kuberoaddonrabbitmqs.application.kubero.dev
+      version: v1alpha1
+    - kind: KuberoAddonRedis
+      name: kuberoaddonredis.application.kubero.dev
+      version: v1alpha1
     - description: Creates a App in a Kubero Pipeline
       displayName: Kubero App
       kind: KuberoApp
@@ -1415,6 +1666,18 @@ spec:
           - clickhouse.altinity.com
           resources:
           - clickhouseinstallations
+          verbs:
+          - '*'
+        - apiGroups:
+          - postgresql.cnpg.io
+          resources:
+          - clusters
+          verbs:
+          - '*'
+        - apiGroups:
+          - elasticsearch.k8s.elastic.co
+          resources:
+          - elasticsearches
           verbs:
           - '*'
         - apiGroups:
@@ -1992,6 +2255,141 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoaddonmysqls
+          - kuberoaddonmysqls/status
+          - kuberoaddonmysqls/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoaddonpostgres
+          - kuberoaddonpostgres/status
+          - kuberoaddonpostgres/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoaddonredis
+          - kuberoaddonredis/status
+          - kuberoaddonredis/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoaddonrabbitmqs
+          - kuberoaddonrabbitmqs/status
+          - kuberoaddonrabbitmqs/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoaddonmongodbs
+          - kuberoaddonmongodbs/status
+          - kuberoaddonmongodbs/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -2046,7 +2444,7 @@ spec:
                 - --leader-elect
                 - --leader-election-id=kubero-operator
                 - --zap-log-level=info
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.1.10
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0-rc.4
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2133,4 +2531,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.1.10
+  version: 0.2.0-rc.4
