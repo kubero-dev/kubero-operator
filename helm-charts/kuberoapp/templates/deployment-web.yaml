@@ -81,6 +81,10 @@ spec:
               readOnly: true
             - mountPath: /app
               name: app-storage
+          {{- with .Values.image.fetch.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         - name: {{ .Chart.Name }}-builder
           securityContext:
             {{- toYaml .Values.image.build.securityContext | nindent 12 }}
@@ -95,6 +99,10 @@ spec:
             - mountPath: {{ .mountPath }}
               name: {{ .name }}
             {{- end }}
+          {{- with .Values.image.build.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
