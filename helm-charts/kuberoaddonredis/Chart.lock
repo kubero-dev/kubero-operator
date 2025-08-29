@@ -1,6 +1,9 @@
 dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 1.0.0
 - name: redis
-  repository: https://groundhog2k.github.io/helm-charts/
-  version: 2.1.2
-digest: sha256:1d9a231002c9752c847424a0744d407dfbdc447edf356d69a7a3e46eddbb4f41
-generated: "2025-08-14T23:54:19.54348+02:00"
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 0.1.7
+digest: sha256:187e51db3df3825fdfaa5dca2003446aff71e7b0412da87f4dcdff5526f99138
+generated: "2025-08-29T22:37:24.360736+02:00"

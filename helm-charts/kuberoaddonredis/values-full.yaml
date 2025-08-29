@@ -1,452 +1,144 @@
 redis:
-  ## Default values for Redis deployment
+  ## @section Global parameters
+  global:
+    ## @param global.imageRegistry Global Docker Image registry
+    imageRegistry: ""
+    ## @param global.imagePullSecrets Global Docker registry secret names as an array
+    imagePullSecrets: []
 
-  ## Redis docker image
-  image:
-    registry: "docker.io"
-    repository: "redis"
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
-
-  ## Pull secrets and name override options
-  imagePullSecrets: []
+  ## @section Common parameters
+  ## @param nameOverride String to partially override redis.fullname
   nameOverride: ""
+  ## @param fullnameOverride String to fully override redis.fullname
   fullnameOverride: ""
+  ## @param commonLabels Labels to add to all deployed objects
+  commonLabels: {}
+  ## @param commonAnnotations Annotations to add to all deployed objects
+  commonAnnotations: {}
 
-  ## Additional labels for Deployment or StatefulSet
-  customLabels: {}
+  ## @section Redis image parameters
+  image:
+    ## @param image.registry Redis image registry
+    registry: docker.io
+    ## @param image.repository Redis image repository
+    repository: redis
+    ## @param image.tag Redis image tag
+    tag: "8.2.1@sha256:cc2dfb8f5151da2684b4a09bd04b567f92d07591d91980eb3eca21df07e12760"
+    ## @param image.pullPolicy Redis image pull policy
+    pullPolicy: Always
 
-  ## Additional annotations for Deployment or StatefulSet
-  customAnnotations: {}
+  ## @param replicaCount Number of Redis replicas to deploy
+  replicaCount: 1
 
-  ## Optional service account
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: false
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
-  ## Additional pod annotations
-  podAnnotations: {}
-
-  ## Additional pod labels
-  podLabels: {}
-
-  ## Pod management policy
-  podManagementPolicy: OrderedReady
-
-  ## Pod update strategy
-  updateStrategyType: RollingUpdate
-
-  ## Pod security options
-  podSecurityContext:
-    fsGroup: 999
-    supplementalGroups:
-      - 999
-
-  ## Default security options to run Redis as non-root, read only container without privilege escalation
-  securityContext:
-    allowPrivilegeEscalation: false
-    privileged: false
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 999
-    runAsGroup: 999
-    capabilities:
-      drop:
-        - ALL
-
-  ## Prometheus metrics and service monitor configuration
-  metrics:
-    ## Enable metrics export
-    enabled: false
-    ## Metrics exporter configuration
-    exporter:
-      ## Redis exporter image
-      image:
-        registry: "docker.io"
-        repository: "oliver006/redis_exporter"
-        pullPolicy: IfNotPresent
-        tag: "v1.74.0"
-      ## Default security options to run Exporter as non-root, read only container without privilege escalation
-      securityContext:
-        allowPrivilegeEscalation: false
-        privileged: false
-        readOnlyRootFilesystem: true
-        runAsNonRoot: true
-        runAsUser: 999
-        runAsGroup: 999
-        capabilities:
-          drop:
-            - ALL
-      ## Resource limits and requests
-      resources: {}
-        # limits:
-        #   cpu: 100m
-        #   memory: 128Mi
-        # requests:
-        #   cpu: 100m
-        #   memory: 128Mi
-
-      ## Custom startup probe (overwrites default startup probe)
-      customStartupProbe: {}
-
-      ## Default startup probe
-      startupProbe:
-        enabled: true
-        initialDelaySeconds: 10
-        timeoutSeconds: 5
-        failureThreshold: 5
-        successThreshold: 1
-        periodSeconds: 10
-
-      ## Custom liveness probe (overwrites default liveness probe)
-      customLivenessProbe: {}
-
-      ## Default liveness probe
-      livenessProbe:
-        enabled: true
-        initialDelaySeconds: 15
-        timeoutSeconds: 5
-        failureThreshold: 3
-        successThreshold: 1
-        periodSeconds: 10
-
-      ## Custom readiness probe (overwrites default readiness probe)
-      customReadinessProbe: {}
-
-      ## Default readiness probe
-      readinessProbe:
-        enabled: true
-        initialDelaySeconds: 15
-        timeoutSeconds: 5
-        failureThreshold: 3
-        successThreshold: 1
-        periodSeconds: 10
-
-      ## Arguments for the container entrypoint process (exporter only)
-      args: []
-      ## Additional environment variables (exporter only)
-      env: []
-      ## A list of existing secrets that will be mounted into the exporter container as environment variables (see: https://github.com/oliver006/redis_exporter#command-line-flags)
-      extraExporterEnvSecrets: []
-      ## A list of additional existing secrets that will be mounted into the exporter container
-      ## The mounted files of the secrets can be used for custom configuration options (see: https://github.com/oliver006/redis_exporter#command-line-flags)
-      extraExporterSecrets: []
-          ## Name of the existing K8s secret
-      #  - name:
-          ## Mount default mode (0440 if parameter is omitted)
-      #    defaultMode: 0440
-          ## Mount path where the secret should be mounted into the container (f.e. /mysecretfolder)
-      #    mountPath:
-      ## A list of additional existing configMaps that will be mounted into the exporter container
-      extraExporterConfigs: []
-          ## Name of the existing K8s configMap
-      #  - name:
-          ## Mount default mode (0440 if parameter is omitted)
-      #    defaultMode: 0440
-          ## Mount path where the configMap should be mounted into the container (f.e. /mysecretfolder)
-      #    mountPath:
-
-    ## Exporter service configuration
-    service:
-      ## Enable metrics service
-      enabled: true
-      ## Type of service (not available when haMode is enabled)
-      type: ClusterIP
-      ## Redis exporter service port
-      servicePort: 9121
-      ## Redis exporter container port
-      containerPort: 9121
-      ## The node port (only relevant for type LoadBalancer or NodePort - not available when haMode is enabled)
-      nodePort:
-      ## The cluster ip address (only relevant for type LoadBalancer or NodePort)
-      clusterIP:
-      ## The loadbalancer ip address (only relevant for type LoadBalancer - not available when haMode is enabled)
-      loadBalancerIP:
-      ## The list of IP CIDR ranges that are allowed to access the load balancer (only relevent for type LoadBalancer)
-      loadBalancerSourceRanges: []
-      ## Annotations to add to the service
-      annotations: {}
-      ## Labels to add to the service
-      labels: {}
-
-    ## Prometheus service monitor configuration
-    serviceMonitor:
-      ## Enable service monitor
-      enabled: true
-      ## Additional labels for the service monitor object
-      additionalLabels: {}
-      ## Annotations for the service monitor object
-      annotations: {}
-      ## The scrape interval for prometheus
-      # interval:
-      ## The scrape timeout value
-      # scrapeTimeout:
-      ## Extra parameters rendered to the service monitor endpoint
-      extraEndpointParameters: {}
-      ## Extra parameters rendered to the service monitor
-      extraParameters: {}
-      ## Path to metrics
-      path: "/metrics"
-      ## Scheme to use for metrics endpoint
-      scheme: http
-
-  ## Default redis service port (default Redis server port 6379, defaul Redis sentinel port 26379)
   service:
-    ## Type of service (not available when haMode is enabled)
+    ## @param service.type Kubernetes service type
     type: ClusterIP
-    ## Redis server port
-    serverPort: 6379
-    ## Redis sentinel mode (only when haMode is enabled)
-    sentinelPort: 26379
-    ## The node port (only relevant for type LoadBalancer or NodePort - not available when haMode is enabled)
-    nodePort:
-    ## The cluster ip address (only relevant for type LoadBalancer or NodePort)
-    clusterIP:
-    ## The loadbalancer ip address (only relevant for type LoadBalancer - not available when haMode is enabled)
-    loadBalancerIP:
-    ## The list of IP CIDR ranges that are allowed to access the load balancer (only relevent for type LoadBalancer)
-    loadBalancerSourceRanges: []
-    ## Annotations to add to the service
+    ## @param service.port Redis service port
+    port: 6379
+
+  auth:
+    ## @param auth.enabled Enable Redis authentication
+    enabled: true
+    ## @param auth.password Redis password (if empty, random password will be generated)
+    password: ""
+    ## @param auth.existingSecret Name of existing secret containing Redis password
+    existingSecret: ""
+    ## @param auth.existingSecretPasswordKey Key in existing secret containing Redis password
+    existingSecretPasswordKey: ""
+
+  ## @section config Redis configuration options
+  config:
+    ## @param config.mountPath Redis configuration options
+    mountPath: /usr/local/etc/redis
+    ## @param config.content Include your custom Redis configurations here as string
+    content: |
+      # Redis configuration
+      bind 0.0.0.0
+      port 6379
+    ## param config.existingConfigmap Name of an existing Configmap to use instead of creating one
+    existingConfigmap: ""
+    ## param config.existingConfigmapKey Name of the key in the Configmap that should be used
+    existingConfigmapKey: ""
+
+  persistence:
+    ## @param persistence.enabled Enable persistent storage
+    enabled: true
+    ## @param persistence.storageClass Storage class to use for persistent volume
+    storageClass: ""
+    ## @param persistence.accessMode Access mode for persistent volume
+    accessMode: ReadWriteOnce
+    ## @param persistence.size Size of persistent volume
+    size: 8Gi
+    ## @param persistence.mountPath Mount path for Redis data
+    mountPath: /data
+    ## @param persistence.annotations Annotations for persistent volume claims
     annotations: {}
-    ## Labels to add to the service
-    labels: {}
 
-  ## Resources of the default init container
-  initResources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+  ## @param resources Resource limits and requests for Redis pod
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
 
-  ## Resource limits and requests (for Redis)
-  resources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## Resource limits and requests (for Redis Sentinel - only when haMode is enabled)
-  sentinelResources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## Additional node selector
+  ## @param nodeSelector Node selector for pod assignment
   nodeSelector: {}
 
-  ## Tolerations for pod assignment
+  ## @param tolerations Tolerations for pod assignment
   tolerations: []
 
-  ## Affinity for pod assignment
+  ## @param affinity Affinity rules for pod assignment
   affinity: {}
 
-  ## Topology spread constraints for pods
-  topologySpreadConstraints: {}
+  containerSecurityContext:
+    ## @param securityContext.runAsUser User ID to run the container
+    runAsUser: 999
+    ## @param securityContext.runAsNonRoot Run as non-root user
+    runAsNonRoot: true
+    ## @param containerSecurityContext.allowPrivilegeEscalation Set Redis container's privilege escalation
+    allowPrivilegeEscalation: false
 
-  ## Maximum number of revisions maintained in revision history
-  revisionHistoryLimit:
+  ## @param podSecurityContext Security context for the pod
+  podSecurityContext:
+    ## @param podSecurityContext.fsGroup Set Redis pod's Security Context fsGroup
+    fsGroup: 999
 
-  ## Pod disruption budget
-  podDisruptionBudget: {}
-    ## Minimum number of pods that must be available after eviction
-    # minAvailable:
-    ## Maximum number of pods that can be unavailable after eviction
-    # maxUnavailable:
-
-  ## Custom startup probe (overwrites default startup probe)
-  customStartupProbe: {}
-
-  ## Default startup probe
-  startupProbe:
-    enabled: true
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 30
-    successThreshold: 1
-    periodSeconds: 10
-
-  ## Custom liveness probe (overwrites default liveness probe)
-  customLivenessProbe: {}
-
-  ## Default liveness probe
   livenessProbe:
+    ## @param livenessProbe.enabled Enable liveness probe
     enabled: true
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
+    ## @param livenessProbe.initialDelaySeconds Initial delay before starting probes
+    initialDelaySeconds: 30
+    ## @param livenessProbe.periodSeconds How often to perform the probe
     periodSeconds: 10
+    ## @param livenessProbe.timeoutSeconds Timeout for each probe attempt
+    timeoutSeconds: 5
+    ## @param livenessProbe.failureThreshold Number of failures before pod is restarted
+    failureThreshold: 6
+    ## @param livenessProbe.successThreshold Number of successes to mark probe as successful
+    successThreshold: 1
 
-  ## Custom readiness probe (overwrites default readiness probe)
-  customReadinessProbe: {}
-
-  ## Default readiness probe
   readinessProbe:
+    ## @param readinessProbe.enabled Enable readiness probe
     enabled: true
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
+    ## @param readinessProbe.initialDelaySeconds Initial delay before starting probes
+    initialDelaySeconds: 5
+    ## @param readinessProbe.periodSeconds How often to perform the probe
     periodSeconds: 10
+    ## @param readinessProbe.timeoutSeconds Timeout for each probe attempt
+    timeoutSeconds: 5
+    ## @param readinessProbe.failureThreshold Number of failures before pod is marked unready
+    failureThreshold: 6
+    ## @param readinessProbe.successThreshold Number of successes to mark probe as successful
+    successThreshold: 1
 
-  ## Additional environment variables (Redis server, Sentinel and Init container)
-  env: []
+  ## @param extraEnv Additional environment variables to set
+  extraEnv: []
+  # - name: EXTRA_VAR
+  #   value: "extra_value"
 
-  ## Extra init containers
-  extraInitContainers: []
+  ## @param extraVolumes Additional volumes to add to the pod
+  extraVolumes: []
 
-  ## A list of existing secrets that will be mounted into the init container as environment variables
-  extraInitEnvSecrets: []
-
-  ## Extra containers for usage as sidecars
-  extraContainers: []
-
-  ## Default Kubernetes cluster domain
-  clusterDomain: cluster.local
-
-  ## Arguments for the container entrypoint process (Redis server)
-  args: []
-
-  ## A list of existing secrets that will be mounted into the redis container as environment variables
-  extraRedisEnvSecrets: []
-
-  ## Additional redis.conf
-  redisConfig: |
-
-  ## An existing secret with files that will be added to the redis.conf
-  extraSecretRedisConfigs:
-
-  ## A list of additional existing secrets that will be mounted into the redis container
-  ## The mounted files of the secrets can be used for custom configuration options (see: redisConfig, extraSecretRedisConfigs)
-  extraRedisSecrets: []
-      ## Name of the existing K8s secret
-  #  - name:
-      ## Mount default mode (0440 if parameter is omitted)
-  #    defaultMode: 0440
-      ## Mount path where the secret should be mounted into the container (f.e. /mysecretfolder)
-  #    mountPath:
-
-  ## A list of additional existing configMaps that will be mounted into the container
-  extraRedisConfigs: []
-      ## Name of the existing K8s configMap
-  #  - name:
-      ## Mount default mode (0440 if parameter is omitted)
-  #    defaultMode: 0440
-      ## Mount path where the configMap should be mounted into the container (f.e. /mysecretfolder)
-  #    mountPath:
-
-  ## Arguments for the container entrypoint process (Sentinel)
-  sentinelArgs: []
-
-  ## A list of existing secrets that will be mounted into the sentinel container as environment variables
-  extraSentinelEnvSecrets: []
-
-  ## Additional sentinel.conf (only when haMode is enabled)
-  sentinelConfig: |
-
-  ## An existing secret with files that will be added to the sentinel.conf
-  extraSecretSentinelConfigs:
-
-  ## A list of additional existing secrets that will be mounted into the sentinel container
-  ## The mounted files of the secrets can be used for custom configuration options (see: sentinelConfig, extraSecretSentinelConfigs)
-  extraSentinelSecrets: []
-      ## Name of the existing K8s secret
-  #  - name:
-      ## Mount default mode (0440 if parameter is omitted)
-  #    defaultMode: 0440
-      ## Mount path where the secret should be mounted into the container (f.e. /mysecretfolder)
-  #    mountPath:
-
-  ## A list of additional existing configMaps that will be mounted into the container
-  extraSentinelConfigs: []
-      ## Name of the existing K8s configMap
-  #  - name:
-      ## Mount default mode (0440 if parameter is omitted)
-  #    defaultMode: 0440
-      ## Mount path where the configMap should be mounted into the container (f.e. /mysecretfolder)
-  #    mountPath:
-
-  ## Use Kubernetes Deployment instead of StatefulSet when in Non-HA mode
-  useDeploymentWhenNonHA: true
-
-  ## High availability mode (with master-slave replication and sentinel)
-  haMode:
-    ## Enable high availibility deployment mode
-    enabled: false
-    ## Use DNS names instead of Pod IPs to build the cluster
-    useDnsNames: false
-    ## Mandatory redis HA-master group name (default "redisha")
-    masterGroupName: "redisha"
-    ## Number of replicas (minimum should be 3)
-    replicas: 3
-    ## Quorum of sentinels that need to agree that a master node is not available
-    quorum: 2
-    ## Number of milliseconds after the master should be declared as unavailable
-    downAfterMilliseconds: 30000
-    ## Timeout for a failover
-    failoverTimeout: 180000
-    ## Number of parallel reconfigurations
-    parallelSyncs: 1
-    ## Timeout in seconds to detect if Redis master is alive
-    masterAliveTestTimeout: 2
-    ## Assumed wait time in seconds until failover should be finished and before failover will be forced (should be greater than value of downAfterMilliseconds)
-    failoverWait: 35
-    ## Wait time in seconds before restart will be forced after a DNS failure during initialization
-    dnsFailureWait: 15
-    ## Keep old init logs in /data/init.log after a successful initialization (use only for debugging)
-    keepOldLogs: false
-
-  ## Storage parameters
-  storage:
-    ##  Set persistentVolumenClaimName to reference an existing PVC
-    persistentVolumeClaimName:
-
-    ## Internal volume name and prefix of a created PVC
-    volumeName: "redis-data"
-
-    ## Alternative set requestedSize to define a size for a dynmaically created PVC
-    requestedSize:
-
-    ## the storage class name
-    className:
-
-    ## Default access mode (ReadWriteOnce)
-    accessModes:
-      - ReadWriteOnce
-
-    ## Keep a created Persistent volume claim when uninstalling the helm chart (only for non-HA mode with option useDeploymentWhenNonHA: true)
-    keepPvc: false
-
-    ## Additional storage annotations
-    annotations: {}
-
-    ## Additional storage labels
-    labels: {}
-
-  ## Mount existing extra PVC
-  extraStorage: {}
-      ## Internal volume name
-  #  - name:
-      ## Container mount path
-  #    mountPath:
-      ## Name of existing PVC
-  #    pvcName:
-
-  ## Network policies
-  networkPolicy: {}
-    ## Ingress and Egress policies
-    # ingress: {}
-    # egress: {}
+  ## @param extraVolumeMounts Additional volume mounts to add to the Redis container
+  extraVolumeMounts: []

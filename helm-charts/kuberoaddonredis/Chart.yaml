@@ -5,6 +5,9 @@ name: kuberoaddonredis
 type: application
 version: 0.1.0
 dependencies:
+  - name: common
+    version: "1.x.x"
+    repository: oci://registry-1.docker.io/cloudpirates
   - name: redis
-    repository: https://groundhog2k.github.io/helm-charts/
-    version: 2.x.x
+    version: 0.1.x
+    repository: oci://registry-1.docker.io/cloudpirates
