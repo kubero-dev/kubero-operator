@@ -460,39 +460,26 @@ metadata:
           },
           "spec": {
             "postgres": {
+              "auth": {
+                "database": "",
+                "enablePostgresUser": true,
+                "password": "",
+                "postgresPassword": "",
+                "username": ""
+              },
               "image": {
-                "tag": ""
+                "tag": "17.6"
               },
-              "resources": {},
-              "settings": {
-                "superuser": {
-                  "value": "postgres"
-                },
-                "superuserPassword": {
-                  "value": "changeme"
-                }
-              },
-              "storage": {
+              "persistence": {
                 "accessModes": [
                   "ReadWriteOnce"
                 ],
-                "className": null,
-                "keepPvc": false,
-                "requestedSize": null,
-                "volumeName": "postgres-data"
+                "enabled": true,
+                "size": "8Gi",
+                "storageClass": ""
               },
-              "useDeployment": true,
-              "userDatabase": {
-                "name": {
-                  "value": "kubero_database"
-                },
-                "password": {
-                  "value": "kubero_password"
-                },
-                "user": {
-                  "value": "kubero_user"
-                }
-              }
+              "replicaCount": 1,
+              "resources": {}
             }
           }
         },
@@ -1372,14 +1359,14 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0
-    createdAt: "2025-08-27T20:33:07Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.1
+    createdAt: "2025-08-30T07:48:34Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.41.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.2.0
+  name: kubero-operator.v0.2.1-rc.1
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -2444,7 +2431,7 @@ spec:
                 - --leader-elect
                 - --leader-election-id=kubero-operator
                 - --zap-log-level=info
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.0
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.1
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2531,4 +2518,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.2.0
+  version: 0.2.1-rc.1

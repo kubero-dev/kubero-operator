@@ -1,289 +1,239 @@
 postgres:
-  ## Default values for PostgreSQL deployment
+  ## @section Global parameters
+  global:
+    ## @param global.imageRegistry Global Docker Image registry
+    imageRegistry: ""
+    ## @param global.imagePullSecrets Global Docker registry secret names as an array
+    imagePullSecrets: []
 
-  ## PostgreSQL docker image
-  image:
-    registry: "docker.io"
-    repository: "postgres"
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
-
-  ## Pull secrets and name override options
-  imagePullSecrets: []
+  ## @section Common parameters
+  ## @param nameOverride String to partially override postgres.fullname
   nameOverride: ""
+  ## @param fullnameOverride String to fully override postgres.fullname
   fullnameOverride: ""
+  ## @param commonLabels Labels to add to all deployed objects
+  commonLabels: {}
+  ## @param commonAnnotations Annotations to add to all deployed objects
+  commonAnnotations: {}
 
-  ## Additional labels for Deployment or StatefulSet
-  customLabels: {}
+  ## @section PostgreSQL image configuration
+  image:
+    ## @param image.registry PostgreSQL image registry
+    registry: docker.io
+    ## @param image.repository PostgreSQL image repository
+    repository: postgres
+    ## @param image.tag PostgreSQL image tag (immutable tags are recommended)
+    tag: "17.6@sha256:29e0bb09c8e7e7fc265ea9f4367de9622e55bae6b0b97e7cce740c2d63c2ebc0"
+    ## @param image.imagePullPolicy PostgreSQL image pull policy
+    imagePullPolicy: Always
 
-  ## Additional annotations for Deployment or StatefulSet
-  customAnnotations: {}
+  ## @section Deployment configuration
+  ## @param replicaCount Number of PostgreSQL replicas to deploy (Note: PostgreSQL doesn't support multi-master replication by default)
+  replicaCount: 1
 
-  ## Optional service account
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: false
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
-  ## Additional pod annotations
+  ## @section Pod annotations and labels
+  ## @param podAnnotations Map of annotations to add to the pods
   podAnnotations: {}
-
-  ## Additional pod labels
+  ## @param podLabels Map of labels to add to the pods
   podLabels: {}
 
-  ## Pod management policy
-  podManagementPolicy: OrderedReady
-
-  ## Pod update strategy
-  updateStrategyType: RollingUpdate
-
-  ## Pod security context uses file system group 999 (postgres)
+  ## @section Security Context
   podSecurityContext:
+    ## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
     fsGroup: 999
-    supplementalGroups:
-      - 999
 
-  ## Default security options to run PostgreSQL as non-root (postgres user), read only container without privilege escalation
   securityContext:
+    ## @param securityContext.allowPrivilegeEscalation Enable container privilege escalation
     allowPrivilegeEscalation: false
-    privileged: false
-    readOnlyRootFilesystem: true
+    ## @param securityContext.runAsNonRoot Configure the container to run as a non-root user
     runAsNonRoot: true
-    runAsGroup: 999
+    ## @param securityContext.runAsUser User ID for the PostgreSQL container
     runAsUser: 999
+    ## @param securityContext.runAsGroup Group ID for the PostgreSQL container
+    runAsGroup: 999
+    ## @param securityContext.readOnlyRootFilesystem Mount container root filesystem as read-only
+    readOnlyRootFilesystem: false
+    ## @param securityContext.capabilities.drop Linux capabilities to be dropped
     capabilities:
       drop:
         - ALL
 
-  ## The postgres service configuration (Default is ClusterIP with port 5432)
+  ## @section PostgreSQL Authentication
+  auth:
+    ## @param auth.enablePostgresUser Enable/disable the postgres user
+    enablePostgresUser: true
+    ## @param auth.postgresPassword Password for the postgres admin user. If not set, a random password will be generated
+    postgresPassword: ""
+    ## @param auth.username Name for a custom user to create
+    username: ""
+    ## @param auth.password Password for the custom user to create
+    password: ""
+    ## @param auth.database Name for a custom database to create
+    database: ""
+    ## @param auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+    existingSecret: ""
+    ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials
+    ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials
+    ## @param auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for replication user password
+    secretKeys:
+      adminPasswordKey: "postgres-password"
+      userPasswordKey: "password"
+      replicationPasswordKey: "replication-password"
+
+  ## @section PostgreSQL Configuration
+  config:
+    ## @param config.postgresqlSharedPreloadLibraries Shared preload libraries (comma-separated list)
+    postgresqlSharedPreloadLibraries: ""
+    ## @param config.postgresqlMaxConnections Maximum number of connections
+    postgresqlMaxConnections: 100
+    ## @param config.postgresqlSharedBuffers Amount of memory the database server uses for shared memory buffers
+    postgresqlSharedBuffers: ""
+    ## @param config.postgresqlEffectiveCacheSize Effective cache size
+    postgresqlEffectiveCacheSize: ""
+    ## @param config.postgresqlWorkMem Amount of memory to be used by internal sort operations and hash tables
+    postgresqlWorkMem: ""
+    ## @param config.postgresqlMaintenanceWorkMem Maximum amount of memory to be used by maintenance operations
+    postgresqlMaintenanceWorkMem: ""
+    ## @param config.postgresqlWalBuffers Amount of memory used in shared memory for WAL data
+    postgresqlWalBuffers: ""
+    ## @param config.postgresqlCheckpointCompletionTarget Time spent flushing dirty buffers during checkpoint, as fraction of checkpoint interval
+    postgresqlCheckpointCompletionTarget: ""
+    ## @param config.postgresqlRandomPageCost Sets the planner's estimate of the cost of a non-sequentially-fetched disk page
+    postgresqlRandomPageCost: ""
+    ## @param config.postgresqlLogStatement Sets the type of statements logged
+    postgresqlLogStatement: ""
+    ## @param config.postgresqlLogMinDurationStatement Sets the minimum execution time above which statements will be logged
+    postgresqlLogMinDurationStatement: ""
+    ## @param config.extraConfig Additional PostgreSQL configuration parameters
+    extraConfig: []
+    ## @param config.existingConfigmap Name of existing ConfigMap with PostgreSQL configuration
+    existingConfigmap: ""
+
+  ## @section Service configuration
   service:
+    ## @param service.type PostgreSQL service type
     type: ClusterIP
+    ## @param service.port PostgreSQL service port
     port: 5432
-    ## The node port (only relevant for type LoadBalancer or NodePort)
-    nodePort:
-    ## The cluster ip address (only relevant for type LoadBalancer or NodePort)
-    clusterIP:
-    ## The loadbalancer ip address (only relevant for type LoadBalancer)
-    loadBalancerIP:
-    ## The list of IP CIDR ranges that are allowed to access the load balancer (only relevent for type LoadBalancer)
-    loadBalancerSourceRanges: []
-    ## Annotations to add to the service
+    ## @param service.targetPort PostgreSQL container port
+    targetPort: 5432
+    ## @param service.annotations Service annotations
     annotations: {}
-    ## Labels to add to the service
-    labels: {}
 
+  ## @section Ingress configuration
+  ingress:
+    ## @param ingress.enabled Enable ingress record generation for PostgreSQL
+    enabled: false
+    ## @param ingress.className IngressClass that will be used to implement the Ingress
+    className: ""
+    ## @param ingress.annotations Additional annotations for the Ingress resource
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    ## @param ingress.hosts[0].host Hostname for PostgreSQL ingress
+    ## @param ingress.hosts[0].paths[0].path Path for PostgreSQL ingress
+    ## @param ingress.hosts[0].paths[0].pathType Path type for PostgreSQL ingress
+    hosts:
+      - host: postgres.local
+        paths:
+          - path: /
+            pathType: Prefix
+    ## @param ingress.tls TLS configuration for PostgreSQL ingress
+    tls: []
+    #  - secretName: postgres-tls
+    #    hosts:
+    #      - postgres.local
 
+  ## @section Resources
   resources: {}
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+    #   cpu: 500m
+    #   memory: 512Mi
     # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    #   cpu: 250m
+    #   memory: 256Mi
 
-  ## Additional node selector
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  tolerations: []
-
-  ## Affinity for pod assignment
-  affinity: {}
-
-  ## Topology spread constraints for pods
-  topologySpreadConstraints: {}
-
-  ## Maximum number of revisions maintained in revision history
-  revisionHistoryLimit:
-
-  ## Custom startup probe (overwrites default startup probe)
-  customStartupProbe: {}
-
-  ## Default startup check
-  startupProbe:
+  ## @section Persistence
+  persistence:
+    ## @param persistence.enabled Enable persistence using Persistent Volume Claims
     enabled: true
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 30
-    successThreshold: 1
-    periodSeconds: 10
-
-  ## Custom liveness probe (overwrites default liveness probe)
-  customLivenessProbe: {}
-
-  ## Default health check
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
-    periodSeconds: 10
-
-  ## Custom readiness probe (overwrites default readiness probe)
-  customReadinessProbe: {}
-
-  ## Default readiness probe
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
-    periodSeconds: 10
-
-  ## Extra init containers
-  extraInitContainers: []
-
-  ## Extra containers for usage as sidecars
-  extraContainers: []
-
-  ## Resources of the default init container
-  initResources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## Additional environment variables
-  env: []
-
-  ## Arguments for the container entrypoint process
-  args: []
-
-  ## Use Kubernetes Deployment instead of StatefulSet
-  useDeployment: false
-
-  ## Database configuration
-  settings:
-    ## Optional existing secret for the Postgrest superuser
-    existingSecret:
-
-    ## The default postgres superuser (default when nothing is set: "postgres")
-    superuser:
-    #  secretKey:
-    #  value:
-
-    ## The superuser password
-    superuserPassword:
-    #  secretKey:
-    #  value:
-
-    ## Postgres database authentication method
-    ## For example: "md5"
-    authMethod:
-
-    ## Optional init database arguments
-    ## For example: "--auth-local=md5"
-    initDbArgs:
-
-  ## Optional user database which is created during first startup with user and password
-  userDatabase: {}
-    ## Optional existing secret with database name, user and password
-    # existingSecret:
-    ## Name of the user database
-    # name:
-    ##  Use secretKey when existingSecret was specified otherwise value
-    #   secretKey:
-    #   value:
-    ## Database user with full access rights
-    ##  Use secretKey when existingSecret was specified otherwise value
-    # user:
-    #   secretKey:
-    #   value:
-    ## Password of the database user
-    ##  Use secretKey when existingSecret was specified otherwise value
-    # password:
-    #   secretKey:
-    #   value:
-
-  ## Optional custom configuration block that will be mounted as file in /etc/postgresql/postgresql.conf
-  ## For more flexible options see extraSecretConfigs: section
-  customConfig: |
-
-  ## Optional custom scripts that can be defined inline and will be mounted as files in /docker-entrypoint-initdb.d
-  customScripts: {}
-  #  01-a-script.sh: |
-  #    echo "hello"
-  #  02-another-script.sh: |
-  #    echo "hello 2"
-
-  ## A list of existing secrets that will be mounted into the container as environment variables
-  ## As an alternative these secrets can set the database superuser password or other options when settings.superuserPassword was not specified
-  ## For example: Setting POSTGRES_DB, USERDB_USER, USERDB_PASSWORD will allow creating a user database and grant access for the given user
-  extraEnvSecrets: []
-
-  ## An existing secret with files that will be added to the postgres configuration in addition to /etc/postgresql/postgresql.conf
-  extraSecretConfigs:
-
-  ## An existing configMap with files that will be mounted into the container as script files (*.sql, *.sh) in /docker-entrypoint-initdb.d
-  ## For more details see https://hub.docker.com/_/postgres
-  extraScripts:
-
-  ## A list of additional existing secrets that will be mounted into the container
-  ## The mounted files of the secrets can be used for advanced configuration - f.e. TLS
-  extraSecrets: []
-      ## Name of the existing K8s secret
-  #  - name:
-      ## Mount default mode (0440 if parameter is omitted)
-  #    defaultMode: 0440
-      ## Mount path where the secret should be mounted into the container (f.e. /mysecretfolder)
-  #    mountPath:
-
-  ## A list of additional existing configMaps that will be mounted into the container
-  extraConfigs: []
-      ## Name of the existing K8s configMap
-  #  - name:
-      ## Mount default mode (0440 if parameter is omitted)
-  #    defaultMode: 0440
-      ## Mount path where the configMap should be mounted into the container (f.e. /mysecretfolder)
-  #    mountPath:
-
-  ## Storage parameters
-  storage:
-    ##  Set persistentVolumenClaimName to reference an existing PVC
-    persistentVolumeClaimName:
-
-    ## Internal volume name and prefix of a created PVC
-    volumeName: "postgres-data"
-
-    ## Alternative set requestedSize to define a size for a dynmaically created PVC
-    requestedSize:
-
-    ## the storage class name
-    className:
-
-    ## Default access mode (ReadWriteOnce)
+    ## @param persistence.storageClass Persistent Volume storage class
+    storageClass: ""
+    ## @param persistence.annotations Persistent Volume Claim annotations
+    annotations: {}
+    ## @param persistence.size Persistent Volume size
+    size: 8Gi
+    ## @param persistence.accessModes Persistent Volume access modes
     accessModes:
       - ReadWriteOnce
+    ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+    existingClaim: ""
 
-    ## Keep a created Persistent volume claim when uninstalling the helm chart (only for option useDeployment: true)
-    keepPvc: false
+  ## @section Liveness and readiness probes
+  livenessProbe:
+    ## @param livenessProbe.enabled Enable livenessProbe on PostgreSQL containers
+    enabled: true
+    ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    initialDelaySeconds: 30
+    ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+    periodSeconds: 10
+    ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    timeoutSeconds: 5
+    ## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+    failureThreshold: 3
+    ## @param livenessProbe.successThreshold Success threshold for livenessProbe
+    successThreshold: 1
 
-    ## Additional storage annotations
+  readinessProbe:
+    ## @param readinessProbe.enabled Enable readinessProbe on PostgreSQL containers
+    enabled: true
+    ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    initialDelaySeconds: 5
+    ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+    periodSeconds: 5
+    ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    timeoutSeconds: 5
+    ## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+    failureThreshold: 3
+    ## @param readinessProbe.successThreshold Success threshold for readinessProbe
+    successThreshold: 1
+
+  startupProbe:
+    ## @param startupProbe.enabled Enable startupProbe on PostgreSQL containers
+    enabled: true
+    ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    initialDelaySeconds: 30
+    ## @param startupProbe.periodSeconds Period seconds for startupProbe
+    periodSeconds: 10
+    ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    timeoutSeconds: 5
+    ## @param startupProbe.failureThreshold Failure threshold for startupProbe
+    failureThreshold: 30
+    ## @param startupProbe.successThreshold Success threshold for startupProbe
+    successThreshold: 1
+
+  ## @section Node Selection
+  ## @param nodeSelector Node labels for pod assignment
+  nodeSelector: {}
+
+  ## @param tolerations Toleration labels for pod assignment
+  tolerations: []
+
+  ## @param affinity Affinity settings for pod assignment
+  affinity: {}
+
+
+  ## @section Service Account
+  serviceAccount:
+    ## @param serviceAccount.create Specifies whether a service account should be created
+    create: false
+    ## @param serviceAccount.annotations Annotations to add to the service account
     annotations: {}
-
-    ## Additional storage labels
-    labels: {}
-
-  ## Mount existing extra PVC
-  extraStorage: {}
-      ## Internal volume name
-  #  - name:
-      ## Container mount path
-  #    mountPath:
-      ## Name of existing PVC
-  #    pvcName:
-
-  ## Network policies
-  networkPolicy: {}
-    ## Ingress and Egress policies
-    # ingress: {}
-    # egress: {}
+    ## @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the `fullname` template.
+    name: ""
+    ## @param serviceAccount.automountServiceAccountToken whether to automount the SA token inside the pod
+    automountServiceAccountToken: false
