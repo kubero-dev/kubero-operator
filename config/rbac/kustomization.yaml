@@ -20,6 +20,9 @@ resources:
 # default, aiding admins in cluster management. Those roles are
 # not used by the kubero-operator itself. You can comment the following lines
 # if you do not want those helpers be installed with your Project.
+- kuberoaddonmemcached_admin_role.yaml
+- kuberoaddonmemcached_editor_role.yaml
+- kuberoaddonmemcached_viewer_role.yaml
 - kuberoaddonmongodb_admin_role.yaml
 - kuberoaddonmongodb_editor_role.yaml
 - kuberoaddonmongodb_viewer_role.yaml

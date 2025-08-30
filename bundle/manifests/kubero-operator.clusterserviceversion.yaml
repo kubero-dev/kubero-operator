@@ -355,6 +355,79 @@ metadata:
         },
         {
           "apiVersion": "application.kubero.dev/v1alpha1",
+          "kind": "KuberoAddonMemcached",
+          "metadata": {
+            "name": "kuberoaddonmemcached-sample"
+          },
+          "spec": {
+            "affinity": {},
+            "autoscaling": {
+              "enabled": false,
+              "maxReplicas": 100,
+              "minReplicas": 1,
+              "targetCPUUtilizationPercentage": 80
+            },
+            "fullnameOverride": "",
+            "image": {
+              "pullPolicy": "IfNotPresent",
+              "repository": "nginx",
+              "tag": ""
+            },
+            "imagePullSecrets": [],
+            "ingress": {
+              "annotations": {},
+              "className": "",
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": [
+                    {
+                      "path": "/",
+                      "pathType": "ImplementationSpecific"
+                    }
+                  ]
+                }
+              ],
+              "tls": []
+            },
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": "http"
+              }
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "podAnnotations": {},
+            "podLabels": {},
+            "podSecurityContext": {},
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": "http"
+              }
+            },
+            "replicaCount": 1,
+            "resources": {},
+            "securityContext": {},
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "serviceAccount": {
+              "annotations": {},
+              "automount": true,
+              "create": true,
+              "name": ""
+            },
+            "tolerations": [],
+            "volumeMounts": [],
+            "volumes": []
+          }
+        },
+        {
+          "apiVersion": "application.kubero.dev/v1alpha1",
           "kind": "KuberoAddonMongodb",
           "metadata": {
             "name": "kuberoaddonmongodb-sample"
@@ -1359,19 +1432,22 @@ metadata:
     capabilities: Basic Install
     categories: Integration & Delivery
     certified: "false"
-    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.1
-    createdAt: "2025-08-30T07:48:34Z"
+    containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.2
+    createdAt: "2025-08-30T11:07:43Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.41.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/kubero-dev/kubero
     support: Kubero Community
-  name: kubero-operator.v0.2.1-rc.1
+  name: kubero-operator.v0.2.1-rc.2
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - kind: KuberoAddonMemcached
+      name: kuberoaddonmemcacheds.application.kubero.dev
+      version: v1alpha1
     - kind: KuberoAddonMongodb
       name: kuberoaddonmongodbs.application.kubero.dev
       version: v1alpha1
@@ -2377,6 +2453,33 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - application.kubero.dev
+          resources:
+          - kuberoaddonmemcacheds
+          - kuberoaddonmemcacheds/status
+          - kuberoaddonmemcacheds/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -2431,7 +2534,7 @@ spec:
                 - --leader-elect
                 - --leader-election-id=kubero-operator
                 - --zap-log-level=info
-                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.1
+                image: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.2
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -2518,4 +2621,4 @@ spec:
   provider:
     name: kubero
     url: https://github.com/kubero-dev/
-  version: 0.2.1-rc.1
+  version: 0.2.1-rc.2
