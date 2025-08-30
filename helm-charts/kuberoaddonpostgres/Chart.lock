@@ -1,6 +1,9 @@
 dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 1.0.0
 - name: postgres
-  repository: https://groundhog2k.github.io/helm-charts/
-  version: 1.5.7
-digest: sha256:60f3d24aa5261fa3e10860bf79e12f5891c99264627fdaa7eb980ee2ebb9d41a
-generated: "2025-08-14T16:49:31.210371+02:00"
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 0.2.2
+digest: sha256:28a74e2f3c66b46e12c5251c8f6f229d71432a5ba33aa0285e7dd0285a070c1b
+generated: "2025-08-29T22:44:28.261746+02:00"

@@ -1,53 +1,51 @@
 postgres:
-  ## PostgreSQL docker image
+  ## @section PostgreSQL image configuration
   image:
-    tag: ""
+    ## @param image.tag PostgreSQL image tag (immutable tags are recommended)
+    tag: "17.6"
 
-  # Resource limits and requests
+  ## @section Deployment configuration
+  ## @param replicaCount Number of PostgreSQL replicas to deploy (Note: PostgreSQL doesn't support multi-master replication by default)
+  replicaCount: 1
+
+  ## @section PostgreSQL Authentication
+  auth:
+    ## @param auth.enablePostgresUser Enable/disable the postgres user
+    enablePostgresUser: true
+    ## @param auth.postgresPassword Password for the postgres admin user. If not set, a random password will be generated
+    postgresPassword: ""
+    ## @param auth.username Name for a custom user to create
+    username: ""
+    ## @param auth.password Password for the custom user to create
+    password: ""
+    ## @param auth.database Name for a custom database to create
+    database: ""
+
+  ## @section Resources
   resources: {}
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+    #   cpu: 500m
+    #   memory: 512Mi
     # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    #   cpu: 250m
+    #   memory: 256Mi
 
-  ## Use Kubernetes Deployment instead of StatefulSet
-  useDeployment: true
-
-  ## Database configuration
-  settings:
-    ## The default postgres superuser (default when nothing is set: "postgres")
-    superuser:
-      value: "postgres"
-
-    ## The superuser password
-    superuserPassword:
-      value: "changeme"
-
-  ## Optional user database which is created during first startup with user and password
-  userDatabase:
-    name: 
-       value: "kubero_database"
-    user:
-      value: "kubero_user"
-    password:
-      value: "kubero_password"
-
-  ## Storage parameters
-  storage:
-    ## Internal volume name and prefix of a created PVC
-    volumeName: "postgres-data"
-
-    ## Alternative set requestedSize to define a size for a dynamically created PVC
-    requestedSize:
-
-    ## the storage class name
-    className:
-
-    ## Default access mode (ReadWriteOnce)
+  ## @section Persistence
+  persistence:
+    ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+    enabled: true
+    ## @param persistence.storageClass Persistent Volume storage class
+    storageClass: ""
+    ## @param persistence.annotations Persistent Volume Claim annotations
+    annotations: {}
+    ## @param persistence.size Persistent Volume size
+    size: 8Gi
+    ## @param persistence.accessModes Persistent Volume access modes
     accessModes:
       - ReadWriteOnce
-
-    ## Keep a created Persistent volume claim when uninstalling the helm chart (only for option useDeployment: true)
-    keepPvc: false
+    ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+    existingClaim: ""

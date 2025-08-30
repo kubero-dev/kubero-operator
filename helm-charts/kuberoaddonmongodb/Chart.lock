@@ -1,6 +1,9 @@
 dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 1.0.0
 - name: mongodb
-  repository: https://groundhog2k.github.io/helm-charts/
-  version: 0.7.2
-digest: sha256:3075926429bc8d6a091c16684ec59f0a1ee4f3bbd5422aad3fec8ee8e4ac6588
-generated: "2025-08-15T08:17:10.186356+02:00"
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 0.1.6
+digest: sha256:3c29fa896b8507e36ccca878561fe7b366e29abe3912c5e7f97ec37432d65efd
+generated: "2025-08-29T22:59:10.572535+02:00"
