@@ -1442,6 +1442,12 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - elasticsearch.k8s.elastic.co
+  resources:
+  - elasticsearches
+  verbs:
+  - '*'
+- apiGroups:
   - application.kubero.dev
   resources:
   - kuberoes
