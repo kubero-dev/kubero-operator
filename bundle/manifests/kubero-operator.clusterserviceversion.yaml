@@ -360,70 +360,19 @@ metadata:
             "name": "kuberoaddonmemcached-sample"
           },
           "spec": {
-            "affinity": {},
-            "autoscaling": {
-              "enabled": false,
-              "maxReplicas": 100,
-              "minReplicas": 1,
-              "targetCPUUtilizationPercentage": 80
-            },
-            "fullnameOverride": "",
-            "image": {
-              "pullPolicy": "IfNotPresent",
-              "repository": "nginx",
-              "tag": ""
-            },
-            "imagePullSecrets": [],
-            "ingress": {
-              "annotations": {},
-              "className": "",
-              "enabled": false,
-              "hosts": [
-                {
-                  "host": "chart-example.local",
-                  "paths": [
-                    {
-                      "path": "/",
-                      "pathType": "ImplementationSpecific"
-                    }
-                  ]
-                }
-              ],
-              "tls": []
-            },
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "nameOverride": "",
-            "nodeSelector": {},
-            "podAnnotations": {},
-            "podLabels": {},
-            "podSecurityContext": {},
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/",
-                "port": "http"
-              }
-            },
-            "replicaCount": 1,
-            "resources": {},
-            "securityContext": {},
-            "service": {
-              "port": 80,
-              "type": "ClusterIP"
-            },
-            "serviceAccount": {
-              "annotations": {},
-              "automount": true,
-              "create": true,
-              "name": ""
-            },
-            "tolerations": [],
-            "volumeMounts": [],
-            "volumes": []
+            "memcached": {
+              "config": {
+                "extraArgs": [],
+                "maxConnections": 1024,
+                "memoryLimit": 64,
+                "verbosity": 0
+              },
+              "image": {
+                "tag": "1.6.39"
+              },
+              "replicaCount": 1,
+              "resources": {}
+            }
           }
         },
         {
@@ -1433,7 +1382,7 @@ metadata:
     categories: Integration & Delivery
     certified: "false"
     containerImage: ghcr.io/kubero-dev/kubero-operator/kuberoapp:v0.2.1-rc.2
-    createdAt: "2025-08-30T11:07:43Z"
+    createdAt: "2025-08-31T20:35:42Z"
     description: Kubero is a GitOps continuous delivery tool for Kubernetes.
     operators.operatorframework.io/builder: operator-sdk-v1.41.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
