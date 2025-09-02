@@ -17,3 +17,5 @@ cache
 /notes.txt
 
 helm-charts/kubero/secrets.yaml
+
+.DS_Store
