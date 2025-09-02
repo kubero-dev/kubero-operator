@@ -1,0 +1,37 @@
+apiVersion: application.kubero.dev/v1alpha1
+kind: KuberoAddonMemcached
+metadata:
+  name: kuberoaddonmemcached-sample
+spec:
+  memcached:
+    ## @section Memcached image parameters
+    image:
+      ## @param image.tag Memcached image tag
+      tag: "1.6.39"
+
+    ## @param replicaCount Number of Memcached replicas to deploy
+    replicaCount: 1
+
+
+    ## @section Memcached configuration options
+    config:
+      ## @param config.memoryLimit Maximum amount of memory to use for cache (in MB)
+      memoryLimit: 64
+      ## @param config.maxConnections Maximum number of simultaneous connections
+      maxConnections: 1024
+      ## @param config.extraArgs Additional command-line arguments
+      extraArgs: []
+      ## @param config.verbosity Verbosity level (0-2)
+      verbosity: 0
+
+    ## @param resources Resource limits and requests for Memcached pod
+    resources: {}
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      # limits:
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 50m
+      #   memory: 64Mi

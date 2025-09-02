@@ -81,4 +81,8 @@
   version: v1alpha1
   kind: KuberoAddonMongodb
   chart: helm-charts/kuberoaddonmongodb
+- group: application.kubero.dev
+  version: v1alpha1
+  kind: KuberoAddonMemcached
+  chart: helm-charts/kuberoaddonmemcached
 #+kubebuilder:scaffold:watch
